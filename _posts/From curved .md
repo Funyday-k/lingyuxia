@@ -1,0 +1,302 @@
+---
+title: '从经典场论走向弯曲时空'
+date: 2022
+permalink: /posts/2012/08/blog-post-1/
+tags:
+  - cool posts
+  - category1
+  - category2
+---
+
+# 从经典场论走向弯曲时空
+
+Prof: Hong Zhang
+Year: 2022, Fall
+type: Paper
+
+此文是对于目前学习广义相对论的一个小总结，从场论的视角来总结如何从经典场论到爱因斯坦场论，当然，若说是经典场论也不完全，这种过渡更是从平直时空到弯曲时空的过程
+
+---
+
+## **1. 走在平直的路**
+
+对于场论，最基本的就是**作用量** S 和**拉格朗日量** L ，如果是最基本对于一个质点的运动，其表达为
+
+$$
+\begin{align*} S=\int dt \,L(q,\dot{q}) \end{align*} 
+$$
+
+对于质点的拉格朗日量其表达式为$L=T−V$
+
+我们可以根据最小作用量原理推得欧拉-拉格朗日方程
+
+$$
+\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{q_i}}\right)-\frac{\partial L}{\partial q_i} 
+$$
+
+同样的，我们研究场的性质和上边的是类似的，对于场的拉格朗日量与一个关于时空坐标的场分布函数 $\Phi^{i}(x^{\mu})$有关，而这个场可以标量场，也可以是矢量场或者张量场
+
+加上场的导数$\partial _{\mu}\Phi^{i}$ 来表示拉格朗日量（这里先考虑不含时的场），那么拉格朗日量可以表示成以下形式
+
+$$
+ L=\int d^{3}x \mathcal{L}(\Phi^{i},\partial_{\mu} \Phi^{i}) 
+$$
+
+其中$\mathcal{L}(\Phi^{i},\partial_{\mu} \Phi^{i})$我们称之为**拉格朗日量密度**，毕竟一个场是弥漫在整个空间的，因此我们需要得到密度再积分整个空间，那么作用量的表达式为
+
+$$
+ S=\int dt \, L=\int d^{4}x\, \mathcal{L}(\Phi^{i},\partial _{\mu}\Phi^{i})
+$$
+
+为了求出场的等效的欧拉-拉格朗日方程，我们同样利用最小作用原理，先给场一个微小的变化
+
+$$
+\begin{cases} \Phi^{i}\rightarrow \Phi^{i}+\delta \Phi^{i}\\ \partial _{\mu}\Phi^{i}\rightarrow \partial _{\mu}\Phi^{i}+\delta(\partial _{\mu}\Phi^{i})= \partial _{\mu}\Phi^{i}+\partial _{\mu}(\delta\Phi^{i}) \end{cases}
+$$
+
+那么，相应的拉格朗日密度有
+
+$$
+\begin{align*} \mathcal{L}(\Phi^{i},\partial _{\mu}\Phi^{i})\rightarrow &\mathcal{L}(\Phi^{i}+\delta\Phi^{i},\partial _{\mu}\Phi^{i}+\partial _{\mu}(\delta \Phi^{i}))\\ &=\mathcal{L}(\Phi^{i},\partial _{\mu}\Phi^{i})+\frac{\partial \mathcal{L}}{\partial \Phi^{i}}\delta \Phi^{i}+\frac{\partial \mathcal{L}}{\partial (\partial _{\mu}\Phi^{i})}\partial _{\mu}(\delta \Phi^{i}) \end{align*}
+$$
+
+而对于真实的场分布其作用量变分为零，将拉格朗日密度代入
+
+$$
+ \delta S=\int d^{4}x\left[\frac{\partial \mathcal{L}}{\partial \Phi^{i}}\delta \Phi^{i}+\frac{\partial \mathcal{L}}{\partial (\partial _{\mu}\Phi^{i})}\partial _{\mu}(\delta \Phi^{i})\right] 
+$$
+
+和常规的处理方式一样，将第二项利用分部积分处理，会得到一个积分项以及一个全微分项，对于全微分项的大小完全取决于所谓的初始条件，我们可以把它扔掉
+
+$$
+ \int d^{4}x\frac{\partial \mathcal{L}}{\partial (\partial _{\mu}\Phi^{i})}\partial _{\mu}(\delta \Phi^{i})=-\int d^{4}x\partial _{\mu}\left(\frac{\partial \mathcal{L}}{\partial (\partial _{\mu}\Phi^{i})}\right)\delta \Phi^{i}\\+\underset{ {\huge{\uparrow扔了}}}{\int d^{4}x\partial _{\mu}\left(\frac{\partial \mathcal{L}}{\partial (\partial _{\mu}\Phi^{i})}\delta \Phi^{i}\right)}
+$$
+
+剩下的可以得到作用量的变分的表达式
+
+$$
+ \delta S =\int d^{4}x\left[\frac{\partial \mathcal{L}}{\partial \Phi^{i}}-\partial _{\mu}\left(\frac{\partial \mathcal{L}}{\partial (\partial _{\mu}\Phi^{i})}\right)\right]\delta \Phi^{i} 
+$$
+
+令 δS=0 ，可以得到对于场的**欧拉-拉格朗日方程**
+
+$$
+\frac{\partial \mathcal{L}}{\partial \Phi^{i}}-\partial _{\mu}\left(\frac{\partial \mathcal{L}}{\partial (\partial _{\mu}\Phi^{i})}\right)=0 
+$$
+
+我们以最简单的标量场来具体展示，对于四维时空，标量场本质就是时空坐标到 R 的映射
+
+显然，四维时空的标量场需要遵守洛伦兹不变性，因此我们以此构造出拉格朗日方程
+
+$$
+\mathcal{L}=-\frac{1}{2}\eta^{\mu\nu}(\partial _{\mu}\phi)(\partial _{\nu}\phi)-V(\phi) 
+$$
+
+很显然，该拉格朗日密度满足洛伦兹不变性，则有关系
+
+$$
+ \begin{cases} \dfrac{\partial \mathcal{L}}{\partial \phi}=-\dfrac{d V}{d \phi}\\ \dfrac{\partial \mathcal{L}}{\partial (\partial _{\mu}\phi)}=-\eta^{\mu\nu}\partial _{\nu}\phi \end{cases}
+$$
+
+我们将上式子代入到欧拉-拉格朗日方程，就可以得到
+
+$$
+\Box \phi-\frac{d V}{d \phi}=0
+$$
+
+其中$\Box\equiv \eta^{\mu\nu}\partial _{\mu}\partial _{\nu}$，被称为达朗贝尔算符，显然在闵可夫斯基度规下
+
+$$
+\Box \phi= \eta^{\mu\nu}\partial _{\mu}\partial _{\nu} \phi=\ddot{\phi}-\nabla ^{2}\phi
+$$
+
+## **2. 走向弯曲前的准备**
+
+当我们考虑在弯曲时空下的场的时候，事情变得更加复杂了，由于空间的弯曲，时空中每一处的度规会发生改变，相应的我们原来运算部分就需要修正了
+
+首先需要修正的是算符，之所以需要修正，主要因为之前所使用的偏导算符是依赖于坐标系的选定的，但是我们希望得到坐标无关的算符来描述更为一般的流形的性质，因此我们需要引入**协变算符$\nabla_{\mu}$**，其定义为 $\nabla : \mathscr{F}_{M}(k,l)\rightarrow\mathscr{F}_{M}(k,l+1)$，其满足以下性质
+
+- 线性性：$\nabla _{\mu}(a\mathbf{T}+b\mathbf{S})=a \nabla_{\mu} \mathbf{T}+b \nabla_{\mu} \mathbf{S}$
+- 莱布尼兹律： $\nabla _{\mu}(\mathbf{T}\otimes\mathbf{S})=( \nabla_{\mu} \mathbf{T})\otimes\mathbf{S}+(\nabla_{\mu} \mathbf{S})\otimes\mathbf{T}$
+
+如果我们想要进行坐标变换，显然会有
+
+$$
+\nabla _{\mu'}V^{\nu'}=\frac{\partial x^{\mu}}{\partial x^{\mu'}}\frac{\partial x^{\nu'}}{\partial x^{\nu}}\nabla _{\mu}V^{\nu} 
+$$
+
+而其对于偏导算符的差别（作用于一个矢量）可以表达为
+
+$$
+\nabla _{\mu}V^{\nu}=\partial _{\mu}V^{\nu}+\Gamma_{\mu\lambda }^{\nu}V^{\lambda } 
+$$
+
+其中，$\Gamma_{\mu \lambda }^{\nu}$称之为**克里斯托弗符号**，之所以称之为所谓的“符号”是因为其不具备坐标变换不变性，不能称之为张量，其也称之为**联络系数**，是用来描述曲面的性质的量，其满足以下性质
+
+- 无挠性：$\Gamma_{\mu \lambda }^{\nu}=\Gamma_{\lambda \mu}^{\nu}$
+- 度规相容性： $\nabla _{\rho}g_{\mu\nu}=0$
+
+而从度规相容性出发，我们可以得到联络和度规的关系
+
+$$
+\Gamma_{\mu\nu}^{\sigma}=\frac{1}{2}g^{\sigma\rho}(g_{\nu\rho,\mu}+g_{\rho\mu,\nu}-g_{\mu\nu,\rho})
+$$
+
+其中$g_{\nu\rho,\mu}=\partial _{\mu}g_{\nu\rho}$，根据这个表达式我们可以很明显得到，当度规是闵可夫斯基度规的时候，克里斯托弗符号为零，则此时协变算符和偏导算符等价
+
+而从协变导数出发，我们还可以得到几个典型的张量；首先是黎曼张量，其由协变导数的交换子得出
+
+$$
+[\nabla _{\mu},\nabla _{\nu}]V^{\rho}=R_{\sigma\mu\nu}^{\rho}V^{\sigma}
+$$
+
+其中 $R_{\sigma\mu\nu}^{\rho}$称之为**黎曼张量**，利用协变导数的性质展开得到
+
+$$
+R_{\sigma\mu\nu}^{\rho}=\partial _{\mu}\Gamma_{\nu\sigma}^{\rho}-\partial _{\nu}\Gamma_{\mu\sigma}^{\rho}+\Gamma_{\mu \lambda }^{\rho}\Gamma_{\nu\sigma}^{\lambda }-\Gamma_{\nu \lambda }^{\rho}\Gamma_{\mu \sigma}^{\lambda }
+$$
+
+其性质我们直接罗列出来，首先用度规降指标得到一个新的张量，则有性质
+
+$$
+R_{\rho\sigma\mu\nu}=g_{\rho \lambda }R_{\sigma\mu\nu}^{\rho}
+$$
+
+- 反对称性：$R_{[\rho\sigma\mu\nu]}=0$
+- **毕安基恒等式**： $\nabla _{[\lambda }R_{\rho\sigma]\mu\nu}=0$
+
+如果我们令黎曼张量进行一次缩并，则可以得到**里奇张量**
+
+Rμν=Rμλνλ
+
+显然，进行缩并所得到的张量可以理解为黎曼张量的对称部分，则有性质
+
+Rμν=Rνμ
+
+而里奇张量求迹，可得到**里奇标量**
+
+$$
+R_{\mu\nu}=R_{\mu \lambda \nu}^{\lambda }
+$$
+
+另外对于黎曼张量的无迹部分，可以由**外尔张量**表征
+
+$$
+C_{\rho\sigma\mu\nu}=R_{\rho\sigma\mu\nu}-\frac{2}{n-2}(g_{\rho[\mu}R_{\nu]\sigma}-g_{\sigma[\mu}R_{\nu]\rho})+\frac{2}{(n-1)(n-2)}g_{\rho[\mu}g_{\nu]\sigma}R
+$$
+
+最后，我们还可以定义**爱因斯坦张量**
+
+$$
+G_{\mu\nu}=R_{\mu\nu}-\frac{1}{2}Rg_{\mu\nu}
+$$
+
+根据毕安基恒等式，爱因斯坦张量显然满足
+
+$$
+\nabla ^{\mu}G_{\mu\nu}=0
+$$
+
+而有了这个性质，才为之后的爱因斯坦场方程做了铺垫（即使当时爱因斯坦一开始不知道毕安基恒等式，而凑出来的这个方程）
+
+## **3. 走到弯曲的路**
+
+有了之前的各种描述弯曲时空的张量的铺垫，我们便可以放心大胆的走向弯曲的道路了
+
+那么首先，对于弯曲时空的作用量和拉格朗日量会有所修正，我们不妨先从最简单的标量场开始，即我们应当用$\Phi^{i}$和其协变导数 $\nabla _{\mu}\Phi^{i}$来描述，则有表达式
+
+$$
+S=\int\mathcal{L}(\Phi^{i},\nabla _{\mu}\Phi^{i})d^{n}x 
+$$
+
+我们对于拉格朗日密度做出一个修正
+
+$$
+\mathcal{L}=\sqrt{-g}\widehat{\mathcal{L}}
+$$
+
+其中$\sqrt{-g}=\sqrt{-\text{det}\,g}$,那么欧拉-拉格朗日方程
+
+$$
+ \frac{\partial \widehat{\mathcal{L}}}{\partial \Phi}-\nabla _{\mu}\left(\frac{\partial \widehat{\mathcal{L}}}{\partial (\nabla _{\mu}\Phi)}\right)=0 
+$$
+
+显然这对于一般的场是显然的，也会推出我们之前得到的结论
+
+$$
+\Box \phi-\frac{d V}{d \phi}=0 
+$$
+
+其中 $\Box=g^{\mu\nu}\nabla _{\mu }\nabla _{\nu}$
+
+而对于一般的弯曲时空的作用量我们又该如何描述呢，此时的变量由一般的标量场变为了度规的变化，这时候我们联系到了之前的里奇标量，这是我们熟悉的唯一的由黎曼张量构造的标量，我们不妨将其表示出作用量
+
+$$
+S_{H}=\int \sqrt{-g}R\,d^{\,n}x 
+$$
+
+这就是**希尔伯特作用量**， 我们将会使用最小作用量来验证其正确性
+
+首先，作为变量的度规，我们写出其微分形式
+
+$$
+\delta g_{\mu\nu}=-g_{\mu\rho}g_{\nu\sigma}\delta g^{\rho\sigma}
+$$
+
+那么作用量的微分由三部分组成
+
+$$
+\delta S_{H}=\underset{1\bf{部分}}{\int d^{\,n}x \sqrt{-g}g^{\mu\nu}\delta R_{\mu\nu}}+\underset{2\bf{部分}}{\int d^{\,n}x \sqrt{-g}R_{\mu\nu}\delta g^{\mu\nu}}+\underset{3\bf{部分}}{\int d^{\,n}x R\delta \sqrt{-g}} 
+$$
+
+对于第一部分，黎曼张量和克里斯托弗符号的微分形式可以表示为（具体计算过程略）
+
+$$
+\delta R_{\mu\lambda \nu}^{\rho}=\nabla _{\lambda }(\delta \Gamma_{\nu\mu}^{\rho})-\nabla _{\nu}(\delta \Gamma_{\lambda \mu}^{\rho})\\ \delta \Gamma_{\mu\nu}^{\sigma}=-\frac{1}{2}\left[g_{\lambda \mu}\nabla _{\nu}(\delta g^{\lambda \sigma})+g_{\lambda \nu}\nabla _{\mu}(\delta g^{\lambda \sigma})-g_{ \mu \alpha}g_{\nu \beta}\nabla ^{\sigma}(\delta g^{\alpha \beta})\right]
+$$
+
+则第一部分可写为
+
+$$
+ (\delta S_{H})_{1}=\int d^{n}x\sqrt{-g}\nabla _{\sigma}[g_{\mu\nu}\nabla ^{\sigma}(\delta g^{\mu\nu})-\nabla _{\lambda }(\delta g^{\sigma \lambda })] 
+$$
+
+对于第三部分，要对其行列式求微分，我们有关系
+
+$$
+\begin{align*} &\ln (\text{det} g )=\text{Tr }(\ln g)\\ \implies &\frac{1}{\text{det}g}\delta (\text{det}g)=\text{Tr }(g^{-1}\delta g)\\ \implies&\delta g=-g(g_{\mu\nu}\delta g^{\mu\nu})\\ \implies&\delta \sqrt{-g}=-\frac{1}{2}\sqrt{-g}g_{\mu\nu}\delta g^{\mu\nu} \end{align*}
+$$
+
+最后我们整理得到
+
+$$
+\delta S =\int d^{n}x\sqrt{-g}\left[R_{\mu\nu}-\frac{ 1}{2}Rg_{\mu\nu}\right]\delta g_{\mu\nu} 
+$$
+
+令$\delta S=0$可得到
+
+$$
+\frac{1}{\sqrt{-g}}\frac{\delta S_{H}}{\delta g^{\mu\nu}}=R_{\mu\nu}-\frac{1}{2}Rg_{\mu\nu}=0
+$$
+
+于是我们就得到了在真空中的爱因斯坦场方程了，如果要考虑由非真空的场方程，我们因此需要给作用量添加物质项，于是完整的作用量表达式为
+
+$$
+S=\frac{ 1}{16\pi G}S_{H}+S_{M} 
+$$
+
+同样的，利用最小作用量原理得到
+
+$$
+\frac{1}{\sqrt{-g}}\frac{\delta S_{H}}{\delta g^{\mu\nu}}=\frac{1}{16\pi G}\left(R_{\mu\nu}-\frac{1}{2}Rg_{\mu\nu}\right)+\frac{1}{\sqrt{-g}}\frac{\delta S_{M}}{\delta g^{\mu\nu}}=0 
+$$
+
+我们设  $T_{\mu\nu}=-\frac{2}{\sqrt{-g}}\frac{\delta S_{M}}{\delta g^{\mu\nu}}$ ，称之为**能量动量张量**
+
+于是我们就得到了著名的爱因斯坦场方程的表达式了
+
+$$
+R_{\mu\nu}-\frac{ 1}{2}Rg_{\mu\nu}=8\pi GT_{\mu\nu}
+$$
+
+这就是我们从经典场论走到弯曲时空的一个大致的历程，当然其中忽略了很多细节，因此本文只是作为在学习广相的过程中做的一个小总结，当然推得爱因斯坦场方程的方式不止这样的一种，很多书都会去介绍我们如何去“凑”出来这个方程，当然爱因斯坦一开始也是“凑”出来的，但如何凑的想法体现出了比较明显的物理图像的。
