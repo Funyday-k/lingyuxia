@@ -35,7 +35,7 @@ Studying Experience
 
 * **Student-led study group–Taishan Seminar, May 2022-Present**
 
-  In order to better learn the theoretical knowledge of physics, I, as one of the co-funders and contributors, jointly set up the Taishan Seminar. My classmates and I discuss mathematics and physics-related problems every week. And we established a website to upload notes and other materials for each discussion. Website: [physicsseminar.com](physicsseminar.com)
+  In order to better learn the theoretical knowledge of physics, I, as one of the co-funders and contributors, jointly set up the Taishan Seminar. My classmates and I discuss mathematics and physics-related problems every week. And we established a website to upload notes and other materials for each discussion. Website: [physicsseminar.com](http://physicsseminar.com)
 * **Hands-on project of axion and boson stars, Jan. 2023TDLI Winter Camp of Astrophysics, advised by Prof. Luca Visinelli**
 
   We study the method of estimating the mass of a boson star and Fried- mann equations, and numerically predict the upper bound of the mass using shooting method of ODE and the age of Universe.
