@@ -1,7 +1,7 @@
 ---
 title: '从经典场论走向弯曲时空'
 date: 2022
-permalink: /posts/2012/08/blog-post-1/
+permalink: /posts/2022/blog-post-2/
 tags:
   - cool posts
   - category1
