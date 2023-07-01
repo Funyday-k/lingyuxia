@@ -14,6 +14,6 @@ My passion for physics knows no bounds, serving as the primary motivation for my
 
 I like to think of myself as an intriguing individual, as I possess a genuine love for social interactions and embrace the opportunity to make friends with people from all walks of life.
 
-> **Update: 2023.6.30**
+> **Update: 2023.6.31**
 
 
