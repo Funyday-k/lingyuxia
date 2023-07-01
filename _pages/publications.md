@@ -16,3 +16,6 @@ author_profile: true
 {% endfor %}
 
 > Still in working
+
+But I am writing a book about GR you can download it! 
+[GR](https://github.com/Funyday-k/Notes/blob/main/GW_Scattering/GR_note.pdf)
