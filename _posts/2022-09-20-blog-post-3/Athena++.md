@@ -123,9 +123,6 @@ git --version
 
 ![https://picx.zhimg.com/80/v2-7356b35b47b262f21304d4dca7262b26_1440w.jpeg?source=d16d100b](https://picx.zhimg.com/80/v2-7356b35b47b262f21304d4dca7262b26_1440w.jpeg?source=d16d100b)
 
-编辑切换为居中
-
-添加图片注释，不超过 140 字（可选）
 
 有了这个链接我们就可以将这个项目利用Git下载下来了，具体的指令是
 
