@@ -37,7 +37,7 @@ type: Paper
 
 ## **1.数值模拟工具——athena++**
 
-![Athena++的logo](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/athena_logo_temporary.png)
+![Athena++的logo](pic/athena_logo_temporary.png)
 
 Athena++的logo
 
@@ -58,7 +58,7 @@ Athena是一个由Stone教授于2008年基于C语言开发的高阶数值模拟�
 
 在Documentation一栏会跳转到[Github上的项目](https://github.com/PrincetonUniversity/athena/wiki), 这便是一个大概的教程吧, 当然我个人觉得其中有些讲得并不详细,让我在前期造成了很大困难
 
-![5.jpg](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/5.jpg)
+![5.jpg](pic/5.jpg)
 
 第一步是，我们要获取代码。
 
@@ -105,7 +105,7 @@ git --version
 
 如果安装了Git，就会有
 
-![v2-40d08382f9fa950456032d03b87818a2_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-40d08382f9fa950456032d03b87818a2_1440w.png)
+![v2-40d08382f9fa950456032d03b87818a2_1440w.png](pic/v2-40d08382f9fa950456032d03b87818a2_1440w.png)
 
 如果没有安装Git就按照之上的brew的方法去安装Git（如果安装失败，可以试试科学上网或者更换国内的镜像源）
 
@@ -113,11 +113,11 @@ git --version
 
 首先就是代码本身了，我们需要回到Github的那个项目上去，然后点击Code一栏
 
-![v2-855596cb07d5d8d4b8a0dcbc54ee553a_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-855596cb07d5d8d4b8a0dcbc54ee553a_1440w.png)
+![v2-855596cb07d5d8d4b8a0dcbc54ee553a_1440w.png](pic/v2-855596cb07d5d8d4b8a0dcbc54ee553a_1440w.png)
 
 然后，我们就能看见这整一个代码的文件了
 
-![v2-933f02aefa05140417f6ab3110a8d3cf_1440w.jpeg](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-933f02aefa05140417f6ab3110a8d3cf_1440w.jpeg)
+![v2-933f02aefa05140417f6ab3110a8d3cf_1440w.jpeg](pic/v2-933f02aefa05140417f6ab3110a8d3cf_1440w.jpeg)
 
 那我们怎么获取整个代码项目呢？我们先点击绿色的 Code 里面就会有一个链接
 
@@ -145,7 +145,7 @@ git pull
 ls
 ```
 
-![v2-4429859070148a30e9b70e94502e908a_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-4429859070148a30e9b70e94502e908a_1440w.png)
+![v2-4429859070148a30e9b70e94502e908a_1440w.png](pic/v2-4429859070148a30e9b70e94502e908a_1440w.png)
 
 为了查看这个文件夹里的文件，我们可以选择转到这个文件里，即cd指令
 
@@ -155,7 +155,7 @@ cd athena
 
 然后再使用ls指令就可以查看到athena文件夹里的文件了
 
-![v2-9ce9f9c242439409b88d16772c87fd05_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-9ce9f9c242439409b88d16772c87fd05_1440w.png)
+![v2-9ce9f9c242439409b88d16772c87fd05_1440w.png](pic/v2-9ce9f9c242439409b88d16772c87fd05_1440w.png)
 
 好了，我们现在已经把Athena项目下载好了，那我们该下载相关的环境了
 
@@ -167,7 +167,7 @@ python3 -v
 
 来确认是否安装了python以及python的版本，如果安装了会显示
 
-![v2-167b004621febb39950b7b3595943774_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-167b004621febb39950b7b3595943774_1440w.png)
+![v2-167b004621febb39950b7b3595943774_1440w.png](pic/v2-167b004621febb39950b7b3595943774_1440w.png)
 
 同时我们也进入了python的交互式的界面（就是那个>>>），可以按Ctrl+D退出交互式界面
 
@@ -249,7 +249,7 @@ python3 configure.py -h
 
 我们会得到如下列表
 
-![v2-bef3af2fa9da27b9da07f64f3beb0bc9_1440w.jpeg](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-bef3af2fa9da27b9da07f64f3beb0bc9_1440w.jpeg)
+![v2-bef3af2fa9da27b9da07f64f3beb0bc9_1440w.jpeg](pic/v2-bef3af2fa9da27b9da07f64f3beb0bc9_1440w.jpeg)
 
 其中必不可少的选项是指定问题生成器，即在编译的时候需要加如下后缀
 
@@ -265,7 +265,7 @@ python3 configure.py --prob xxxx
 
 这些文件都是给定的问题产生器，至于是什么物理情景，我们可以点进去查看其描述，这里以jet.cpp为例，我们使用VScode打开这个文件来查看（其实在VScode中打开athena文件夹进行操作也可）
 
-![v2-d337456df6bf2b0d3df8e05892140fc1_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-d337456df6bf2b0d3df8e05892140fc1_1440w.png)
+![v2-d337456df6bf2b0d3df8e05892140fc1_1440w.png](pic/v2-d337456df6bf2b0d3df8e05892140fc1_1440w.png)
 
 于是我们就可以在注释里知道
 
@@ -300,7 +300,7 @@ brew list hdf5-mpi
 
 来查询hdf5-mpi的安装位置
 
-![v2-e5d63d91f63efdee2b2a1bc7625ebd4c_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-e5d63d91f63efdee2b2a1bc7625ebd4c_1440w.png)
+![v2-e5d63d91f63efdee2b2a1bc7625ebd4c_1440w.png](pic/v2-e5d63d91f63efdee2b2a1bc7625ebd4c_1440w.png)
 
 接下来我们开始编译，先输入
 
@@ -310,7 +310,7 @@ make clean
 
 如果这里说没有下载make工具可以按照提示的指令进行按照，然后再重复上述步骤
 
-![这里是删除之前的编译文件](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-82a64b94e2cd7fde409cea822d915d13_1440w.png)
+![这里是删除之前的编译文件](pic/v2-82a64b94e2cd7fde409cea822d915d13_1440w.png)
 
 这里是删除之前的编译文件
 
@@ -324,15 +324,15 @@ make -j
 
 于是就开始进行编译了
 
-![v2-5d113941d6e98c66db820ac86553f65e_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-5d113941d6e98c66db820ac86553f65e_1440w.png)
+![v2-5d113941d6e98c66db820ac86553f65e_1440w.png](pic/v2-5d113941d6e98c66db820ac86553f65e_1440w.png)
 
 上图就是编译成功了，这样在地址**/bin**中会生成一个二进制的可执行的文件**/bin/athena**
 
 这个时候，我们就需要输入文件了，而与给定的问题生成器对应的输入文件都存放在地址**/inputs**中，而目前我们需要的输入文件是**/inputs/hydro/athinput.jet**而这个文件我们也是可以查看的
 
-![v2-985299952405b522a69d1e3d4c520900_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-985299952405b522a69d1e3d4c520900_1440w.png)
+![v2-985299952405b522a69d1e3d4c520900_1440w.png](pic/v2-985299952405b522a69d1e3d4c520900_1440w.png)
 
-![v2-469893a6fda11839873a62cb042f937f_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-469893a6fda11839873a62cb042f937f_1440w.png)
+![v2-469893a6fda11839873a62cb042f937f_1440w.png](pic/v2-469893a6fda11839873a62cb042f937f_1440w.png)
 
 这些就是输入文件的内容，其中在<output2>中的file_type我们需要改成hdf5格式，否则是默认vtk格式，而对于不同的格式有什么特点，这里简单的列一下
 
@@ -375,7 +375,7 @@ cd prob
 
 当我们计算完成后，就会得到HDF5的计算文件，接下来我们就需要对其进行可视化了，这里我们有好几个方法，比如使用Vislt软件，Vislt是比较方便的，但是上限不高，对于之后的数据分析的需求很难满足；所以这里更推荐使用python的库yt
 
-![9.jpg](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/9.jpg)
+![9.jpg](pic/9.jpg)
 
 关于相关的教程，你可以从官网的文档里学习到，这里我们用一个简单的代码展示一下
 
@@ -401,9 +401,9 @@ p.save()
 
 我们就可以得到了一张漂亮的图像
 
-![v2-beeca23962068d17aa1040f67a33aa25_1440w.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-beeca23962068d17aa1040f67a33aa25_1440w.png)
+![v2-beeca23962068d17aa1040f67a33aa25_1440w.png](pic/v2-beeca23962068d17aa1040f67a33aa25_1440w.png)
 
-![这是一个考虑狭义相对论的喷流](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/v2-93a16e8887006695a9a29a048c9e3379_1440w.png)
+![这是一个考虑狭义相对论的喷流](pic/v2-93a16e8887006695a9a29a048c9e3379_1440w.png)
 
 这是一个考虑狭义相对论的喷流
 
@@ -411,7 +411,7 @@ p.save()
 
 当然对于简单的测试，我们可以利用Vislt，直接选择一系列的HDF5文件来直接得到动画和图片
 
-![{F4B3EFB1-E73D-E363-7B61-3876574B5163}.png](Athena++%E6%80%BB%E7%BB%93%209702550ebc4c45829e9939eca4c9e2c0/F4B3EFB1-E73D-E363-7B61-3876574B5163.png)
+![{F4B3EFB1-E73D-E363-7B61-3876574B5163}.png](pic/F4B3EFB1-E73D-E363-7B61-3876574B5163.png)
 
 喷流的模拟
 
