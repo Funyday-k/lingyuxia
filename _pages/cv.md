@@ -16,6 +16,13 @@ Education
 >*Taishan College is the distinguished college of Shandong Univer- sity. Only about 20 students from freshmen can be selected for the Physics Orientation of Taishan College each year.*
 
 * Visiting Student, Department of Physics, Bar-Ian University, Israel, 2023 - 2024
+  
+Technical Skills and Interests
+====
+
+* **Code Skills**: $\LaTeX$, Mathematica, Python, C, Matlab
+* **Core Course**: General Relativity & Cosmology, Quantum Mechanics, Electrodynamics
+* **Areas of Interest**: Gravitational Wave, Cosmology, Gravity Theory
 
 Research Experience
 ======
@@ -24,7 +31,7 @@ Research Experience
 
   * *Institude of Frontier and Interdisciplinary science, Shandong Univer- sity, advised by Prof. Hong Zhang*
 
-  The project is to study the scattering of gravitational waves. For the tradi- tional scattering problem, we can use the partial wave method to analyze the wave function. But for the "classical potential" such as gravitational potential and Coulomb potential, the incident wave cannot be easily as- sumed by the plane wave, and the wave source itself will also affect the distribution of the wave propogation. Therefore, the purpose of our study is to analyze the distribution of wave function under the consideration of finite wave sources, and use analytical method and numerical numerircal to help us verify the conclusion.
+  In the study of scattering problems, a key obstacle is the lack of convergence of wave summation when calculating scattering amplitudes. In our work, we discard the assumption of plane wave incidence in the traditional fractional wave method, and consider the combined influence of the long-range forces of the wave source and the scattering source, so as to solve the problem of lack of convergence of scattering amplitude, and extract the physical information we need in the absence of analytical solutions of differential equations.
 
 * **Gamma-Ray Bursts**, Nov. 2023 - Prensent
   * *Department of Physics, Bar-Ilan University, advised by Prof. Peer Asaf*
@@ -34,7 +41,8 @@ Research Experience
 
   * *Shanghai Astronomical Observatory, CAS, advised by Prof. Feng Yuan*
 
-  This is a ”Science and Technology Innovation Project” of the SAO, CAS. The formation and evolution of galaxies is one of the most important fun- damental sciences, and active galactic nuclei (AGN) feedback has a crucial impact on galaxy evolution. We propose to use the advanced numerical simulation code Athena++, combined with knowledge of astrophysics and hydrodynamics to analyze some special phenonmenon.
+  This is a Science and Technology Innovation Project of the SAO, CAS. We propose to use the advanced numerical
+simulation code Athena++, combined with knowledge of astrophysics and hydrodynamics to analyze some special phenomenon.
 
 
 Studying Experience
@@ -48,6 +56,10 @@ Studying Experience
   * 2023TDLI Winter Camp of Astrophysics, advised by Prof. Luca Visinelli
 
   We study the method of estimating the mass of a boson star and Fried- mann equations, and numerically predict the upper bound of the mass using shooting method of ODE and the age of Universe.
+
+* **The first Summer School of Basic Theory for top physics students**, July 2023
+
+  The Summer School invited more than 20 experts and scholars, including academicians of the Chinese Academy of Sciences, to give lectures and participate in seminars for students. The summer School’s content includes in-depth learning of basic theories of physics, cutting-edge reports, teacher-student seminars, student exchanges, education and teaching forums, etc.
 
 
 Awards & Skills
