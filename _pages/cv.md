@@ -9,6 +9,9 @@ redirect_from:
 
 {% include base_path %}
 
+This is [PDF](https://funyday-k.github.io/lingyuxia//files/CV.pdf).
+
+
 Education
 ======
 * B.S. of Physics in Taishan College, Shandong University, China,  2021 - 2025
