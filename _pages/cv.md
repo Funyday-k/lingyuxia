@@ -14,33 +14,31 @@ This is [PDF](https://funyday-k.github.io/lingyuxia//files/CV.pdf).
 
 Education
 ======
-* B.S. of Physics in Taishan College, Shandong University, China,  2021 - 2025
-
->*Taishan College is the distinguished college of Shandong Univer- sity. Only about 20 students from freshmen can be selected for the Physics Orientation of Taishan College each year.*
+* B.S. of Physics in Taishan College, Shandong University, China, Sep. 2021 - June 2025
 
 * Visiting Student, Department of Physics, Bar-Ian University, Israel, 2023 - 2024
   
 Technical Skills and Interests
 ====
 
-* **Code Skills**: $\LaTeX$, Mathematica, Python, C, Matlab
+* **Code Skills**: **Mathematica**, Python, C, Matlab, $\LaTeX$
 * **Core Course**: General Relativity & Cosmology, Quantum Mechanics, Electrodynamics
 * **Areas of Interest**: Gravitational Wave, Cosmology, Gravity Theory
 
 Research Experience
 ======
 
-* **Scattering of Gravitational Wave**,  Nov. 2022 - Present 
+* **Scattering of Gravitational Wave**,  Nov. 2022 - June 2025
 
   * *Institude of Frontier and Interdisciplinary science, Shandong Univer- sity, advised by Prof. Hong Zhang*
 
   In the study of scattering problems, a key obstacle is the lack of convergence of wave summation when calculating scattering amplitudes. In our work, we discard the assumption of plane wave incidence in the traditional fractional wave method, and consider the combined influence of the long-range forces of the wave source and the scattering source, so as to solve the problem of lack of convergence of scattering amplitude, and extract the physical information we need in the absence of analytical solutions of differential equations.
 
-* **Gamma-Ray Bursts**, Nov. 2023 - Prensent
+* **Gamma-Ray Bursts**, Nov. 2023 - Aug. 2024
   * *Department of Physics, Bar-Ilan University, advised by Prof. Peer Asaf*
   Research about GRB(Gamma-Ray Bursts).
 
-* **Numerical simulations of Active Galactic Nuclei**, Mar. 2022 - Present
+* **Numerical simulations of Active Galactic Nuclei**, Mar. 2022 - Nov. 2022
 
   * *Shanghai Astronomical Observatory, CAS, advised by Prof. Feng Yuan*
 
@@ -74,13 +72,6 @@ Awards & Skills
 * First prize of physics competition of university students in Shandong province
 
 
-## Programming
-
-* LaTeX
-* Mathematica
-* Python
-* C
-* Matlab
 
 
 Publications
