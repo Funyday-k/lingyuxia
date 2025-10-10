@@ -31,7 +31,7 @@ Research Experience
 
 * **Scattering of Gravitational Wave**,  Nov. 2022 - June 2025
 
-  * *Institude of Frontier and Interdisciplinary science, Shandong Univer- sity, advised by Prof. Hong Zhang*
+  * *Institude of Frontier and Interdisciplinary science, Shandong University, advised by Prof. Hong Zhang*
 
   In the study of scattering problems, a key obstacle is the lack of convergence of wave summation when calculating scattering amplitudes. In our work, we discard the assumption of plane wave incidence in the traditional fractional wave method, and consider the combined influence of the long-range forces of the wave source and the scattering source, so as to solve the problem of lack of convergence of scattering amplitude, and extract the physical information we need in the absence of analytical solutions of differential equations.
 
@@ -57,7 +57,7 @@ Studying Experience
 * **Hands-on project of axion and boson stars**, Jan. 
   * 2023TDLI Winter Camp of Astrophysics, advised by Prof. Luca Visinelli
 
-  We study the method of estimating the mass of a boson star and Fried- mann equations, and numerically predict the upper bound of the mass using shooting method of ODE and the age of Universe.
+  We study the method of estimating the mass of a boson star and Friedmann equations, and numerically predict the upper bound of the mass using shooting method of ODE and the age of Universe.
 
 * **The first Summer School of Basic Theory for top physics students**, July 2023
 
