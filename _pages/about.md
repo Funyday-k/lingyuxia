@@ -36,11 +36,11 @@ My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the De
 
 # My Contact details
 
-> **Name:Lingyu Xia 夏凌羽**
+> **Name: Lingyu Xia 夏凌羽**
 > 
 > **Address：Room 313 3T, Science Centre North Block,Department of Physics, Faculty of Science, The Chinese University of Hong Kong, Hong Kong, China**
 > 
-> **E-mail: lingyuxia@link.cuhk.edu.hk &&xialingyu213@gmail.com**
+> **E-mail: lingyuxia@link.cuhk.edu.hk & xialingyu213@gmail.com**
 >
 > **Phone Number: Guess!**
 
