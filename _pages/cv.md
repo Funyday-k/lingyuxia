@@ -16,6 +16,7 @@ Education
 ======
 * B.S. of Physics in Taishan College, Shandong University, China, Sep. 2021 - June 2025
 
+
 * Visiting Student, Department of Physics, Bar-Ian University, Israel, 2023 - 2024
   
 Technical Skills and Interests
