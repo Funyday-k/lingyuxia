@@ -32,7 +32,7 @@ My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the De
 
 # Publication
 
-![急](/images/pub_note.jpg "急")
+![急](/images/pub_note.jpg)
 
 # My Contact details
 
