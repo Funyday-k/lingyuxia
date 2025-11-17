@@ -22,9 +22,11 @@ My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the De
 
 # Conferences & Visiting
 
-- 2025.10.25-10.26: [2025 Future Science Prize Week Science Symposium II](https://www.futureprize-hk.org/en/2025sciencesymposium-ii) (Hong Kong, **Planning**)
-- 2025.3.21-3.24: [The 2nd LHAASO Symposium](https://indico.ihep.ac.cn/event/23146/).(Hong Kong 香港)
-- 2024.4.11: [The 69th annual conference of the Israel Physical Society](https://www.israelphysicalsociety.org/conference/69th-annual-meeting). (Tel Aviv 特拉维夫)
+- 2026.5.2: [2026 Asia-Pacific Regional IAU Meeting](https://aprim2026.org) (HKU, Hong Kong)
+- 2025.11.3 :[The First HKIAA Symposium](https://www.scifac.hku.hk/news/hku-launches-the-hong-kong-institute-for-astronomy-and-astrophysics) (HKU, Hong Kong)
+- 2025.10.25-10.26: [2025 Future Science Prize Week Science Symposium II](https://www.futureprize-hk.org/en/2025sciencesymposium-ii) (Hong Kong)
+- 2025.3.21-3.24: [The 2nd LHAASO Symposium](https://indico.ihep.ac.cn/event/23146/).(CUHK, Hong Kong)
+- 2024.4.11: [The 69th annual conference of the Israel Physical Society](https://www.israelphysicalsociety.org/conference/69th-annual-meeting). (Tel Aviv University, Israel)
 
 
 
@@ -34,11 +36,19 @@ My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the De
 
 ![急](/images/pub_note.jpg)
 
+
+# Useful Links
+- [MAURICIO's Daily ArXiv Picks](https://mbustamante.net/my-daily-arxiv-picks/)
+- [Inspire HEP](https://inspirehep.net/)
+- [NASA ADS](https://ui.adsabs.harvard.edu/)
+-  [CUHK Physics Department](https://phy.cuhk.edu.hk/)
+-  [Institute of Frontier and Interdisciplinary Sciences, SDU](https://frontier.qd.sdu.edu.cn)
+
 # My Contact details
 
 > **Name: Lingyu Xia 夏凌羽**
 > 
-> **Address：Room 313 3T, Science Centre North Block,Department of Physics, Faculty of Science, The Chinese University of Hong Kong, Hong Kong, China**
+> **Address：Room 313, Science Centre North Block,Department of Physics, Faculty of Science, The Chinese University of Hong Kong, Hong Kong, China**
 > 
 > **E-mail: lingyuxia@link.cuhk.edu.hk & xialingyu213@gmail.com**
 >
