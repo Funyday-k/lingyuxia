@@ -34,7 +34,8 @@ My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the De
 
 # Publication
 
-![急](https://github.com/Funyday-k/lingyuxia/blob/22310579fc1e82d1e814def166174e3b1effcbd3/_pages/pub_note.jpg)
+
+![alt text](https://github.com/Funyday-k/lingyuxia/blob/22310579fc1e82d1e814def166174e3b1effcbd3/_pages/pub_note.jpg)
 
 
 # Useful Links
