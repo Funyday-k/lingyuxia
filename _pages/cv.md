@@ -9,77 +9,66 @@ redirect_from:
 
 {% include base_path %}
 
-This is [PDF](/lingyuxia/files/CV.pdf).
-
-
 Education
 ======
-* B.S. of Physics in Taishan College, Shandong University, China, Sep. 2021 - June 2025
-
-
-* Visiting Student, Department of Physics, Bar-Ian University, Israel, 2023 - 2024
-  
-Technical Skills and Interests
-====
-
-* **Code Skills**: **Mathematica**, Python, C, Matlab, $\LaTeX$
-* **Core Course**: General Relativity & Cosmology, Quantum Mechanics, Electrodynamics
-* **Areas of Interest**: Gravitational Wave, Cosmology, Gravity Theory
+* 2025.08 -- Present, Ph.D. student in Physics, The Chinese University of Hong Kong, supervised by [Prof. Kenny Chun Yu Ng](https://wp.phy.cuhk.edu.hk/teaching_staff/kenny-c-y-ng)
+* 2023.12 -- 2024.08, Visiting Student, Department of Physics, Bar-Ilan University, supervised by [Prof. Asaf Peer](https://physics.biu.ac.il/en/node/4374)
+* 2021.09 -- 2025.06, B.S. in Physics, Taishan College, Shandong University, supervised by [Prof. Hong Zhang](http://www.pppi.sdu.edu.cn/info/1059/2453.htm)
 
 Research Experience
 ======
 
-* **Scattering of Gravitational Wave**,  Nov. 2022 - June 2025
+* **Sub-GeV Dark Matter in the Sun (DaMaSCUS-SUN)**, 2025 -- Present
+  * *Department of Physics, The Chinese University of Hong Kong, advised by Prof. Kenny Ng*
+  * Developed a numerical computation framework for modeling dark matter capture, evaporation, annihilation, and signal flux from the Sun, based on spin-dependent elastic scattering with the AGSS09 standard solar model.
 
-  * *Institude of Frontier and Interdisciplinary science, Shandong University, advised by Prof. Hong Zhang*
+* **Accelerating DM Simulation with Diffusion Models (DaMaSCUS-Diffusion)**, 2025 -- Present
+  * *Department of Physics, The Chinese University of Hong Kong, advised by Prof. Kenny Ng*
+  * Built a FiLM-conditioned score-based diffusion model (VP-SDE) to replace Monte Carlo scattering sampling, achieving ~1000x speedup with < 3% normalized Wasserstein error.
 
-  In the study of scattering problems, a key obstacle is the lack of convergence of wave summation when calculating scattering amplitudes. In our work, we discard the assumption of plane wave incidence in the traditional fractional wave method, and consider the combined influence of the long-range forces of the wave source and the scattering source, so as to solve the problem of lack of convergence of scattering amplitude, and extract the physical information we need in the absence of analytical solutions of differential equations.
+* **Scattering of Gravitational Wave**, Nov. 2022 -- June 2025
+  * *Institute of Frontier and Interdisciplinary Science, Shandong University, advised by Prof. Hong Zhang*
+  * Addressed the convergence problem of wave summation in scattering amplitude calculations by replacing the plane wave incidence assumption with a framework considering long-range forces from both wave source and scattering source.
 
-* **Gamma-Ray Bursts**, Nov. 2023 - Aug. 2024
-  * *Department of Physics, Bar-Ilan University, advised by Prof. Peer Asaf*
-  Research about GRB(Gamma-Ray Bursts).
+* **Gamma-Ray Bursts**, Nov. 2023 -- Aug. 2024
+  * *Department of Physics, Bar-Ilan University, advised by Prof. Asaf Peer*
+  * Research on Gamma-Ray Bursts (GRB).
 
-* **Numerical simulations of Active Galactic Nuclei**, Mar. 2022 - Nov. 2022
-
+* **Numerical Simulations of Active Galactic Nuclei**, Mar. 2022 -- Nov. 2022
   * *Shanghai Astronomical Observatory, CAS, advised by Prof. Feng Yuan*
+  * Used the numerical simulation code Athena++ combined with astrophysics and hydrodynamics to analyze AGN jet phenomena.
 
-  This is a Science and Technology Innovation Project of the SAO, CAS. We propose to use the advanced numerical
-simulation code Athena++, combined with knowledge of astrophysics and hydrodynamics to analyze some special phenomenon.
+Technical Skills
+====
 
+* **Programming**: Python, Mathematica, C, MATLAB, $\LaTeX$
+* **Tools**: Athena++, Monte Carlo simulation, Machine Learning (PyTorch)
+* **Areas of Interest**: Dark Matter, Cosmic Ray, Gravitational Wave Theory
+
+Conferences & Activities
+======
+
+* 2026.8.31 -- 9.4: TeV Particle Astrophysics 2026 (Tendo, Japan, *Planning*)
+* 2025.11.3: The First HKIAA Symposium (HKU, Hong Kong)
+* 2025.10.25 -- 10.26: 2025 Future Science Prize Week Science Symposium II (Hong Kong)
+* 2025.3.21 -- 3.24: The 2nd LHAASO Symposium (CUHK, Hong Kong)
+* 2024.4.11: The 69th Annual Conference of the Israel Physical Society (Tel Aviv University, Israel)
+
+Awards
+======
+* 2023, Third Prize in Academic Level, Shandong University
+* 2022, Provincial First Prize, China Undergraduate Mathematical Contest in Modeling
+* First Prize, Physics Competition of University Students in Shandong Province
 
 Studying Experience
 =====
 
-* **Student-led study group–Taishan Seminar**, May 2022-Present
+* **Student-led Study Group -- Taishan Seminar**, May 2022 -- Present
+  * Co-founded a weekly physics and mathematics discussion group. Website: [physicsseminar.com](http://physicsseminar.com)
 
-  In order to better learn the theoretical knowledge of physics, I, as one of the co-funders and contributors, jointly set up the Taishan Seminar. My classmates and I discuss mathematics and physics-related problems every week. And we established a website to upload notes and other materials for each discussion. Website: [physicsseminar.com](http://physicsseminar.com)
+* **Hands-on Project of Axion and Boson Stars**, Jan. 2023
+  * 2023 TDLI Winter Camp of Astrophysics, advised by Prof. Luca Visinelli
+  * Studied boson star mass estimation using Friedmann equations and shooting method for ODE.
 
-* **Hands-on project of axion and boson stars**, Jan. 
-  * 2023TDLI Winter Camp of Astrophysics, advised by Prof. Luca Visinelli
-
-  We study the method of estimating the mass of a boson star and Friedmann equations, and numerically predict the upper bound of the mass using shooting method of ODE and the age of Universe.
-
-* **The first Summer School of Basic Theory for top physics students**, July 2023
-
-  The Summer School invited more than 20 experts and scholars, including academicians of the Chinese Academy of Sciences, to give lectures and participate in seminars for students. The summer School’s content includes in-depth learning of basic theories of physics, cutting-edge reports, teacher-student seminars, student exchanges, education and teaching forums, etc.
-
-
-Awards & Skills
-======
-## Awards
-
-* 2023, Third prize in academic level of Shandong University
-* 2022, Provincial First Prize in China Undergraduate Mathematical Contest in Modeling
-* First prize of physics competition of university students in Shandong province
-
-
-
-
-Publications
-======
-  <ul>{% for post in site.publications %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-
-  Still in working...
+* **The First Summer School of Basic Theory for Top Physics Students**, July 2023
 
