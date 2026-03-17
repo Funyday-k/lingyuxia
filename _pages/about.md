@@ -30,12 +30,6 @@ My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the De
 
 
 
-# Publication
-
-
-![alt text](/lingyuxia/images/pub_note.jpg)
-
-
 # Useful Links
 - [MAURICIO's Daily ArXiv Picks](https://mbustamante.net/my-daily-arxiv-picks/)
 - [Inspire HEP](https://inspirehep.net/)

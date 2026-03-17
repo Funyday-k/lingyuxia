@@ -15,7 +15,4 @@ author_profile: true
   {% include archive-single.html %}
 {% endfor %}
 
-> Still in working
-
-But I am writing a note about GR you can download it! 
-[GR](/lingyuxia/files/GR_note.pdf)
+![alt text](/lingyuxia/images/pub_note.jpg)
