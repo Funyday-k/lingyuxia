@@ -18,4 +18,4 @@ author_profile: true
 > Still in working
 
 But I am writing a note about GR you can download it! 
-[GR](https://funyday-k.github.io/lingyuxia//files/GR_note.pdf)
+[GR](/lingyuxia/files/GR_note.pdf)

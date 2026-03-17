@@ -9,7 +9,7 @@ redirect_from:
 
 {% include base_path %}
 
-This is [PDF](https://funyday-k.github.io/lingyuxia//files/CV.pdf).
+This is [PDF](/lingyuxia/files/CV.pdf).
 
 
 Education

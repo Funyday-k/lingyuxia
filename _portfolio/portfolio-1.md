@@ -5,28 +5,28 @@ collection: portfolio
 ---
 ## My Group
 
-![groupmeal](image/groupmeal.jpg)
+![groupmeal](/lingyuxia/images/portfolio/groupmeal.jpg)
 
 
 ## Memory of Dalian(大连)
-![dalian](image/dalian_harbor.jpg)
+![dalian](/lingyuxia/images/portfolio/dalian_harbor.jpg)
 
-![dalian2](image/dalian2.jpg)
+![dalian2](/lingyuxia/images/portfolio/dalian2.jpg)
 
-![dalian3](image/dalian.jpg)
+![dalian3](/lingyuxia/images/portfolio/dalian.jpg)
 
 ## My Undergraduate
 
 Final meal with my classmates.
 
-![1](image/my_class.jpg)
+![1](/lingyuxia/images/portfolio/my_class.jpg)
 
 
-![2](image/grad.jpg)
+![2](/lingyuxia/images/portfolio/grad.jpg)
 
 
 ## Memory of Tel Aviv
 
-![telaviv](image/telaviv.jpg)
+![telaviv](/lingyuxia/images/portfolio/telaviv.jpg)
 
-![telaviv2](image/telaviv2.jpg)
+![telaviv2](/lingyuxia/images/portfolio/telaviv2.jpg)
