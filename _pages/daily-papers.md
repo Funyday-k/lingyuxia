@@ -81,6 +81,25 @@ author_profile: true
 .paper-abstract.show {
   display: block;
 }
+.paper-authors-collapsed .authors-extra {
+  display: none;
+}
+.paper-authors-collapsed .authors-extra.show {
+  display: inline;
+}
+.authors-toggle {
+  cursor: pointer;
+  color: #0366d6;
+  font-size: 0.85em;
+  background: none;
+  border: none;
+  padding: 0 0.2em;
+  font-family: inherit;
+  vertical-align: middle;
+}
+.authors-toggle:hover {
+  text-decoration: underline;
+}
 .paper-comment {
   color: #e36209;
   font-size: 0.9em;
@@ -139,7 +158,7 @@ author_profile: true
         {% endif %}
       </p>
       {% if paper.authors and paper.authors != "" %}
-        <p class="paper-authors">👤 {{ paper.authors }}</p>
+        <p class="paper-authors" data-authors="{{ paper.authors | escape }}">👤 <span class="authors-text">{{ paper.authors }}</span></p>
       {% endif %}
       {% if paper.affiliations and paper.affiliations != "" %}
         <p class="paper-affiliations">🏛 {{ paper.affiliations }}</p>
@@ -165,3 +184,32 @@ author_profile: true
 {% if site.data.daily_papers.size == 0 %}
   <p class="no-papers-msg">暂无论文分享，敬请期待！</p>
 {% endif %}
+
+<script>
+(function () {
+  const THRESHOLD = 10;
+  document.querySelectorAll('.paper-authors').forEach(function (el) {
+    var raw = el.getAttribute('data-authors') || '';
+    var parts = raw.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    if (parts.length <= THRESHOLD) return;
+
+    var visible = parts.slice(0, THRESHOLD);
+    var hidden  = parts.slice(THRESHOLD);
+
+    var span = el.querySelector('.authors-text');
+    span.innerHTML =
+      visible.join(', ') +
+      ', <span class="authors-extra">' + hidden.join(', ') + '</span>' +
+      ' <button class="authors-toggle" aria-expanded="false">+' + hidden.length + ' more</button>';
+
+    el.classList.add('paper-authors-collapsed');
+
+    span.querySelector('.authors-toggle').addEventListener('click', function () {
+      var extraEl  = span.querySelector('.authors-extra');
+      var expanded = extraEl.classList.toggle('show');
+      this.textContent = expanded ? '− less' : '+' + hidden.length + ' more';
+      this.setAttribute('aria-expanded', expanded);
+    });
+  });
+})();
+</script>
