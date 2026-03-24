@@ -115,16 +115,18 @@ author_profile: true
   font-size: 0.78em;
   padding: 0.15em 0.5em;
   border-radius: 3px;
-  background: #0366d6;
   color: #fff;
   margin-left: 0.5em;
   vertical-align: middle;
   text-decoration: none;
+  font-weight: 600;
 }
-.paper-link-badge:hover {
-  background: #0250a3;
-  color: #fff;
-}
+.badge-arxiv  { background: #b31b1b; }
+.badge-aps    { background: #1560bd; }
+.badge-nature { background: #1a6e3a; }
+.badge-iop    { background: #7b2d8b; }
+.badge-doi    { background: #555; }
+.paper-link-badge:hover { opacity: 0.85; color: #fff; }
 .no-papers-msg {
   color: #6c757d;
   font-style: italic;
@@ -152,9 +154,15 @@ author_profile: true
       <p class="paper-title">
         <a href="{{ paper.link }}" target="_blank" rel="noopener noreferrer">{{ paper.title }}</a>
         {% if paper.link contains 'arxiv.org' %}
-          <a href="{{ paper.link }}" class="paper-link-badge" target="_blank">arXiv</a>
+          <a href="{{ paper.link }}" class="paper-link-badge badge-arxiv" target="_blank" rel="noopener">arXiv</a>
+        {% elsif paper.link contains 'link.aps.org' or paper.link contains 'journals.aps.org' %}
+          <a href="{{ paper.link }}" class="paper-link-badge badge-aps" target="_blank" rel="noopener">APS</a>
+        {% elsif paper.link contains 'nature.com' %}
+          <a href="{{ paper.link }}" class="paper-link-badge badge-nature" target="_blank" rel="noopener">Nature</a>
+        {% elsif paper.link contains 'iopscience.iop.org' or paper.link contains 'iopp.org' %}
+          <a href="{{ paper.link }}" class="paper-link-badge badge-iop" target="_blank" rel="noopener">IOP</a>
         {% elsif paper.link contains 'doi.org' %}
-          <a href="{{ paper.link }}" class="paper-link-badge" target="_blank">DOI</a>
+          <a href="{{ paper.link }}" class="paper-link-badge badge-doi" target="_blank" rel="noopener">DOI</a>
         {% endif %}
       </p>
       {% if paper.authors and paper.authors != "" %}
