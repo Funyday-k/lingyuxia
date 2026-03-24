@@ -1,0 +1,154 @@
+---
+layout: archive
+title: "Daily Paper"
+permalink: /daily-paper/
+author_profile: true
+---
+
+<style>
+.paper-date-section {
+  margin-bottom: 2em;
+}
+.paper-date-section h2 {
+  border-bottom: 2px solid #494e52;
+  padding-bottom: 0.3em;
+  margin-bottom: 0.5em;
+  font-size: 1.3em;
+}
+.paper-date-comment {
+  color: #6c757d;
+  font-style: italic;
+  margin-bottom: 1em;
+}
+.paper-card {
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 1em 1.2em;
+  margin-bottom: 1em;
+  background: #fafbfc;
+  transition: box-shadow 0.2s;
+}
+.paper-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.paper-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0 0 0.4em 0;
+}
+.paper-title a {
+  color: #24292e;
+  text-decoration: none;
+}
+.paper-title a:hover {
+  color: #0366d6;
+  text-decoration: underline;
+}
+.paper-authors {
+  color: #586069;
+  font-size: 0.92em;
+  margin-bottom: 0.3em;
+}
+.paper-affiliations {
+  color: #6a737d;
+  font-size: 0.85em;
+  font-style: italic;
+  margin-bottom: 0.5em;
+}
+.paper-abstract-toggle {
+  cursor: pointer;
+  color: #0366d6;
+  font-size: 0.9em;
+  user-select: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+}
+.paper-abstract-toggle:hover {
+  text-decoration: underline;
+}
+.paper-abstract {
+  display: none;
+  margin-top: 0.5em;
+  padding: 0.8em;
+  background: #f1f3f5;
+  border-radius: 4px;
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: #333;
+}
+.paper-abstract.show {
+  display: block;
+}
+.paper-link-badge {
+  display: inline-block;
+  font-size: 0.78em;
+  padding: 0.15em 0.5em;
+  border-radius: 3px;
+  background: #0366d6;
+  color: #fff;
+  margin-left: 0.5em;
+  vertical-align: middle;
+  text-decoration: none;
+}
+.paper-link-badge:hover {
+  background: #0250a3;
+  color: #fff;
+}
+.no-papers-msg {
+  color: #6c757d;
+  font-style: italic;
+}
+</style>
+
+{% include base_path %}
+
+<p style="color:#586069; margin-bottom:1.5em;">
+  📖 我的每日论文阅读分享。点击标题访问原文，点击「Abstract」展开摘要。
+</p>
+
+{% assign sorted_entries = site.data.daily_papers | sort: "date" | reverse %}
+
+{% for entry in sorted_entries %}
+<div class="paper-date-section">
+  <h2>📅 {{ entry.date }}</h2>
+  {% if entry.comment %}
+    <p class="paper-date-comment">{{ entry.comment }}</p>
+  {% endif %}
+
+  {% for paper in entry.papers %}
+  <div class="paper-card">
+    {% if paper.title %}
+      <p class="paper-title">
+        <a href="{{ paper.link }}" target="_blank" rel="noopener noreferrer">{{ paper.title }}</a>
+        {% if paper.link contains 'arxiv.org' %}
+          <a href="{{ paper.link }}" class="paper-link-badge" target="_blank">arXiv</a>
+        {% elsif paper.link contains 'doi.org' %}
+          <a href="{{ paper.link }}" class="paper-link-badge" target="_blank">DOI</a>
+        {% endif %}
+      </p>
+      {% if paper.authors and paper.authors != "" %}
+        <p class="paper-authors">👤 {{ paper.authors }}</p>
+      {% endif %}
+      {% if paper.affiliations and paper.affiliations != "" %}
+        <p class="paper-affiliations">🏛 {{ paper.affiliations }}</p>
+      {% endif %}
+      {% if paper.abstract and paper.abstract != "" %}
+        <button class="paper-abstract-toggle" onclick="this.nextElementSibling.classList.toggle('show'); this.textContent = this.nextElementSibling.classList.contains('show') ? '▼ Hide Abstract' : '▶ Abstract';">▶ Abstract</button>
+        <div class="paper-abstract">{{ paper.abstract }}</div>
+      {% endif %}
+    {% else %}
+      <p class="paper-title">
+        <a href="{{ paper.link }}" target="_blank" rel="noopener noreferrer">{{ paper.link }}</a>
+        <span style="color:#d73a49; font-size:0.85em;">（元数据待获取，请运行 fetch_papers.py）</span>
+      </p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+{% if site.data.daily_papers.size == 0 %}
+  <p class="no-papers-msg">暂无论文分享，敬请期待！</p>
+{% endif %}

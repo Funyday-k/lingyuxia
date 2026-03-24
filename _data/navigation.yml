@@ -9,6 +9,9 @@ main:
   - title: "Essay"
     url: /year-archive/
 
+  - title: "Daily Paper"
+    url: /daily-paper/
+
   - title: "CV"
     url: /cv/
 

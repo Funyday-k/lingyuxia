@@ -1,0 +1,24 @@
+# 每日论文分享 / Daily Paper Sharing
+# 使用方法: 添加 link 后运行 python scripts/fetch_papers.py
+# 支持 arxiv 链接和 DOI 链接
+
+- date: '2026-03-24'
+  comment: 示例条目 - 替换为你自己的论文链接
+  papers:
+  - link: https://arxiv.org/abs/2301.10235
+    title: 'When the Metaverse Meets Carbon Neutrality: Ongoing Efforts and Directions'
+    authors: Fangming Liu, Qiangyu Pei, Shutong Chen, Yongjie Yuan, Lin Wang, Max Muhlhauser
+    affiliations: ''
+    abstract: The metaverse has recently gained increasing attention from the public.
+  - link: https://doi.org/10.1103/PhysRevLett.131.011002
+    title: Logarithmic Duality of the Curvature Perturbation
+    authors: Shi Pi, Misao Sasaki
+    affiliations: Peking University; Kavli Institute for the Physics and Mathematics of the Universe; The University of Tokyo;
+      Institute of Theoretical Physics; Chinese Academy of Sciences; National Taiwan University; Kyoto University
+    abstract: We study the comoving curvature perturbation R in the single-field inflation models whose potential can be approximated
+      by a piecewise quadratic potential V(φ) by using the δN formalism. We find a general formula for R(δφ,δπ), consisting
+      of a sum of logarithmic functions of the field perturbation δφ and the velocity perturbation δπ at the point of interest,
+      as well as of δπ_{*} at the boundaries of each quadratic piece, which are functions of (δφ,δπ) through the equation
+      of motion. Each logarithmic expression has an equivalent dual expression, due to the second-order nature of the equation
+      of motion for φ. We also clarify the condition under which R(δφ,δπ) reduces to a single logarithm, which yields either
+      the renowned "exponential tail" of the probability distribution function of R or a Gumbel-distribution-like tail.
