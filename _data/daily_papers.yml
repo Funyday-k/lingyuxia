@@ -15,6 +15,7 @@
       the interactions of the missing matter with ordinary matter over a broad range of parameter space, there still exist
       several windows for SIMP''s. It is noteworthy that there are two regions of less than geometric cross sections: one
       with masses of ${10}^{5}$-${10}^{7}$ GeV and another with masses above ${10}^{10}$ GeV.'
+    comment: Old but classic paper, make me think about a way from WIMPs to SIMPs 👍.
   - link: http://arxiv.org/abs/2602.15113
     title: The Sun Can Strongly Constrain Spin-Dependent Dark Matter Nucleon Scattering Below the Evaporation Limit
     authors: Thong T. Q. Nguyen, Tim Linden
@@ -27,6 +28,7 @@
       evaporation and annihilation on spin-dependent DM nucleon cross-section limits, finding that Solar observations can
       continue to exceed terrestrial constraints by between 1-5 orders of magnitude for DM masses between 2-4 GeV, and can
       even provide world leading constraints below 0.2 GeV where direct detection is limited.
+    comment: Old theory but new thoughts, very related to my project 😨 but model-dependent 🤌.
   - link: http://arxiv.org/abs/2602.05955
     title: Improved Heavy Dark Matter Annihilation Search from Dwarf Galaxies with HAWC
     authors: A. Albert, R. Alfaro, C. Alvarez, A. Andrés, E. Anita-Rangel, M. Araya, J. C. Arteaga-Velázquez, D. Avila Rojas,
@@ -54,3 +56,4 @@
       of the HAWC instrument. We report that we do not detect evidence of DM from dSphs, so we place upper limits for the
       velocity-weighted DM annihilation cross-section ($\langleσv \rangle$) on the order of $10^{-23}~\text{cm}^3\text{s}^{-1}$
       for a DM mass range of $1-10^4$ TeV.
+    comment: New results from HAWC, very impressive and competitive with other indirect detection experiments.
