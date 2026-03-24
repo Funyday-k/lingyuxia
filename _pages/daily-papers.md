@@ -81,6 +81,16 @@ author_profile: true
 .paper-abstract.show {
   display: block;
 }
+.paper-comment {
+  color: #e36209;
+  font-size: 0.9em;
+  margin-top: 0.4em;
+  margin-bottom: 0.2em;
+  padding: 0.3em 0.6em;
+  background: #fff8e1;
+  border-left: 3px solid #f9a825;
+  border-radius: 3px;
+}
 .paper-link-badge {
   display: inline-block;
   font-size: 0.78em;
@@ -105,7 +115,7 @@ author_profile: true
 {% include base_path %}
 
 <p style="color:#586069; margin-bottom:1.5em;">
-  📖 我的每日论文阅读分享。点击标题访问原文，点击「Abstract」展开摘要。
+  📖 My Daily Paper Picks. Click title to visit paper website, click "Abstract" to expand abstract.
 </p>
 
 {% assign sorted_entries = site.data.daily_papers | sort: "date" | reverse %}
@@ -137,6 +147,9 @@ author_profile: true
       {% if paper.abstract and paper.abstract != "" %}
         <button class="paper-abstract-toggle" onclick="this.nextElementSibling.classList.toggle('show'); this.textContent = this.nextElementSibling.classList.contains('show') ? '▼ Hide Abstract' : '▶ Abstract';">▶ Abstract</button>
         <div class="paper-abstract">{{ paper.abstract }}</div>
+      {% endif %}
+      {% if paper.comment %}
+        <p class="paper-comment">💬 {{ paper.comment }}</p>
       {% endif %}
     {% else %}
       <p class="paper-title">

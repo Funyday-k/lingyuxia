@@ -21,12 +21,17 @@ DATA_FILE = Path(__file__).resolve().parent.parent / "_data" / "daily_papers.yml
 # ── arxiv API ────────────────────────────────────────────────
 
 ARXIV_ID_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/([0-9]+\.[0-9]+(?:v\d+)?)", re.I)
+ARXIV_DOI_RE = re.compile(r"10\.48550/arXiv\.([0-9]+\.[0-9]+(?:v\d+)?)", re.I)
 ATOM_NS = "{http://www.w3.org/2005/Atom}"
 ARXIV_NS = "{http://arxiv.org/schemas/atom}"
 
 
 def extract_arxiv_id(url: str) -> str | None:
     m = ARXIV_ID_RE.search(url)
+    if m:
+        return m.group(1)
+    # 匹配 arXiv DOI 格式: https://doi.org/10.48550/arXiv.XXXX.XXXXX
+    m = ARXIV_DOI_RE.search(url)
     return m.group(1) if m else None
 
 
@@ -77,7 +82,7 @@ def fetch_arxiv(arxiv_id: str) -> dict | None:
 
 # ── DOI (OpenAlex API + CrossRef fallback) ───────────────────
 
-DOI_RE = re.compile(r"(?:doi\.org/|doi:)(10\.\S+)", re.I)
+DOI_RE = re.compile(r"(?:doi\.org/|link\.aps\.org/doi/|doi:)(10\.\S+)", re.I)
 
 
 def extract_doi(url: str) -> str | None:
@@ -200,31 +205,51 @@ def fetch_doi(doi: str) -> dict | None:
     return fetch_crossref(doi)
 
 
-def fetch_openalex_by_arxiv(arxiv_id: str) -> dict | None:
-    """通过 OpenAlex 查询 arxiv 论文的机构信息。"""
-    # OpenAlex 使用 arxiv ID 的 URL 格式
-    api_url = f"https://api.openalex.org/works/https://arxiv.org/abs/{arxiv_id}"
+def fetch_affiliations_by_arxiv(arxiv_id: str) -> str:
+    """尝试多个数据源为 arxiv 论文补充机构信息，返回机构字符串（可能为空）。"""
+    # 1. 尝试 OpenAlex（已收录的论文）
     try:
+        api_url = f"https://api.openalex.org/works/https://arxiv.org/abs/{arxiv_id}"
         req = urllib.request.Request(
             api_url,
-            headers={
-                "User-Agent": "DailyPaperBot/1.0 (mailto:lingyuxia@link.cuhk.edu.hk)",
-                "Accept": "application/json",
-            },
+            headers={"User-Agent": "DailyPaperBot/1.0 (mailto:lingyuxia@link.cuhk.edu.hk)"},
         )
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=20) as resp:
             data = json.loads(resp.read())
+        affs = []
+        for authorship in data.get("authorships", []):
+            for inst in authorship.get("institutions", []):
+                name = inst.get("display_name", "")
+                if name and name not in affs:
+                    affs.append(name)
+        if affs:
+            return "; ".join(affs)
     except urllib.error.URLError:
-        return None
+        pass
 
-    affiliations = []
-    for authorship in data.get("authorships", []):
-        for inst in authorship.get("institutions", []):
-            inst_name = inst.get("display_name", "")
-            if inst_name and inst_name not in affiliations:
-                affiliations.append(inst_name)
+    # 2. 尝试 Inspire-HEP（对高能物理新论文覆盖更好）
+    try:
+        api_url = f"https://inspirehep.net/api/literature?sort=mostrecent&size=1&q=arxiv:{arxiv_id}"
+        req = urllib.request.Request(
+            api_url,
+            headers={"User-Agent": "DailyPaperBot/1.0", "Accept": "application/json"},
+        )
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            data = json.loads(resp.read())
+        hits = data.get("hits", {}).get("hits", [])
+        if hits:
+            affs = []
+            for author in hits[0].get("metadata", {}).get("authors", []):
+                for aff in author.get("affiliations", []):
+                    v = aff.get("value", "")
+                    if v and v not in affs:
+                        affs.append(v)
+            if affs:
+                return "; ".join(affs)
+    except urllib.error.URLError:
+        pass
 
-    return {"affiliations": "; ".join(affiliations) if affiliations else ""}
+    return ""
 
 
 # ── 主逻辑 ──────────────────────────────────────────────────
@@ -274,11 +299,11 @@ def process_paper(paper: dict) -> bool:
         print(f"  Fetching arxiv: {arxiv_id} ...")
         meta = fetch_arxiv(arxiv_id)
         if meta:
-            # arxiv API 经常缺少机构信息，用 OpenAlex 补充
+            # arxiv API 经常缺少机构信息，用 OpenAlex/Inspire-HEP 补充
             if not meta.get("affiliations"):
-                oa = fetch_openalex_by_arxiv(arxiv_id)
-                if oa and oa.get("affiliations"):
-                    meta["affiliations"] = oa["affiliations"]
+                affs = fetch_affiliations_by_arxiv(arxiv_id)
+                if affs:
+                    meta["affiliations"] = affs
             paper.update(meta)
             print(f"    -> {meta['title'][:60]}...")
             return True
@@ -303,7 +328,41 @@ def process_paper(paper: dict) -> bool:
     return False
 
 
+def refetch_affiliations(paper: dict) -> bool:
+    """只补充 affiliations 字段（不重新获取已有的 title/abstract）。"""
+    link = paper.get("link", "")
+    if not link or paper.get("affiliations"):
+        return False
+
+    arxiv_id = extract_arxiv_id(link)
+    if arxiv_id:
+        print(f"  Refetching affiliations for arxiv: {arxiv_id} ...")
+        affs = fetch_affiliations_by_arxiv(arxiv_id)
+        if affs:
+            paper["affiliations"] = affs
+            print(f"    -> {affs[:80]}")
+            return True
+        else:
+            print(f"    -> No affiliations found in any database")
+            return False
+
+    doi = extract_doi(link)
+    if doi:
+        print(f"  Refetching affiliations for DOI: {doi} ...")
+        meta = fetch_openalex(doi)
+        if meta and meta.get("affiliations"):
+            paper["affiliations"] = meta["affiliations"]
+            print(f"    -> {meta['affiliations'][:80]}")
+            return True
+        else:
+            print(f"    -> No affiliations found")
+            return False
+
+    return False
+
+
 def main():
+    refetch_aff_mode = "--refetch-affiliations" in sys.argv
     entries = load_data()
     updated = 0
 
@@ -314,15 +373,23 @@ def main():
             continue
         print(f"[{date}]")
         for paper in papers:
-            if process_paper(paper):
-                updated += 1
-                time.sleep(1)  # 避免请求过快
+            if refetch_aff_mode:
+                if refetch_affiliations(paper):
+                    updated += 1
+                    time.sleep(1)
+            else:
+                if process_paper(paper):
+                    updated += 1
+                    time.sleep(1)  # 避免请求过快
 
     if updated > 0:
         save_data(entries)
-        print(f"\nDone! Updated {updated} paper(s).")
+        if refetch_aff_mode:
+            print(f"\nDone! Updated affiliations for {updated} paper(s).")
+        else:
+            print(f"\nDone! Updated {updated} paper(s).")
     else:
-        print("\nNo new papers to fetch.")
+        print("\nNo updates.")
 
 
 if __name__ == "__main__":
