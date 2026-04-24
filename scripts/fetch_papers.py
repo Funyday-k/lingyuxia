@@ -6,6 +6,7 @@ fetch_papers.py - 自动获取 arxiv / DOI 论文元数据
 """
 
 import re
+import socket
 import sys
 import time
 import urllib.request
@@ -25,6 +26,17 @@ ARXIV_DOI_RE = re.compile(r"10\.48550/arXiv\.([0-9]+\.[0-9]+(?:v\d+)?)", re.I)
 ATOM_NS = "{http://www.w3.org/2005/Atom}"
 ARXIV_NS = "{http://arxiv.org/schemas/atom}"
 
+NETWORK_EXCEPTIONS = (urllib.error.URLError, TimeoutError, socket.timeout)
+
+
+def read_url(req: urllib.request.Request, timeout: int, error_message: str) -> bytes | None:
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.read()
+    except NETWORK_EXCEPTIONS as e:
+        print(f"{error_message}: {e}")
+        return None
+
 
 def extract_arxiv_id(url: str) -> str | None:
     m = ARXIV_ID_RE.search(url)
@@ -37,12 +49,9 @@ def extract_arxiv_id(url: str) -> str | None:
 
 def fetch_arxiv(arxiv_id: str) -> dict | None:
     api_url = f"http://export.arxiv.org/api/query?id_list={arxiv_id}"
-    try:
-        req = urllib.request.Request(api_url, headers={"User-Agent": "DailyPaperBot/1.0"})
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = resp.read()
-    except urllib.error.URLError as e:
-        print(f"  [ERROR] arxiv request failed for {arxiv_id}: {e}")
+    req = urllib.request.Request(api_url, headers={"User-Agent": "DailyPaperBot/1.0"})
+    data = read_url(req, timeout=30, error_message=f"  [ERROR] arxiv request failed for {arxiv_id}")
+    if data is None:
         return None
 
     root = ET.fromstring(data)
@@ -105,19 +114,17 @@ def _reconstruct_abstract(inverted_index: dict) -> str:
 def fetch_openalex(doi: str) -> dict | None:
     """通过 OpenAlex API 获取论文元数据（摘要、机构信息更全）。"""
     api_url = f"https://api.openalex.org/works/doi:{doi}"
-    try:
-        req = urllib.request.Request(
-            api_url,
-            headers={
-                "User-Agent": "DailyPaperBot/1.0 (mailto:lingyuxia@link.cuhk.edu.hk)",
-                "Accept": "application/json",
-            },
-        )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read())
-    except urllib.error.URLError as e:
-        print(f"    [WARN] OpenAlex request failed: {e}")
+    req = urllib.request.Request(
+        api_url,
+        headers={
+            "User-Agent": "DailyPaperBot/1.0 (mailto:lingyuxia@link.cuhk.edu.hk)",
+            "Accept": "application/json",
+        },
+    )
+    raw = read_url(req, timeout=30, error_message="    [WARN] OpenAlex request failed")
+    if raw is None:
         return None
+    data = json.loads(raw)
 
     title = data.get("title", "")
 
@@ -147,19 +154,17 @@ def fetch_openalex(doi: str) -> dict | None:
 def fetch_crossref(doi: str) -> dict | None:
     """CrossRef API 作为后备数据源。"""
     api_url = f"https://api.crossref.org/works/{doi}"
-    try:
-        req = urllib.request.Request(
-            api_url,
-            headers={
-                "User-Agent": "DailyPaperBot/1.0 (mailto:lingyuxia@link.cuhk.edu.hk)",
-                "Accept": "application/json",
-            },
-        )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read())
-    except urllib.error.URLError as e:
-        print(f"    [WARN] CrossRef request failed: {e}")
+    req = urllib.request.Request(
+        api_url,
+        headers={
+            "User-Agent": "DailyPaperBot/1.0 (mailto:lingyuxia@link.cuhk.edu.hk)",
+            "Accept": "application/json",
+        },
+    )
+    raw = read_url(req, timeout=30, error_message="    [WARN] CrossRef request failed")
+    if raw is None:
         return None
+    data = json.loads(raw)
 
     msg = data.get("message", {})
     titles = msg.get("title", [])
@@ -208,14 +213,14 @@ def fetch_doi(doi: str) -> dict | None:
 def fetch_affiliations_by_arxiv(arxiv_id: str) -> str:
     """尝试多个数据源为 arxiv 论文补充机构信息，返回机构字符串（可能为空）。"""
     # 1. 尝试 OpenAlex（已收录的论文）
-    try:
-        api_url = f"https://api.openalex.org/works/https://arxiv.org/abs/{arxiv_id}"
-        req = urllib.request.Request(
-            api_url,
-            headers={"User-Agent": "DailyPaperBot/1.0 (mailto:lingyuxia@link.cuhk.edu.hk)"},
-        )
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            data = json.loads(resp.read())
+    api_url = f"https://api.openalex.org/works/https://arxiv.org/abs/{arxiv_id}"
+    req = urllib.request.Request(
+        api_url,
+        headers={"User-Agent": "DailyPaperBot/1.0 (mailto:lingyuxia@link.cuhk.edu.hk)"},
+    )
+    raw = read_url(req, timeout=20, error_message="    [WARN] OpenAlex affiliation request failed")
+    if raw is not None:
+        data = json.loads(raw)
         affs = []
         for authorship in data.get("authorships", []):
             for inst in authorship.get("institutions", []):
@@ -224,18 +229,16 @@ def fetch_affiliations_by_arxiv(arxiv_id: str) -> str:
                     affs.append(name)
         if affs:
             return "; ".join(affs)
-    except urllib.error.URLError:
-        pass
 
     # 2. 尝试 Inspire-HEP（对高能物理新论文覆盖更好）
-    try:
-        api_url = f"https://inspirehep.net/api/literature?sort=mostrecent&size=1&q=arxiv:{arxiv_id}"
-        req = urllib.request.Request(
-            api_url,
-            headers={"User-Agent": "DailyPaperBot/1.0", "Accept": "application/json"},
-        )
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            data = json.loads(resp.read())
+    api_url = f"https://inspirehep.net/api/literature?sort=mostrecent&size=1&q=arxiv:{arxiv_id}"
+    req = urllib.request.Request(
+        api_url,
+        headers={"User-Agent": "DailyPaperBot/1.0", "Accept": "application/json"},
+    )
+    raw = read_url(req, timeout=20, error_message="    [WARN] Inspire-HEP request failed")
+    if raw is not None:
+        data = json.loads(raw)
         hits = data.get("hits", {}).get("hits", [])
         if hits:
             affs = []
@@ -246,8 +249,6 @@ def fetch_affiliations_by_arxiv(arxiv_id: str) -> str:
                         affs.append(v)
             if affs:
                 return "; ".join(affs)
-    except urllib.error.URLError:
-        pass
 
     return ""
 

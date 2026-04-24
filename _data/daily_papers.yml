@@ -57,3 +57,19 @@
       velocity-weighted DM annihilation cross-section ($\langleσv \rangle$) on the order of $10^{-23}~\text{cm}^3\text{s}^{-1}$
       for a DM mass range of $1-10^4$ TeV.
     comment: New results from HAWC, very impressive and competitive with other indirect detection experiments.
+- date: '2026-04-24'
+  papers:
+  - link: https://arxiv.org/pdf/2604.21652v1
+    title: Constraining dark matter self-interaction from kinetic heating in neutron stars
+    authors: Sambo Sarkar
+    affiliations: IISER, Berhampur; Jeonbuk Natl. U.
+    abstract: Dark matter search strategies have started advancing towards the neutrino fog. In this regard, compact objects
+      such as neutron stars have already demonstrated their ability in probing such low DM-nucleon cross-sections from dark
+      matter induced effects. In the optically thin limit, effect of dark matter self-interaction becomes relevant and may
+      assist the capture and thermalization of dark matter inside stars, imparting observable changes on neutron star temperatures.
+      The resulting radiation although weak can be potentially detected by the James Webb Space Telescope and upcoming Thirty
+      Meter Telescope and the European Extremely Large Telescope. Observation of cold neutron stars accompanied by advancements
+      in direct detection probes would provide stringent constraints or a smoking-gun signature for dark matter self-interactions.
+      The potential detection of a neutron star with surface temperatures $\sim (1000 - 1200)$ K in the optically thin limit
+      can push the bounds on asymmetric dark matter self-interaction cross-section to approximately two orders of magnitude
+      more stringent than the bullet cluster.
