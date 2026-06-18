@@ -73,3 +73,27 @@
       The potential detection of a neutron star with surface temperatures $\sim (1000 - 1200)$ K in the optically thin limit
       can push the bounds on asymmetric dark matter self-interaction cross-section to approximately two orders of magnitude
       more stringent than the bullet cluster.
+- date: '2026-06-18'
+  papers:
+  - link: https://arxiv.org/pdf/2606.17132
+    comment: Interesting method for determining whether the neutrino is a Dirac or Majorana fermion
+    title: Are neutrinos Majorana? Fixed-target and high-energy astrophysical searches decide
+    authors: Gabriela Barenboim, Mauricio Bustamante, Qinrui Liu
+    affiliations: Valencia U.; Bohr Inst.; Perimeter Inst. Theor. Phys.; Simon Fraser U.; Queen's U., Kingston
+    abstract: Determining whether the neutrino is a Dirac or Majorana fermion remains a fundamental open question. Conventional
+      searches rely on neutrinoless double beta decay, but this electron-only channel suffers from blind spots. We propose
+      a new, complementary probe to overcome this limitation. A heavy neutral lepton (HNL) triggers a high-energy shift in
+      how the active neutrino flavors ($ν_e$, $ν_μ$, $ν_τ$) mix -- but only if the neutrinos are Majorana. For GeV-scale HNLs,
+      the upcoming beam-dump experiment SHiP can discover the HNL and measure how it mixes with the active flavors. Separately,
+      the scattering of TeV--PeV astrophysical neutrinos can resolve the HNL, revealing a shift in the proportions of each
+      flavor arriving at Earth that could be detected by neutrino telescopes, regardless of the unknown flavor composition
+      at the astrophysical neutrino sources. Because this flavor shift is most sensitive to the muon and tau sectors, it bypasses
+      the blind spots of neutrinoless double beta decay. A correlated signal at SHiP and next-generation neutrino telescopes
+      would prove that neutrinos are Majorana; its absence would point to them being Dirac.
+  - link: https://arxiv.org/abs/2606.13829
+    title: AI can help scientists publish less
+    authors: Gianfranco Bertone
+    affiliations: ''
+    abstract: We can do more than defend science from a flood of AI-assisted papers. Used well, AI offers a historic opportunity
+      to correct distortions in the publication system, help us publish fewer and better papers, and give scientists back
+      the time to do their best work.

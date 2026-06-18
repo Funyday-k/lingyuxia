@@ -3,6 +3,8 @@ _site/
 
 # Local agent/tooling config
 .trellis/
-.vscode/settings.json
-.vscode/settings.json.copilot-hub-bak
+.vscode/
 
+/scripts/
+
+.DS_Store
