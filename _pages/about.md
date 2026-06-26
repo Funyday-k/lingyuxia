@@ -16,6 +16,7 @@ My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the De
 
 - [Sci-Station](https://github.com/Funyday-k/Sci-Station): a local-first macOS research workstation for papers, project notes, PDFs, tasks, and research materials.
 - [APEX](https://github.com/Funyday-k/APEX): a local web tool for extracting structured data from scientific figures with CV, VLM, and human-in-the-loop workflows.
+- [DaMaSCUS-SUN-EVAP](https://github.com/Funyday-k/DaMaSCUS-SUN-EVAP): an evaporation branch built on DaMaSCUS-SUN for capture and evaporation studies in the Sun.
 
 # Education 
 

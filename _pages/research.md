@@ -22,5 +22,3 @@ My undergraduate thesis studied **gravitational wave scattering**. The main chal
 The work built a theoretical framework that goes beyond the usual plane-wave incident assumption by taking into account the long-range effects from both the wave source and the scattering source, with the goal of improving the convergence and consistency of the scattering calculation.
 
 The thesis also developed a corresponding numerical treatment for the scattering problem and connected it to partial-wave analysis in the long-range regime.
-
-![Trajectory Validation](/lingyuxia/images/trajectory_validation.png)
