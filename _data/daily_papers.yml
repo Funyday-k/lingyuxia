@@ -97,3 +97,31 @@
     abstract: We can do more than defend science from a flood of AI-assisted papers. Used well, AI offers a historic opportunity
       to correct distortions in the publication system, help us publish fewer and better papers, and give scientists back
       the time to do their best work.
+- date: '2026-06-26'
+  papers:
+  - link: https://arxiv.org/abs/2408.15318
+    comment: Very interesting idea!
+    title: Search for Dark Matter Induced Airglow in Planetary Atmospheres
+    authors: Carlos Blanco, Rebecca K. Leane, Marianne Moore, Joshua Tong
+    affiliations: Princeton U.; Stockholm U., OKC; SLAC; KIPAC, Menlo Park; MIT
+    abstract: We point out that dark matter can illuminate planetary skies via ultraviolet airglow. Dark matter annihilation
+      products can excite molecular hydrogen, which then deexcites to produce ultraviolet emission in the Lyman and Werner
+      bands. We search for this new effect by analyzing nightside ultraviolet radiation data from Voyager and New Horizons
+      flybys of Neptune, Uranus, Saturn, and Jupiter. We set new constraints on the dark matter-nucleon scattering cross section
+      for DM above the electron mass; these extend down to $10^{-40}~$cm$^2$ for DM masses around 1 GeV when most of the energy
+      is deposited in the atmosphere. We highlight that future ultraviolet airglow measurements of Solar System planets or
+      other worlds provide a new dark matter discovery avenue.
+  - link: https://arxiv.org/abs/2508.00980
+    comment: Interesting idea, but limited by the old WIMPs theory.
+    title: Complementary Planetary Spectroscopy Probes of Dark Matter
+    authors: Carlos Blanco, Rebecca K. Leane, Marianne Moore, Joshua Tong
+    affiliations: Penn State U., University Park, IGC; Princeton U.; Stockholm U., OKC; SLAC; KIPAC, Menlo Park; MIT, Cambridge,
+      CTP; Harvard U.
+    abstract: We investigate dark matter (DM) interactions via spectroscopic signatures of energy injection in planetary environments.
+      We develop a general framework to account for how DM energy injection signals depend on the DM spatial distribution,
+      planetary structure, and DM energy deposition profile. We combine UV airglow data on the Solar System's gas giants from
+      the Voyager and New Horizons flybys, and ionospheric measurements from AMS-02 and ELFIN CubeSat on Earth, with internal
+      heat flow data from Cassini, Voyager, and terrestrial boreholes, to constrain DM-nucleon scattering across both heavy
+      and light mediator scenarios. We show that Earth, gas giants, and ice giants probe complementary DM masses and mediator
+      properties, and forecast the reach of a free-floating Super-Jupiter. These results establish planetary spectroscopy
+      as a powerful and versatile probe of the dark sector, complementary to direct detection, cosmology, and collider searches.
