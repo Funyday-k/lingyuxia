@@ -5,18 +5,17 @@ main:
 
   - title: "Publications"
     url: /publications/ 
-        
-  - title: "Essay"
-    url: /year-archive/
 
   - title: "Daily Paper"
     url: /daily-paper/
+
+  - title: "Software"
+    url: /software/
 
   - title: "CV"
     url: /cv/
 
   - title: "Gallery"
     url: /portfolio/
-
 
 

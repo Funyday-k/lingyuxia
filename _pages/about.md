@@ -12,6 +12,11 @@ Hi!
 
 My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the Department of Physics at The Chinese University of Hong Kong. My advisor is [Prof. Kenny Ng.](https://wp.phy.cuhk.edu.hk/teaching_staff/kenny-c-y-ng) My research interests are: **Dark Matter, Cosmic Ray**. 
 
+## Software
+
+- [Sci-Station](https://github.com/Funyday-k/Sci-Station): a local-first macOS research workstation for papers, project notes, PDFs, tasks, and research materials.
+- [APEX](https://github.com/Funyday-k/APEX): a local web tool for extracting structured data from scientific figures with CV, VLM, and human-in-the-loop workflows.
+
 # Education 
 
 - 2021.09--2025.06, B.S. in Physics, Taishan College, Shandong University,  supervised by [Prof. Hong Zhang(张宏)](http://www.pppi.sdu.edu.cn/info/1059/2453.htm).
@@ -49,5 +54,3 @@ My name is **Lingyu Xia(夏凌羽)**, and I am currently a PhD student in the De
 
 
 > **Update: 2026.03.17**
-
-
