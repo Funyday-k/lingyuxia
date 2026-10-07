@@ -1,0 +1,172 @@
+---
+layout: null
+title: "流形 · GR Note"
+permalink: /note/manifold/
+description: "从局部邻域、坐标图到图册与换坐标，一次可以动手探索的流形之旅。"
+---
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从局部邻域、坐标图到图册与换坐标，一次可以动手探索的流形之旅。">
+  <meta name="theme-color" content="#f0f6f8">
+  <title>流形 · GR Note | Lingyu Xia</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='15' fill='%23eef5f8' stroke='%23547bab' stroke-width='2'/%3E%3Cellipse cx='20' cy='20' rx='7' ry='15' fill='none' stroke='%23547bab'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="{{ '/assets/css/manifold.css' | relative_url }}">
+  <script type="module" src="{{ '/assets/js/manifold.js' | relative_url }}"></script>
+</head>
+<body>
+  <a class="skip-link" href="#explore">跳到交互演示</a>
+  <header class="topbar page-width">
+    <a class="wordmark" href="{{ '/' | relative_url }}">Lingyu Xia <span>/</span> GR Note</a>
+    <nav aria-label="页面导航">
+      <a href="{{ '/note/' | relative_url }}">返回 Note</a>
+      <a href="{{ '/files/GR_note.pdf' | relative_url }}#page=4" target="_blank" rel="noopener">阅读原笔记</a>
+    </nav>
+  </header>
+  <div class="landscape"><img src="{{ '/images/gr-note/cover.jpg' | relative_url }}" alt="GR 笔记封面中的雪山与蓝色湖泊" width="960" height="540"></div>
+  <main class="page-width">
+    <div class="page-heading">
+      <div><h1>流形：从局部，看见整体</h1><p class="subtitle" lang="en">An interactive journey into manifolds</p></div>
+      <a class="source-link" href="{{ '/files/GR_note.pdf' | relative_url }}#page=4" target="_blank" rel="noopener">基于 GR Note §1.1</a>
+    </div>
+    <div class="chapter-tabs" role="tablist" aria-label="探索步骤" id="explore">
+      <button role="tab" aria-selected="true" aria-controls="lesson-0" id="tab-0" tabindex="0"><span>01</span> 局部观察者</button>
+      <button role="tab" aria-selected="false" aria-controls="lesson-1" id="tab-1" tabindex="-1"><span>02</span> 坐标与距离</button>
+      <button role="tab" aria-selected="false" aria-controls="lesson-2" id="tab-2" tabindex="-1"><span>03</span> 拼接局部</button>
+      <button role="tab" aria-selected="false" aria-controls="lesson-3" id="tab-3" tabindex="-1"><span>04</span> 不变的物理</button>
+    </div>
+    <noscript><p class="notice">交互演示需要 JavaScript。你仍可阅读下方的定义，或打开原笔记。</p></noscript>
+
+    <section class="lesson" role="tabpanel" id="lesson-0" aria-labelledby="tab-0">
+      <div class="narrative">
+        <h2>如果你就住在球面上。</h2>
+        <p>你只能沿表面走动。定位附近的一个点，需要两个独立的数；描述整个空间，却未必能只用一张地图。</p>
+        <div class="definition">局部像 <span class="math">ℝ²</span>，整体可以是球面 <span class="math">S²</span>。</div>
+        <div class="control-block">
+          <label class="range-label" for="patch-size">邻域大小 <output id="patch-value" for="patch-size">45°</output></label>
+          <input id="patch-size" type="range" min="10" max="75" value="45" step="1">
+          <div class="range-ends" aria-hidden="true"><span>10°</span><span>75°</span></div>
+        </div>
+        <div class="actions">
+          <button class="primary" id="unfold" aria-pressed="false">展开坐标图</button>
+          <button class="secondary motion-button" id="rotate" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2 13 8 4 14Z"/></svg><span>自动旋转</span></button>
+        </div>
+        <p class="readout" id="sphere-readout"></p>
+      </div>
+      <figure class="scene">
+        <canvas id="sphere-canvas" width="900" height="410" tabindex="0" role="img" aria-label="球面的一片开邻域映到二维坐标平面。拖动或用方向键旋转球面，使用展开坐标图按钮观看映射。"></canvas>
+        <figcaption>拖动改变视角 · 缩小邻域，比较弧长与投影长度 · R = 1 m</figcaption>
+      </figure>
+    </section>
+
+    <section class="lesson" role="tabpanel" id="lesson-1" aria-labelledby="tab-1" hidden>
+      <div class="narrative">
+        <h2>同样走一步，<br>坐标不一定变一样多。</h2>
+        <p>在半径 1 m 的圆形轨道上，让小球走过固定的 5°。实际路程始终相同，投影坐标的变化却随位置改变。</p>
+        <fieldset class="chart-choices"><legend>选择一张坐标图</legend>
+          <label><input type="radio" name="chart" value="top" checked><span>上半圆</span></label>
+          <label><input type="radio" name="chart" value="right"><span>右半圆</span></label>
+          <label><input type="radio" name="chart" value="bottom"><span>下半圆</span></label>
+          <label><input type="radio" name="chart" value="left"><span>左半圆</span></label>
+        </fieldset>
+        <div class="definition math" id="chart-formula">U上 = {y &gt; 0}，φ上(x, y) = x</div>
+        <div class="control-block compact">
+          <label class="range-label" for="circle-angle">点的位置 <output id="circle-value" for="circle-angle">45°</output></label>
+          <input id="circle-angle" type="range" min="0" max="360" value="45" step="1">
+        </div>
+        <button class="secondary small-action" id="walk-step">沿轨道走一步</button>
+        <p class="readout" id="chart-readout" aria-live="polite"></p>
+      </div>
+      <figure class="scene">
+        <canvas id="chart-canvas" width="900" height="410" tabindex="0" role="img" aria-label="圆周上的点 p 与开区间内的坐标一一对应。拖动点，或用方向键移动点。"></canvas>
+        <figcaption>实心点 p → 空心点 q：固定走过 5° · 坐标图的端点不包含在内</figcaption>
+      </figure>
+    </section>
+
+    <section class="lesson" role="tabpanel" id="lesson-2" aria-labelledby="tab-2" hidden>
+      <div class="narrative">
+        <h2>局部地图，<br>拼成完整的空间。</h2>
+        <p>不同区域可以使用不同的坐标。试着拿掉其中一张：有些点将失去坐标描述，但空间本身没有缺口。</p>
+        <fieldset class="atlas-choices"><legend>打开或关闭坐标图</legend>
+          <label><input type="checkbox" name="atlas" value="top" checked><span class="swatch top"></span>上半圆 <span class="math">y &gt; 0</span></label>
+          <label><input type="checkbox" name="atlas" value="right" checked><span class="swatch right"></span>右半圆 <span class="math">x &gt; 0</span></label>
+          <label><input type="checkbox" name="atlas" value="bottom" checked><span class="swatch bottom"></span>下半圆 <span class="math">y &lt; 0</span></label>
+          <label><input type="checkbox" name="atlas" value="left" checked><span class="swatch left"></span>左半圆 <span class="math">x &lt; 0</span></label>
+        </fieldset>
+        <div class="definition" id="coverage-status" aria-live="polite"></div>
+        <button class="secondary" id="restore-atlas">恢复完整图册</button>
+      </div>
+      <figure class="scene">
+        <canvas id="atlas-canvas" width="900" height="410" role="img" aria-label="四张开半圆坐标图共同覆盖圆周。关闭坐标图后，未覆盖区域和点以橙色标出。"></canvas>
+        <figcaption>每个点至少落在一张图里 · 图与图之间可以重叠</figcaption>
+      </figure>
+    </section>
+
+    <section class="lesson" role="tabpanel" id="lesson-3" aria-labelledby="tab-3" hidden>
+      <div class="narrative">
+        <h2>换一套坐标，<br>路程还是同一段。</h2>
+        <p>同一段 5° 运动，在上图与右图中有不同的坐标变化。用各自的度规换算，两者得到相同的实际路程。</p>
+        <div class="definition math">dℓ² = R² du²/(1−u²)<br>= R² dv²/(1−v²)</div>
+        <div class="control-block">
+          <label class="range-label" for="transition-angle">点的位置 <output id="transition-value" for="transition-angle">35°</output></label>
+          <input id="transition-angle" type="range" min="0" max="85" value="35" step="1">
+          <div class="range-ends" aria-hidden="true"><span>0°</span><span>85°</span></div>
+        </div>
+        <div class="actions">
+          <button class="primary" id="switch-chart" aria-pressed="false">换到右图</button>
+          <button class="secondary motion-button" id="move-point" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2 13 8 4 14Z"/></svg><span>播放点的运动</span></button>
+        </div>
+        <p class="readout" id="transition-readout" aria-live="polite"></p>
+      </div>
+      <figure class="scene">
+        <canvas id="transition-canvas" width="900" height="410" tabindex="0" role="img" aria-label="第一象限的同一个圆周点，在上图中的坐标是 u 等于 x，在右图中是 v 等于 y。拖动点，或用方向键移动点。"></canvas>
+        <figcaption>换坐标不移动小球 · 播放才改变位置 · 两种描述，同一段路程</figcaption>
+      </figure>
+    </section>
+
+    <aside class="insight" id="insight">局部的平面坐标并不保持距离。缩小观察范围，也没有让球面的曲率消失。</aside>
+    <nav class="lesson-footer" aria-label="章节翻页">
+      <button class="secondary" id="previous" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m9 4-6 6 6 6M3 10h14"/></svg><span>上一步</span></button>
+      <span id="step-count" aria-live="polite">1 / 4</span>
+      <button class="primary" id="next"><span>下一步：坐标与距离</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m11 4 6 6-6 6M17 10H3"/></svg></button>
+    </nav>
+    <section class="physics-bridge" aria-labelledby="physics-heading">
+      <h2 id="physics-heading">为什么广义相对论需要它？</h2>
+      <dl>
+        <div><dt>流形 <span class="math">M</span></dt><dd>把时空视为事件的集合。每个事件附近，用四个独立坐标来标记位置与时间。</dd></div>
+        <div><dt>度规 <span class="math">g</span></dt><dd>坐标只是标签；度规告诉我们如何把坐标差换成钟和尺实际测量的时空间隔。</dd></div>
+        <div><dt>曲率张量</dt><dd>局部自由落体可以消去一点处的联络，却通常消不去潮汐效应：邻近自由落体之间仍可能产生相对加速度。</dd></div>
+      </dl>
+    </section>
+    <details class="reading-notes">
+      <summary>把直觉写成定义</summary>
+      <div class="reading-body">
+        <h3>局部欧氏，不等于几何上平直</h3>
+        <p>这里讨论无边界的 <span class="math">n</span> 维拓扑流形：它是 Hausdorff、第二可数的拓扑空间，每个点都有一个开邻域 <span class="math">U</span>，通过同胚 <span class="math">φ: U → V ⊂ ℝⁿ</span> 与欧氏空间的开集对应。同胚要求映射一一对应、连续，且逆映射也连续。Hausdorff 保证不同点可以用不相交的邻域分开；第二可数要求存在可数的拓扑基。</p>
+        <p>第一幕使用单位球面上半部的投影 <span class="math">φ(x,y,z)=(x,y)</span>，逆映射为 <span class="math">(u,v) ↦ (u,v,√(1−u²−v²))</span>。蓝色区域取 <span class="math">z &gt; cos α</span>，对应开圆盘 <span class="math">u²+v² &lt; sin²α</span>。动画展示对应关系；它不保持球面上的距离与面积，也没有把球面变平。</p>
+        <h3>坐标图、图册、光滑性</h3>
+        <p>坐标图是这对对象 <span class="math">(U,φ)</span>。一组坐标图的定义域覆盖整个流形，就构成图册。第三幕采用四张开半圆图，缺少任意一张都会漏掉至少一个点；若改选更大的开集，圆周也可以用两张图覆盖。圆周不能用一张图覆盖，因为它是紧致的，而 <span class="math">ℝ</span> 的非空开集不是紧致的。</p>
+        <p>重叠区域上的换图为 <span class="math">φβ ∘ φα⁻¹</span>。若所有换图都是 <span class="math">C∞</span>，就得到光滑图册；兼容的图册确定光滑结构。第四幕的上图、右图在第一象限重叠，换图及其逆映射在 <span class="math">(0,1)</span> 内都光滑。边界点不属于这个重叠区域。</p>
+        <h3>为什么两套坐标算出同一路程？</h3>
+        <p>圆形轨道取 <span class="math">x=cos θ，y=sin θ</span>，半径为 <span class="math">R=1 m</span>。上图使用无量纲坐标 <span class="math">u=x</span>，右图使用 <span class="math">v=y</span>。两套度规分量分别为 <span class="math">gᵤᵤ=R²/(1−u²)</span>、<span class="math">gᵥᵥ=R²/(1−v²)</span>，而弧长元都是 <span class="math">dℓ=R|dθ|</span>。</p>
+        <p>界面显示的有限路程由积分精确计算：<span class="math">ℓ=R|arcsin u₂−arcsin u₁|=R|arcsin v₂−arcsin v₁|=RΔθ</span>，其中这一段必须完整位于各自图域内。不是把有限坐标差直接当成微分。坐标接近图域边界时，度规分量可能发散；这里出问题的是坐标，圆形轨道本身仍然规则。</p>
+        <p>圆周在这里用于解释坐标和长度；它在图中的外在弯曲不代表非零内禀曲率，一维黎曼曲率恒为零。第一幕的球面则有非零内禀高斯曲率 <span class="math">K=1/R²</span>。缩小邻域改善局部平直近似，但不改变 <span class="math">K</span>。</p>
+        <h3>从流形走向广义相对论</h3>
+        <p>维数是局部需要的独立坐标个数：圆周是一维，球面是二维。画在三维空间中只是帮助理解；流形的定义不要求一个外部空间。广义相对论进一步在四维光滑流形上赋予 Lorentz 度规，用来描述时空间隔与因果结构。流形本身并不预先规定长度、角度或曲率。</p>
+        <p>“局部欧氏”描述的是拓扑与坐标结构，并不是说时空的度规是欧氏度规。在一点可选择局部惯性坐标，使度规等于 Minkowski 度规、联络为零；曲率一般仍非零，有限区域内的潮汐效应也不能由换坐标消除。</p>
+      </div>
+    </details>
+    <details class="reading-notes sources">
+      <summary>阅读依据与原笔记说明</summary>
+      <div class="reading-body">
+        <p>改编自 Lingyu Xia，<a href="{{ '/files/GR_note.pdf' | relative_url }}#page=4" target="_blank" rel="noopener"><i>General Relativity Note</i>，§1.1，正文第 2–5 页</a>（2023 年 5 月 30 日）。封面照片取自同一份笔记。讲解延续“邻域 → 坐标图 → 图册 → 光滑换图”的顺序；交互数值由单位圆、单位球面的解析式实时计算。</p>
+        <p>原笔记第 5 页圆周例子中，下半圆与右半圆的投影公式需分别改为 <span class="math">φ下(x,y)=x</span>、<span class="math">φ右(x,y)=y</span>，以保证在相应开半圆上一一对应。此处据此绘制，原 PDF 保留原样。</p>
+        <p>延伸阅读：David Tong · General Relativity，<a href="https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S2.html" target="_blank" rel="noopener">§2.1 Manifolds</a>；<a href="https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S3.html" target="_blank" rel="noopener">§3 Riemannian Geometry</a>。钟尺、度规和局部惯性系的说明是本交互页加入的物理解释。</p>
+      </div>
+    </details>
+    <footer class="colophon"><span>Lingyu Xia · General Relativity Note</span><a href="{{ '/note/' | relative_url }}">回到全部笔记</a></footer>
+  </main>
+</body>
+</html>
