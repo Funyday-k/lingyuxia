@@ -9,9 +9,11 @@ main:
   - title: "Daily Paper"
     url: /daily-paper/
 
+  - title: "Note"
+    url: /note/
+
   - title: "CV"
     url: /cv/
 
   - title: "Gallery"
     url: /portfolio/
-
