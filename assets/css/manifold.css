@@ -76,6 +76,7 @@ button svg { width: 18px; height: 18px; flex: 0 0 18px; fill: none; stroke: curr
 .lesson-footer { border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; padding: 15px 0 24px; font: 19px/1.5 Georgia, serif; gap: 12px; }
 .lesson-footer button { min-width: 145px; }
 .lesson-footer #next { min-width: 218px; }
+.lesson-footer #step-count { flex-shrink: 0; white-space: nowrap; }
 fieldset { margin: 17px 0 0; padding: 0; border: 0; }
 legend { font: 14px/1.5 var(--sans); color: var(--muted); margin-bottom: 10px; }
 .chart-choices { display: flex; gap: 7px; flex-wrap: wrap; }
