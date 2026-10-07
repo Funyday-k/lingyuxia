@@ -3,18 +3,21 @@ import {
   isCovered, uncoveredWitness, arcLengthFromChart
 } from './manifold-math.mjs';
 
+const { t, getLanguage } = await import(`./gr-language.mjs${new URL(import.meta.url).search}`);
+
 const $ = id => document.getElementById(id);
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const TAU = Math.PI * 2;
 const STEP = 5;
 const COLORS = { ink: '#274354', blue: '#547bab', teal: '#4d9092', muted: '#657989', grid: '#e7f0f5', rust: '#ac6248' };
-const chapters = ['局部观察者', '坐标与距离', '拼接局部', '不变的物理'];
+const chapters = () => [t('Local observers', '局部观察者'), t('Coordinates', '坐标与距离'), t('Atlas', '拼接局部'), t('Invariant physics', '不变的物理')];
 const anchors = ['local-observer', 'coordinates', 'atlas', 'invariance'];
-const insights = [
-  '局部的平面坐标并不保持距离。缩小观察范围，也没有让球面的曲率消失。',
-  '坐标差取决于你怎么编号；用度规换算后的路程，才是尺子测量的量。',
-  '失去一张地图，不等于空间消失了一块。坐标图的边界不一定是物理边界。',
-  '坐标与度规分量一起变，测得的同一段路程保持不变。'
+const chartLabel = name => t({ top: 'upper', right: 'right', bottom: 'lower', left: 'left' }[name], CHARTS[name].label);
+const insights = () => [
+  t('Plane coordinates need not preserve distance. A smaller field of view does not make the sphere’s curvature vanish.', '局部的平面坐标并不保持距离。缩小观察范围，也没有让球面的曲率消失。'),
+  t('A coordinate difference depends on your labels. The metric converts it into a distance measured by a ruler.', '坐标差取决于你怎么编号；用度规换算后的路程，才是尺子测量的量。'),
+  t('Losing a map does not remove part of the space. A chart boundary need not be a physical boundary.', '失去一张地图，不等于空间消失了一块。坐标图的边界不一定是物理边界。'),
+  t('Coordinates and metric components change together. The measured distance along the same path stays the same.', '坐标与度规分量一起变，测得的同一段路程保持不变。')
 ];
 const state = {
   scene: 0, alpha: 45, yaw: .44, pitch: -.27, unfold: 0, unfoldTarget: 0,
@@ -31,7 +34,7 @@ let lastTime = null;
 function text(ctx, value, x, y, options = {}) {
   ctx.save();
   ctx.fillStyle = options.color || COLORS.ink;
-  ctx.font = `${options.italic ? 'italic ' : ''}${options.size || 16}px ${options.math ? 'Georgia, serif' : '"Songti SC", "Noto Serif CJK SC", serif'}`;
+  ctx.font = `${options.italic ? 'italic ' : ''}${options.size || 16}px ${options.math || getLanguage() === 'en' ? 'Georgia, serif' : '"Songti SC", "Noto Serif CJK SC", serif'}`;
   ctx.textAlign = options.align || 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(value, x, y);
@@ -195,9 +198,9 @@ function renderSphere() {
   dot(ctx, plane.x, plane.y, COLORS.ink, 3.5);
   const q2 = chart(capPoint(beta, direction)); dot(ctx, q2[0], q2[1], COLORS.teal, 3.5, true);
   arrow(ctx, [c.x + radius + 14, h * .43], [plane.x - planeScale - 9, h * .46], COLORS.blue, -18, 'φ');
-  text(ctx, '球面 S²', c.x, h * .89, { size: narrow ? 15 : 20 });
-  text(ctx, '坐标平面 ℝ²', plane.x, h * .77, { size: narrow ? 13 : 17 });
-  text(ctx, '观察者只能沿表面测量', c.x, h * .96, { size: narrow ? 11 : 13, color: COLORS.muted });
+  text(ctx, t('Sphere S²', '球面 S²'), c.x, h * .89, { size: narrow ? 15 : 20 });
+  text(ctx, t('Coordinate plane ℝ²', '坐标平面 ℝ²'), plane.x, h * .77, { size: narrow ? 13 : 17 });
+  text(ctx, t('Measurements stay on the surface', '观察者只能沿表面测量'), c.x, h * .96, { size: narrow ? 11 : 13, color: COLORS.muted });
 }
 
 function renderChart() {
@@ -219,10 +222,10 @@ function renderChart() {
   text(ctx, 'S¹', center.x - radius * .35, center.y - radius * .3, { math: true, italic: true, size: 22 });
   const first = coordinate(state.chart, p), last = coordinate(state.chart, q);
   const x1 = w * (narrow ? .19 : .60), x2 = w * (narrow ? .81 : .91), y = h * (narrow ? .79 : .48);
-  interval(ctx, x1, x2, y, { first, last }, item.color, `φ${item.label}(p) = ${item.axis}`);
-  if (!narrow) arrow(ctx, [center.x + radius + 16, center.y - 22], [x1 - 18, y - 10], item.color, -22, `φ${item.label}`);
-  text(ctx, '实际路程 ℓ = 0.087 m', narrow ? w * .5 : w * .75, h * (narrow ? .94 : .76), { size: narrow ? 14 : 18 });
-  if (first === null || last === null) text(ctx, '这一步需要换张图', (x1 + x2) / 2, y + 51, { color: COLORS.rust, size: 13 });
+  interval(ctx, x1, x2, y, { first, last }, item.color, `φ${chartLabel(state.chart)}(p) = ${item.axis}`);
+  if (!narrow) arrow(ctx, [center.x + radius + 16, center.y - 22], [x1 - 18, y - 10], item.color, -22, `φ${chartLabel(state.chart)}`);
+  text(ctx, t('Distance ℓ = 0.087 m', '实际路程 ℓ = 0.087 m'), narrow ? w * .5 : w * .75, h * (narrow ? .94 : .76), { size: narrow ? 14 : 18 });
+  if (first === null || last === null) text(ctx, t('This step needs another chart', '这一步需要换张图'), (x1 + x2) / 2, y + 51, { color: COLORS.rust, size: 13 });
 }
 
 function renderAtlas() {
@@ -245,15 +248,15 @@ function renderAtlas() {
     dot(ctx, ...p, COLORS.rust, 7, true); dot(ctx, ...p, COLORS.rust, 2.5);
   }
   text(ctx, 'S¹', center.x, center.y - 8, { size: 30, math: true, italic: true });
-  text(ctx, '空间始终完整', center.x, center.y + 25, { size: 14, color: COLORS.muted });
+  text(ctx, t('The space is intact', '空间始终完整'), center.x, center.y + 25, { size: 14, color: COLORS.muted });
   Object.entries(CHARTS).forEach(([name, chart], i) => {
     const x = narrow ? w * (.15 + (i % 2) * .48) : w * .71;
     const y = narrow ? h * .78 + Math.floor(i / 2) * 37 : h * .24 + i * 61;
     const on = state.atlas.includes(name);
     path(ctx, [[x - 15, y], [x + 10, y]], on ? chart.color : '#c6d2d9', 3, on ? [] : [3, 3]);
-    text(ctx, `U${chart.label}  ${chart.domain}`, x + 22, y, { align: 'left', size: narrow ? 13 : 17, color: on ? COLORS.ink : '#8a9dab' });
+    text(ctx, `U${chartLabel(name)}  ${chart.domain}`, x + 22, y, { align: 'left', size: narrow ? 13 : 17, color: on ? COLORS.ink : '#8a9dab' });
   });
-  if (!narrow) text(ctx, uncoveredWitness(state.atlas) ? '橙色 = 暂无坐标描述' : '每一点都有坐标描述', center.x, h * .92, { size: 15, color: uncoveredWitness(state.atlas) ? COLORS.rust : COLORS.blue });
+  if (!narrow) text(ctx, uncoveredWitness(state.atlas) ? t('Orange = no chart covers this point', '橙色 = 暂无坐标描述') : t('Every point has coordinates', '每一点都有坐标描述'), center.x, h * .92, { size: 15, color: uncoveredWitness(state.atlas) ? COLORS.rust : COLORS.blue });
 }
 
 function renderTransition() {
@@ -279,9 +282,9 @@ function renderTransition() {
   text(ctx, 'R = 1 m', center.x, center.y + radius * .48, { math: true, size: 13, color: COLORS.muted });
   const u = coordinate('top', p), u2 = coordinate('top', q), v = coordinate('right', p), v2 = coordinate('right', q);
   const y = h * .76;
-  interval(ctx, w * .07, w * .38, y, { first: u, last: u2 }, COLORS.blue, '上图：u = x', state.activeCoordinate === 'top');
-  interval(ctx, w * .62, w * .93, y, { first: v, last: v2 }, COLORS.teal, '右图：v = y', state.activeCoordinate === 'right');
-  arrow(ctx, [w * .41, y], [w * .59, y], state.activeCoordinate === 'top' ? COLORS.blue : COLORS.teal, -21, narrow ? '换图' : 'φ右 ∘ φ上⁻¹');
+  interval(ctx, w * .07, w * .38, y, { first: u, last: u2 }, COLORS.blue, t('Upper: u = x', '上图：u = x'), state.activeCoordinate === 'top');
+  interval(ctx, w * .62, w * .93, y, { first: v, last: v2 }, COLORS.teal, t('Right: v = y', '右图：v = y'), state.activeCoordinate === 'right');
+  arrow(ctx, [w * .41, y], [w * .59, y], state.activeCoordinate === 'top' ? COLORS.blue : COLORS.teal, -21, narrow ? t('Map', '换图') : t('φᵣ ∘ φᵤ⁻¹', 'φ右 ∘ φ上⁻¹'));
   if (state.swap > 0) {
     const progress = 1 - state.swap;
     const t = state.activeCoordinate === 'right' ? progress : 1 - progress;
@@ -289,31 +292,35 @@ function renderTransition() {
   }
   const firstLength = arcLengthFromChart('top', state.transitionAngle, state.transitionAngle + STEP);
   const secondLength = arcLengthFromChart('right', state.transitionAngle, state.transitionAngle + STEP);
-  const result = firstLength !== null && secondLength !== null ? `ℓ上 = ${firstLength.toFixed(3)} m   =   ℓ右 = ${secondLength.toFixed(3)} m` : '图域边界：换一张图，物理运动仍然连续';
+  const result = firstLength !== null && secondLength !== null ? t(`ℓupper = ${firstLength.toFixed(3)} m   =   ℓright = ${secondLength.toFixed(3)} m`, `ℓ上 = ${firstLength.toFixed(3)} m   =   ℓ右 = ${secondLength.toFixed(3)} m`) : t(narrow ? 'Boundary: motion stays continuous' : 'Chart boundary: the physical motion remains continuous', '图域边界：换一张图，物理运动仍然连续');
   text(ctx, result, w * .5, h * .95, { size: narrow ? 12 : 17, color: firstLength !== null && secondLength !== null ? COLORS.ink : COLORS.rust });
 }
 
 function updateText() {
   const beta = radians(state.alpha) * .65;
   $('patch-value').value = `${state.alpha}°`;
-  $('sphere-readout').textContent = `p → q：弧长 ${beta.toFixed(3)} m；投影长度 ${Math.sin(beta).toFixed(3)} m。`;
-  const chart = CHARTS[state.chart];
+  $('sphere-readout').textContent = t(
+    `p → q: arc ${beta.toFixed(3)} m; projection ${Math.sin(beta).toFixed(3)} m.`,
+    `p → q：弧长 ${beta.toFixed(3)} m；投影长度 ${Math.sin(beta).toFixed(3)} m。`);
+  const chart = CHARTS[state.chart], label = chartLabel(state.chart);
   $('circle-value').value = `${Math.round(state.angle)}°`;
   $('circle-angle').value = state.angle;
-  $('chart-formula').textContent = `U${chart.label} = {${chart.domain}}，φ${chart.label}(x, y) = ${chart.axis}`;
+  $('chart-formula').textContent = `U${label} = {${chart.domain}}, φ${label}(x, y) = ${chart.axis}`;
   const u = coordinate(state.chart, circlePoint(state.angle));
   const u2 = coordinate(state.chart, circlePoint(state.angle + STEP));
   const valid = u !== null && u2 !== null;
   $('chart-readout').classList.toggle('warning', !valid);
   $('chart-readout').textContent = valid
-    ? `Δ坐标 = ${(u2 - u).toFixed(3)}；实际路程 ℓ = ${arcLengthFromChart(state.chart, state.angle, state.angle + STEP).toFixed(3)} m。`
-    : '这一步超出当前坐标图，需换图描述。实际路程仍为 0.087 m。';
+    ? t(`Δcoordinate = ${(u2 - u).toFixed(3)}; distance ℓ = ${arcLengthFromChart(state.chart, state.angle, state.angle + STEP).toFixed(3)} m.`,
+        `Δ坐标 = ${(u2 - u).toFixed(3)}；实际路程 ℓ = ${arcLengthFromChart(state.chart, state.angle, state.angle + STEP).toFixed(3)} m。`)
+    : t('This step leaves the chart. Choose another chart; the distance is still 0.087 m.', '这一步超出当前坐标图，需换图描述。实际路程仍为 0.087 m。');
   const witness = uncoveredWitness(state.atlas);
   $('coverage-status').classList.toggle('warning', Boolean(witness));
   const clean = value => Math.abs(value) < 1e-9 ? 0 : Math.round(value);
   $('coverage-status').textContent = witness
-    ? `${state.atlas.length} 张图：尚未覆盖整个圆周，例如 (${clean(witness.x)}, ${clean(witness.y)}) 没有坐标描述。`
-    : '4 张图覆盖整个圆周：每个点都至少有一种坐标描述。';
+    ? t(`${state.atlas.length} charts: the circle is not covered. For example, (${clean(witness.x)}, ${clean(witness.y)}) has no coordinates.`,
+        `${state.atlas.length} 张图：尚未覆盖整个圆周，例如 (${clean(witness.x)}, ${clean(witness.y)}) 没有坐标描述。`)
+    : t('All four charts cover the circle: every point has at least one coordinate description.', '4 张图覆盖整个圆周：每个点都至少有一种坐标描述。');
   $('transition-value').value = `${Math.round(state.transitionAngle)}°`;
   $('transition-angle').value = state.transitionAngle;
   const a = state.transitionAngle, end = a + STEP;
@@ -325,14 +332,25 @@ function updateText() {
     const start = coordinate(state.activeCoordinate, circlePoint(a));
     const finish = coordinate(state.activeCoordinate, circlePoint(end));
     const name = state.activeCoordinate === 'top' ? 'u' : 'v';
-    $('transition-readout').textContent = `当前用 ${name}：${start.toFixed(3)} → ${finish.toFixed(3)}；两张图算得 ℓ = ${lu.toFixed(3)} m。`;
+    $('transition-readout').textContent = t(
+      `Using ${name}: ${start.toFixed(3)} → ${finish.toFixed(3)}. Both charts give ℓ = ${lu.toFixed(3)} m.`,
+      `当前用 ${name}：${start.toFixed(3)} → ${finish.toFixed(3)}；两张图算得 ℓ = ${lu.toFixed(3)} m。`);
   } else {
     const currentValid = (state.activeCoordinate === 'top' ? lu : lv) !== null;
-    const otherName = state.activeCoordinate === 'top' ? '右' : '上';
+    const otherName = chartLabel(state.activeCoordinate === 'top' ? 'right' : 'top');
     $('transition-readout').textContent = currentValid
-      ? `当前图仍可描述这一步，ℓ = 0.087 m；${otherName}图在边界失效，轨道并无物理奇点。`
-      : `这一步超出当前图的图域，可切到${otherName}图。实际路程仍为 0.087 m。`;
+      ? t(`This chart still gives ℓ = 0.087 m. The ${otherName} chart fails at its boundary; the track remains regular.`,
+          `当前图仍可描述这一步，ℓ = 0.087 m；${otherName}图在边界失效，轨道并无物理奇点。`)
+      : t(`This step leaves the current chart. Switch to the ${otherName} chart; the distance is still 0.087 m.`,
+          `这一步超出当前图的图域，可切到${otherName}图。实际路程仍为 0.087 m。`);
   }
+  $('unfold').textContent = state.unfoldTarget ? t('Fold the chart', '收回坐标图') : t('Unfold the chart', '展开坐标图');
+  $('switch-chart').textContent = state.activeCoordinate === 'right' ? t('Use upper chart', '换到上图') : t('Use right chart', '换到右图');
+  motionButton('rotate', state.rotating, t('Auto-rotate', '自动旋转'), t('Pause rotation', '暂停旋转'));
+  motionButton('move-point', state.moving, t('Animate motion', '播放点的运动'), t('Pause motion', '暂停运动'));
+  $('previous').querySelector('span').textContent = t('Previous', state.scene ? `上一步：${chapters()[state.scene - 1]}` : '上一步');
+  $('next').querySelector('span').textContent = state.scene === 3 ? t('Start again', '从头再看') : t(`Next: ${chapters()[state.scene + 1]}`, `下一步：${chapters()[state.scene + 1]}`);
+  $('insight').textContent = insights()[state.scene];
 }
 function render() {
   [renderSphere, renderChart, renderAtlas, renderTransition][state.scene]();
@@ -375,21 +393,18 @@ function stopMotion() {
   state.rotating = false; state.moving = false; state.walk = null;
   $('walk-step').disabled = false;
   $('transition-readout').setAttribute('aria-live', 'polite');
-  motionButton('rotate', false, '自动旋转', '暂停旋转');
-  motionButton('move-point', false, '播放点的运动', '暂停运动');
+  motionButton('rotate', false, t('Auto-rotate', '自动旋转'), t('Pause rotation', '暂停旋转'));
+  motionButton('move-point', false, t('Animate motion', '播放点的运动'), t('Pause motion', '暂停运动'));
 }
 function setScene(index, focus = false) {
   stopMotion(); state.scene = index;
-  for (let i = 0; i < chapters.length; i++) {
+  for (let i = 0; i < chapters().length; i++) {
     $(`lesson-${i}`).hidden = i !== index;
     $(`tab-${i}`).setAttribute('aria-selected', String(i === index));
     $(`tab-${i}`).tabIndex = i === index ? 0 : -1;
   }
   $('previous').disabled = index === 0;
-  $('previous').querySelector('span').textContent = index ? `上一步：${chapters[index - 1]}` : '上一步';
-  $('next').querySelector('span').textContent = index === 3 ? '从头再看' : `下一步：${chapters[index + 1]}`;
   $('step-count').textContent = `${index + 1} / 4`;
-  $('insight').textContent = insights[index];
   history.replaceState(null, '', `#${anchors[index]}`);
   if (focus) {
     $(`tab-${index}`).focus({ preventScroll: true });
@@ -415,10 +430,10 @@ $('patch-size').addEventListener('input', event => { state.alpha = Number(event.
 $('unfold').addEventListener('click', () => {
   state.unfoldTarget = state.unfoldTarget ? 0 : 1;
   $('unfold').setAttribute('aria-pressed', String(Boolean(state.unfoldTarget)));
-  $('unfold').textContent = state.unfoldTarget ? '收回坐标图' : '展开坐标图'; requestRender();
+  $('unfold').textContent = state.unfoldTarget ? t('Fold the chart', '收回坐标图') : t('Unfold the chart', '展开坐标图'); requestRender();
 });
 $('rotate').addEventListener('click', () => {
-  state.rotating = !state.rotating; motionButton('rotate', state.rotating, '自动旋转', '暂停旋转'); requestRender();
+  state.rotating = !state.rotating; motionButton('rotate', state.rotating, t('Auto-rotate', '自动旋转'), t('Pause rotation', '暂停旋转')); requestRender();
 });
 document.querySelectorAll('input[name="chart"]').forEach(input => input.addEventListener('change', () => {
   state.chart = input.value; updateText(); requestRender();
@@ -444,14 +459,14 @@ $('switch-chart').addEventListener('click', () => {
   state.activeCoordinate = state.activeCoordinate === 'top' ? 'right' : 'top';
   const right = state.activeCoordinate === 'right';
   $('switch-chart').setAttribute('aria-pressed', String(right));
-  $('switch-chart').textContent = right ? '换到上图' : '换到右图';
+  $('switch-chart').textContent = right ? t('Use upper chart', '换到上图') : t('Use right chart', '换到右图');
   state.swap = reducedMotion.matches ? 0 : 1; updateText(); requestRender();
 });
 $('move-point').addEventListener('click', () => {
   state.moving = !state.moving;
   if (state.moving) state.transitionAngle = clamp(state.transitionAngle, 5, 78);
   $('transition-readout').setAttribute('aria-live', state.moving ? 'off' : 'polite');
-  motionButton('move-point', state.moving, '播放点的运动', '暂停运动'); updateText(); requestRender();
+  motionButton('move-point', state.moving, t('Animate motion', '播放点的运动'), t('Pause motion', '暂停运动')); updateText(); requestRender();
 });
 
 // Pointer and keyboard affordances share the same analytic state as the sliders.
@@ -497,4 +512,5 @@ canvases.forEach((canvas, index) => {
 new ResizeObserver(requestRender).observe(document.querySelector('main'));
 document.addEventListener('visibilitychange', () => { if (document.hidden) stopMotion(); else requestRender(); });
 window.addEventListener('hashchange', () => { const index = anchors.indexOf(location.hash.slice(1)); if (index >= 0) setScene(index); });
+document.addEventListener('gr:languagechange', () => { updateText(); requestRender(); });
 setScene(Math.max(0, anchors.indexOf(location.hash.slice(1))));

@@ -1,172 +1,188 @@
 ---
 layout: null
-title: "流形 · GR Note"
-permalink: /note/manifold/
-description: "从局部邻域、坐标图到图册与换坐标，一次可以动手探索的流形之旅。"
+title: "Manifolds | Interactive General Relativity"
+permalink: /gr/manifold/
+redirect_from:
+  - /note/manifold/
+description: "Explore manifolds through local observations, coordinate charts and physical measurements."
 ---
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="从局部邻域、坐标图到图册与换坐标，一次可以动手探索的流形之旅。">
+  <meta name="description" content="Explore manifolds through local observations, coordinate charts and physical measurements." data-zh-content="通过局部观察、坐标图与物理测量，交互式理解流形。">
   <meta name="theme-color" content="#f0f6f8">
-  <title>流形 · GR Note | Lingyu Xia</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='15' fill='%23eef5f8' stroke='%23547bab' stroke-width='2'/%3E%3Cellipse cx='20' cy='20' rx='7' ry='15' fill='none' stroke='%23547bab'/%3E%3C/svg%3E">
+  <title data-zh="流形 | 广义相对论交互专题">Manifolds | Interactive General Relativity</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3Ccircle%20cx='20'%20cy='20'%20r='15'%20fill='%23eef5f8'%20stroke='%23547bab'%20stroke-width='2'/%3E%3Cellipse%20cx='20'%20cy='20'%20rx='7'%20ry='15'%20fill='none'%20stroke='%23547bab'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="{{ '/assets/css/manifold.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   <script type="module" src="{{ '/assets/js/manifold.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+  <link rel="stylesheet" href="{{ '/assets/css/gr-series.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
 <body>
-  <a class="skip-link" href="#explore">跳到交互演示</a>
-  <header class="topbar page-width">
-    <a class="wordmark" href="{{ '/' | relative_url }}">Lingyu Xia <span>/</span> GR Note</a>
-    <nav aria-label="页面导航">
-      <a href="{{ '/note/' | relative_url }}">返回 Note</a>
-      <a href="{{ '/files/GR_note.pdf' | relative_url }}#page=4" target="_blank" rel="noopener">阅读原笔记</a>
-    </nav>
-  </header>
-  <div class="landscape"><img src="{{ '/images/gr-note/cover.jpg' | relative_url }}" alt="GR 笔记封面中的雪山与蓝色湖泊" width="960" height="540"></div>
+  <a class="skip-link" href="#explore" data-zh="跳到交互演示">Skip to the exploration</a>
+  <header class="topbar page-width"><a class="wordmark" href="{{ '/gr/' | relative_url }}">Lingyu Xia <span>/</span> <span class="series-name" data-zh="广义相对论">General Relativity</span></a>
+<nav aria-label="Series navigation" data-zh-aria-label="专题导航"><a href="{{ '/gr/' | relative_url }}" data-zh="专题目录">All explorations</a><div class="language-switch" role="group" aria-label="Language" data-zh-aria-label="语言">
+<button type="button" data-language="en" lang="en" aria-label="Switch to English" aria-pressed="true">EN</button><button type="button" data-language="zh" lang="zh-CN" aria-label="切换到中文" aria-pressed="false">中文</button>
+</div></nav></header>
+  <div class="landscape"><img src="{{ '/images/gr/landscape.jpg' | relative_url }}" alt="Snow-covered mountains beside a blue lake" width="889" height="500" data-zh-alt="雪山与蓝色湖泊"></div>
   <main class="page-width">
     <div class="page-heading">
-      <div><h1>流形：从局部，看见整体</h1><p class="subtitle" lang="en">An interactive journey into manifolds</p></div>
-      <a class="source-link" href="{{ '/files/GR_note.pdf' | relative_url }}#page=4" target="_blank" rel="noopener">基于 GR Note §1.1</a>
+      <div>
+<h1 data-zh="流形：从局部，看见整体">Manifolds: from local to global</h1>
+<p class="subtitle" data-zh="从观察者出发，理解空间的几何">An interactive journey into manifolds</p>
+</div>
+      <a class="source-link" href="{{ '/gr/' | relative_url }}" data-zh="01 / 广义相对论">01 / General Relativity</a>
     </div>
-    <div class="chapter-tabs" role="tablist" aria-label="探索步骤" id="explore">
-      <button role="tab" aria-selected="true" aria-controls="lesson-0" id="tab-0" tabindex="0"><span>01</span> 局部观察者</button>
-      <button role="tab" aria-selected="false" aria-controls="lesson-1" id="tab-1" tabindex="-1"><span>02</span> 坐标与距离</button>
-      <button role="tab" aria-selected="false" aria-controls="lesson-2" id="tab-2" tabindex="-1"><span>03</span> 拼接局部</button>
-      <button role="tab" aria-selected="false" aria-controls="lesson-3" id="tab-3" tabindex="-1"><span>04</span> 不变的物理</button>
+    <div class="chapter-tabs" role="tablist" aria-label="Exploration steps" id="explore" data-zh-aria-label="探索步骤">
+      <button role="tab" aria-selected="true" aria-controls="lesson-0" id="tab-0" tabindex="0" data-zh="&lt;span&gt;01&lt;/span&gt; 局部观察者"><span>01</span> Local observers</button>
+      <button role="tab" aria-selected="false" aria-controls="lesson-1" id="tab-1" tabindex="-1" data-zh="&lt;span&gt;02&lt;/span&gt; 坐标与距离"><span>02</span> Coordinates &amp; distance</button>
+      <button role="tab" aria-selected="false" aria-controls="lesson-2" id="tab-2" tabindex="-1" data-zh="&lt;span&gt;03&lt;/span&gt; 拼接局部"><span>03</span> An atlas</button>
+      <button role="tab" aria-selected="false" aria-controls="lesson-3" id="tab-3" tabindex="-1" data-zh="&lt;span&gt;04&lt;/span&gt; 不变的物理"><span>04</span> Invariant physics</button>
     </div>
-    <noscript><p class="notice">交互演示需要 JavaScript。你仍可阅读下方的定义，或打开原笔记。</p></noscript>
+    <noscript><p class="notice" data-zh="交互演示需要 JavaScript；下方的定义无需启用 JavaScript 即可阅读。">Enable JavaScript to use the interactive diagrams. The definitions below are available without it.</p></noscript>
 
     <section class="lesson" role="tabpanel" id="lesson-0" aria-labelledby="tab-0">
       <div class="narrative">
-        <h2>如果你就住在球面上。</h2>
-        <p>你只能沿表面走动。定位附近的一个点，需要两个独立的数；描述整个空间，却未必能只用一张地图。</p>
-        <div class="definition">局部像 <span class="math">ℝ²</span>，整体可以是球面 <span class="math">S²</span>。</div>
+        <h2 data-zh="如果你就住在球面上。">Imagine living on a sphere.</h2>
+        <p data-zh="你只能沿表面走动。定位附近的一个点，需要两个独立的数；描述整个空间，却未必能只用一张地图。">You can move only along the surface. Two independent numbers locate a nearby point, but one map need not describe the entire space.</p>
+        <div class="definition" data-zh='局部像 &lt;span class="math"&gt;ℝ²&lt;/span&gt;，整体可以是球面 &lt;span class="math"&gt;S²&lt;/span&gt;。'>Locally like <span class="math">ℝ²</span>. Globally, a sphere <span class="math">S²</span>.</div>
         <div class="control-block">
-          <label class="range-label" for="patch-size">邻域大小 <output id="patch-value" for="patch-size">45°</output></label>
+          <label class="range-label" for="patch-size"><span data-zh="邻域大小">Neighborhood size</span><output id="patch-value" for="patch-size">45°</output></label>
           <input id="patch-size" type="range" min="10" max="75" value="45" step="1">
-          <div class="range-ends" aria-hidden="true"><span>10°</span><span>75°</span></div>
+          <div class="range-ends" aria-hidden="true">
+<span>10°</span><span>75°</span>
+</div>
         </div>
         <div class="actions">
-          <button class="primary" id="unfold" aria-pressed="false">展开坐标图</button>
-          <button class="secondary motion-button" id="rotate" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2 13 8 4 14Z"/></svg><span>自动旋转</span></button>
+          <button class="primary" id="unfold" aria-pressed="false" data-zh="展开坐标图">Unfold the chart</button>
+          <button class="secondary motion-button" id="rotate" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2 13 8 4 14Z"></path></svg><span data-zh="自动旋转">Auto-rotate</span></button>
         </div>
         <p class="readout" id="sphere-readout"></p>
       </div>
       <figure class="scene">
-        <canvas id="sphere-canvas" width="900" height="410" tabindex="0" role="img" aria-label="球面的一片开邻域映到二维坐标平面。拖动或用方向键旋转球面，使用展开坐标图按钮观看映射。"></canvas>
-        <figcaption>拖动改变视角 · 缩小邻域，比较弧长与投影长度 · R = 1 m</figcaption>
+        <canvas id="sphere-canvas" width="900" height="410" tabindex="0" role="img" aria-label="An open neighborhood on a sphere maps to a two-dimensional coordinate plane. Drag or use arrow keys to rotate; use the unfold button to see the map." data-zh-aria-label="球面的一片开邻域映到二维坐标平面。拖动或用方向键旋转球面，使用展开坐标图按钮观看映射。"></canvas>
+        <figcaption data-zh="拖动改变视角 · 缩小邻域，比较弧长与投影长度 · R = 1 m">Drag to rotate · Shrink the neighborhood and compare arc and projected lengths · R = 1 m</figcaption>
       </figure>
     </section>
 
     <section class="lesson" role="tabpanel" id="lesson-1" aria-labelledby="tab-1" hidden>
       <div class="narrative">
-        <h2>同样走一步，<br>坐标不一定变一样多。</h2>
-        <p>在半径 1 m 的圆形轨道上，让小球走过固定的 5°。实际路程始终相同，投影坐标的变化却随位置改变。</p>
-        <fieldset class="chart-choices"><legend>选择一张坐标图</legend>
-          <label><input type="radio" name="chart" value="top" checked><span>上半圆</span></label>
-          <label><input type="radio" name="chart" value="right"><span>右半圆</span></label>
-          <label><input type="radio" name="chart" value="bottom"><span>下半圆</span></label>
-          <label><input type="radio" name="chart" value="left"><span>左半圆</span></label>
+        <h2 data-zh="同样走一步，&lt;br&gt;坐标不一定变一样多。">One step. Different <br>coordinate changes.</h2>
+        <p data-zh="在半径 1 m 的圆形轨道上，让小球走过固定的 5°。实际路程始终相同，投影坐标的变化却随位置改变。">On a circular track of radius 1 m, let a ball move through a fixed 5°. The distance stays the same, while its change in projected coordinate depends on where it starts.</p>
+        <fieldset class="chart-choices">
+<legend data-zh="选择一张坐标图">Choose a coordinate chart</legend>
+          <label><input type="radio" name="chart" value="top" checked><span data-zh="上半圆">Upper</span></label>
+          <label><input type="radio" name="chart" value="right"><span data-zh="右半圆">Right</span></label>
+          <label><input type="radio" name="chart" value="bottom"><span data-zh="下半圆">Lower</span></label>
+          <label><input type="radio" name="chart" value="left"><span data-zh="左半圆">Left</span></label>
         </fieldset>
-        <div class="definition math" id="chart-formula">U上 = {y &gt; 0}，φ上(x, y) = x</div>
+        <div class="definition math" id="chart-formula" data-zh="U上 = {y &gt; 0}，φ上(x, y) = x">Uupper = {y &gt; 0}, φupper(x, y) = x</div>
         <div class="control-block compact">
-          <label class="range-label" for="circle-angle">点的位置 <output id="circle-value" for="circle-angle">45°</output></label>
+          <label class="range-label" for="circle-angle"><span data-zh="点的位置">Position</span><output id="circle-value" for="circle-angle">45°</output></label>
           <input id="circle-angle" type="range" min="0" max="360" value="45" step="1">
         </div>
-        <button class="secondary small-action" id="walk-step">沿轨道走一步</button>
+        <button class="secondary small-action" id="walk-step" data-zh="沿轨道走一步">Take one step</button>
         <p class="readout" id="chart-readout" aria-live="polite"></p>
       </div>
       <figure class="scene">
-        <canvas id="chart-canvas" width="900" height="410" tabindex="0" role="img" aria-label="圆周上的点 p 与开区间内的坐标一一对应。拖动点，或用方向键移动点。"></canvas>
-        <figcaption>实心点 p → 空心点 q：固定走过 5° · 坐标图的端点不包含在内</figcaption>
+        <canvas id="chart-canvas" width="900" height="410" tabindex="0" role="img" aria-label="Points on a circle correspond to coordinates in an open interval. Drag a point or use arrow keys to move it." data-zh-aria-label="圆周上的点 p 与开区间内的坐标一一对应。拖动点，或用方向键移动点。"></canvas>
+        <figcaption data-zh="实心点 p → 空心点 q：固定走过 5° · 坐标图的端点不包含在内">Filled point p → open point q: a fixed 5° step · Chart endpoints are excluded</figcaption>
       </figure>
     </section>
 
     <section class="lesson" role="tabpanel" id="lesson-2" aria-labelledby="tab-2" hidden>
       <div class="narrative">
-        <h2>局部地图，<br>拼成完整的空间。</h2>
-        <p>不同区域可以使用不同的坐标。试着拿掉其中一张：有些点将失去坐标描述，但空间本身没有缺口。</p>
-        <fieldset class="atlas-choices"><legend>打开或关闭坐标图</legend>
-          <label><input type="checkbox" name="atlas" value="top" checked><span class="swatch top"></span>上半圆 <span class="math">y &gt; 0</span></label>
-          <label><input type="checkbox" name="atlas" value="right" checked><span class="swatch right"></span>右半圆 <span class="math">x &gt; 0</span></label>
-          <label><input type="checkbox" name="atlas" value="bottom" checked><span class="swatch bottom"></span>下半圆 <span class="math">y &lt; 0</span></label>
-          <label><input type="checkbox" name="atlas" value="left" checked><span class="swatch left"></span>左半圆 <span class="math">x &lt; 0</span></label>
+        <h2 data-zh="局部地图，&lt;br&gt;拼成完整的空间。">Local maps. <br>A complete space.</h2>
+        <p data-zh="不同区域可以使用不同的坐标。试着拿掉其中一张：有些点将失去坐标描述，但空间本身没有缺口。">Different regions can use different coordinates. Remove a map: some points lose their coordinate description, but no part of the space disappears.</p>
+        <fieldset class="atlas-choices">
+<legend data-zh="打开或关闭坐标图">Include or remove charts</legend>
+          <label><input type="checkbox" name="atlas" value="top" checked><span class="swatch top"></span><span data-zh="上半圆">Upper</span><span class="math">y &gt; 0</span></label>
+          <label><input type="checkbox" name="atlas" value="right" checked><span class="swatch right"></span><span data-zh="右半圆">Right</span><span class="math">x &gt; 0</span></label>
+          <label><input type="checkbox" name="atlas" value="bottom" checked><span class="swatch bottom"></span><span data-zh="下半圆">Lower</span><span class="math">y &lt; 0</span></label>
+          <label><input type="checkbox" name="atlas" value="left" checked><span class="swatch left"></span><span data-zh="左半圆">Left</span><span class="math">x &lt; 0</span></label>
         </fieldset>
         <div class="definition" id="coverage-status" aria-live="polite"></div>
-        <button class="secondary" id="restore-atlas">恢复完整图册</button>
+        <button class="secondary" id="restore-atlas" data-zh="恢复完整图册">Restore all charts</button>
       </div>
       <figure class="scene">
-        <canvas id="atlas-canvas" width="900" height="410" role="img" aria-label="四张开半圆坐标图共同覆盖圆周。关闭坐标图后，未覆盖区域和点以橙色标出。"></canvas>
-        <figcaption>每个点至少落在一张图里 · 图与图之间可以重叠</figcaption>
+        <canvas id="atlas-canvas" width="900" height="410" role="img" aria-label="Four open semicircle charts cover a circle. Missing regions and points appear in orange when charts are removed." data-zh-aria-label="四张开半圆坐标图共同覆盖圆周。关闭坐标图后，未覆盖区域和点以橙色标出。"></canvas>
+        <figcaption data-zh="每个点至少落在一张图里 · 图与图之间可以重叠">Every point belongs to at least one chart · Charts may overlap</figcaption>
       </figure>
     </section>
 
     <section class="lesson" role="tabpanel" id="lesson-3" aria-labelledby="tab-3" hidden>
       <div class="narrative">
-        <h2>换一套坐标，<br>路程还是同一段。</h2>
-        <p>同一段 5° 运动，在上图与右图中有不同的坐标变化。用各自的度规换算，两者得到相同的实际路程。</p>
+        <h2 data-zh="换一套坐标，&lt;br&gt;路程还是同一段。">Different coordinates. <br>The same distance.</h2>
+        <p data-zh="同一段 5° 运动，在上图与右图中有不同的坐标变化。用各自的度规换算，两者得到相同的实际路程。">The same 5° motion has different coordinate changes in the upper and right charts. Integrating each chart’s metric gives the same physical distance.</p>
         <div class="definition math">dℓ² = R² du²/(1−u²)<br>= R² dv²/(1−v²)</div>
         <div class="control-block">
-          <label class="range-label" for="transition-angle">点的位置 <output id="transition-value" for="transition-angle">35°</output></label>
+          <label class="range-label" for="transition-angle"><span data-zh="点的位置">Position</span><output id="transition-value" for="transition-angle">35°</output></label>
           <input id="transition-angle" type="range" min="0" max="85" value="35" step="1">
-          <div class="range-ends" aria-hidden="true"><span>0°</span><span>85°</span></div>
+          <div class="range-ends" aria-hidden="true">
+<span>0°</span><span>85°</span>
+</div>
         </div>
         <div class="actions">
-          <button class="primary" id="switch-chart" aria-pressed="false">换到右图</button>
-          <button class="secondary motion-button" id="move-point" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2 13 8 4 14Z"/></svg><span>播放点的运动</span></button>
+          <button class="primary" id="switch-chart" aria-pressed="false" data-zh="换到右图">Use right chart</button>
+          <button class="secondary motion-button" id="move-point" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2 13 8 4 14Z"></path></svg><span data-zh="播放点的运动">Animate motion</span></button>
         </div>
         <p class="readout" id="transition-readout" aria-live="polite"></p>
       </div>
       <figure class="scene">
-        <canvas id="transition-canvas" width="900" height="410" tabindex="0" role="img" aria-label="第一象限的同一个圆周点，在上图中的坐标是 u 等于 x，在右图中是 v 等于 y。拖动点，或用方向键移动点。"></canvas>
-        <figcaption>换坐标不移动小球 · 播放才改变位置 · 两种描述，同一段路程</figcaption>
+        <canvas id="transition-canvas" width="900" height="410" tabindex="0" role="img" aria-label="The same point has coordinate u equal to x in the upper chart and v equal to y in the right chart. Drag it or use arrow keys to move it." data-zh-aria-label="第一象限的同一个圆周点，在上图中的坐标是 u 等于 x，在右图中是 v 等于 y。拖动点，或用方向键移动点。"></canvas>
+        <figcaption data-zh="换坐标不移动小球 · 播放才改变位置 · 两种描述，同一段路程">Changing charts leaves the ball in place · Animation moves it along the track</figcaption>
       </figure>
     </section>
 
-    <aside class="insight" id="insight">局部的平面坐标并不保持距离。缩小观察范围，也没有让球面的曲率消失。</aside>
-    <nav class="lesson-footer" aria-label="章节翻页">
-      <button class="secondary" id="previous" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m9 4-6 6 6 6M3 10h14"/></svg><span>上一步</span></button>
+    <aside class="insight" id="insight" data-zh="局部的平面坐标并不保持距离。缩小观察范围，也没有让球面的曲率消失。">Plane coordinates need not preserve distance. A smaller field of view does not make the sphere’s curvature vanish.</aside>
+    <nav class="lesson-footer" aria-label="Explore the next step" data-zh-aria-label="章节翻页">
+      <button class="secondary" id="previous" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m9 4-6 6 6 6M3 10h14"></path></svg><span data-zh="上一步">Previous</span></button>
       <span id="step-count" aria-live="polite">1 / 4</span>
-      <button class="primary" id="next"><span>下一步：坐标与距离</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m11 4 6 6-6 6M17 10H3"/></svg></button>
+      <button class="primary" id="next"><span data-zh="下一步：坐标与距离">Next: coordinates</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m11 4 6 6-6 6M17 10H3"></path></svg></button>
     </nav>
     <section class="physics-bridge" aria-labelledby="physics-heading">
-      <h2 id="physics-heading">为什么广义相对论需要它？</h2>
+      <h2 id="physics-heading" data-zh="为什么广义相对论需要它？">Why does general relativity need this?</h2>
       <dl>
-        <div><dt>流形 <span class="math">M</span></dt><dd>把时空视为事件的集合。每个事件附近，用四个独立坐标来标记位置与时间。</dd></div>
-        <div><dt>度规 <span class="math">g</span></dt><dd>坐标只是标签；度规告诉我们如何把坐标差换成钟和尺实际测量的时空间隔。</dd></div>
-        <div><dt>曲率张量</dt><dd>局部自由落体可以消去一点处的联络，却通常消不去潮汐效应：邻近自由落体之间仍可能产生相对加速度。</dd></div>
+        <div>
+<dt data-zh='流形 &lt;span class="math"&gt;M&lt;/span&gt;'>Manifold <span class="math">M</span>
+</dt>
+<dd data-zh="把时空视为事件的集合。每个事件附近，用四个独立坐标来标记位置与时间。">Spacetime is a collection of events. Near any event, four independent coordinates label where and when it happens.</dd>
+</div>
+        <div>
+<dt data-zh='度规 &lt;span class="math"&gt;g&lt;/span&gt;'>Metric <span class="math">g</span>
+</dt>
+<dd data-zh="坐标只是标签；度规告诉我们如何把坐标差换成钟和尺实际测量的时空间隔。">Coordinates are labels. The metric connects coordinate differences to the spacetime intervals measured by clocks and rulers.</dd>
+</div>
+        <div>
+<dt data-zh="曲率张量">Curvature tensor</dt>
+<dd data-zh="局部自由落体可以消去一点处的联络，却通常消不去潮汐效应：邻近自由落体之间仍可能产生相对加速度。">A freely falling frame can remove the connection at a point, but generally not tidal effects: neighboring freely falling bodies can still accelerate relative to one another.</dd>
+</div>
       </dl>
     </section>
     <details class="reading-notes">
-      <summary>把直觉写成定义</summary>
+      <summary data-zh="把直觉写成定义">From intuition to definitions</summary>
       <div class="reading-body">
-        <h3>局部欧氏，不等于几何上平直</h3>
-        <p>这里讨论无边界的 <span class="math">n</span> 维拓扑流形：它是 Hausdorff、第二可数的拓扑空间，每个点都有一个开邻域 <span class="math">U</span>，通过同胚 <span class="math">φ: U → V ⊂ ℝⁿ</span> 与欧氏空间的开集对应。同胚要求映射一一对应、连续，且逆映射也连续。Hausdorff 保证不同点可以用不相交的邻域分开；第二可数要求存在可数的拓扑基。</p>
-        <p>第一幕使用单位球面上半部的投影 <span class="math">φ(x,y,z)=(x,y)</span>，逆映射为 <span class="math">(u,v) ↦ (u,v,√(1−u²−v²))</span>。蓝色区域取 <span class="math">z &gt; cos α</span>，对应开圆盘 <span class="math">u²+v² &lt; sin²α</span>。动画展示对应关系；它不保持球面上的距离与面积，也没有把球面变平。</p>
-        <h3>坐标图、图册、光滑性</h3>
-        <p>坐标图是这对对象 <span class="math">(U,φ)</span>。一组坐标图的定义域覆盖整个流形，就构成图册。第三幕采用四张开半圆图，缺少任意一张都会漏掉至少一个点；若改选更大的开集，圆周也可以用两张图覆盖。圆周不能用一张图覆盖，因为它是紧致的，而 <span class="math">ℝ</span> 的非空开集不是紧致的。</p>
-        <p>重叠区域上的换图为 <span class="math">φβ ∘ φα⁻¹</span>。若所有换图都是 <span class="math">C∞</span>，就得到光滑图册；兼容的图册确定光滑结构。第四幕的上图、右图在第一象限重叠，换图及其逆映射在 <span class="math">(0,1)</span> 内都光滑。边界点不属于这个重叠区域。</p>
-        <h3>为什么两套坐标算出同一路程？</h3>
-        <p>圆形轨道取 <span class="math">x=cos θ，y=sin θ</span>，半径为 <span class="math">R=1 m</span>。上图使用无量纲坐标 <span class="math">u=x</span>，右图使用 <span class="math">v=y</span>。两套度规分量分别为 <span class="math">gᵤᵤ=R²/(1−u²)</span>、<span class="math">gᵥᵥ=R²/(1−v²)</span>，而弧长元都是 <span class="math">dℓ=R|dθ|</span>。</p>
-        <p>界面显示的有限路程由积分精确计算：<span class="math">ℓ=R|arcsin u₂−arcsin u₁|=R|arcsin v₂−arcsin v₁|=RΔθ</span>，其中这一段必须完整位于各自图域内。不是把有限坐标差直接当成微分。坐标接近图域边界时，度规分量可能发散；这里出问题的是坐标，圆形轨道本身仍然规则。</p>
-        <p>圆周在这里用于解释坐标和长度；它在图中的外在弯曲不代表非零内禀曲率，一维黎曼曲率恒为零。第一幕的球面则有非零内禀高斯曲率 <span class="math">K=1/R²</span>。缩小邻域改善局部平直近似，但不改变 <span class="math">K</span>。</p>
-        <h3>从流形走向广义相对论</h3>
-        <p>维数是局部需要的独立坐标个数：圆周是一维，球面是二维。画在三维空间中只是帮助理解；流形的定义不要求一个外部空间。广义相对论进一步在四维光滑流形上赋予 Lorentz 度规，用来描述时空间隔与因果结构。流形本身并不预先规定长度、角度或曲率。</p>
-        <p>“局部欧氏”描述的是拓扑与坐标结构，并不是说时空的度规是欧氏度规。在一点可选择局部惯性坐标，使度规等于 Minkowski 度规、联络为零；曲率一般仍非零，有限区域内的潮汐效应也不能由换坐标消除。</p>
+        <h3 data-zh="局部欧氏，不等于几何上平直">Locally Euclidean does not mean geometrically flat</h3>
+        <p data-zh='这里讨论无边界的 &lt;span class="math"&gt;n&lt;/span&gt; 维拓扑流形：它是 Hausdorff、第二可数的拓扑空间，每个点都有一个开邻域 &lt;span class="math"&gt;U&lt;/span&gt;，通过同胚 &lt;span class="math"&gt;φ: U → V ⊂ ℝⁿ&lt;/span&gt; 与欧氏空间的开集对应。同胚要求映射一一对应、连续，且逆映射也连续。Hausdorff 保证不同点可以用不相交的邻域分开；第二可数要求存在可数的拓扑基。'>An <span class="math">n</span>-dimensional topological manifold without boundary is a Hausdorff, second-countable topological space in which every point has an open neighborhood <span class="math">U</span> homeomorphic to an open set <span class="math">V ⊂ ℝⁿ</span>. A homeomorphism <span class="math">φ: U → V</span> is a continuous bijection with a continuous inverse. Hausdorff means distinct points have disjoint neighborhoods; second-countable means there is a countable basis for the topology.</p>
+        <p data-zh='第一幕使用单位球面上半部的投影 &lt;span class="math"&gt;φ(x,y,z)=(x,y)&lt;/span&gt;，逆映射为 &lt;span class="math"&gt;(u,v) ↦ (u,v,√(1−u²−v²))&lt;/span&gt;。蓝色区域取 &lt;span class="math"&gt;z &amp;gt; cos α&lt;/span&gt;，对应开圆盘 &lt;span class="math"&gt;u²+v² &amp;lt; sin²α&lt;/span&gt;。动画展示对应关系；它不保持球面上的距离与面积，也没有把球面变平。'>The first scene uses the projection <span class="math">φ(x,y,z)=(x,y)</span> on the upper unit sphere, with inverse <span class="math">(u,v) ↦ (u,v,√(1−u²−v²))</span>. The blue region <span class="math">z &gt; cos α</span> maps to the open disk <span class="math">u²+v² &lt; sin²α</span>. The animation shows a correspondence: it neither preserves distances and areas nor physically flattens the sphere.</p>
+        <h3 data-zh="坐标图、图册、光滑性">Charts, atlases and smoothness</h3>
+        <p data-zh='坐标图是这对对象 &lt;span class="math"&gt;(U,φ)&lt;/span&gt;。一组坐标图的定义域覆盖整个流形，就构成图册。第三幕采用四张开半圆图，缺少任意一张都会漏掉至少一个点；若改选更大的开集，圆周也可以用两张图覆盖。圆周不能用一张图覆盖，因为它是紧致的，而 &lt;span class="math"&gt;ℝ&lt;/span&gt; 的非空开集不是紧致的。'>A coordinate chart is the pair <span class="math">(U,φ)</span>. An atlas is a collection of charts whose domains cover the manifold. In the third scene, removing any of the four open semicircle charts leaves at least one point uncovered. Larger open sets allow the circle to be covered by just two charts. One chart cannot cover the circle: the circle is compact, while a nonempty open subset of <span class="math">ℝ</span> is not.</p>
+        <p data-zh='重叠区域上的换图为 &lt;span class="math"&gt;φβ ∘ φα⁻¹&lt;/span&gt;。若所有换图都是 &lt;span class="math"&gt;C∞&lt;/span&gt;，就得到光滑图册；兼容的图册确定光滑结构。第四幕的上图、右图在第一象限重叠，换图及其逆映射在 &lt;span class="math"&gt;(0,1)&lt;/span&gt; 内都光滑。边界点不属于这个重叠区域。'>On an overlap, the transition map is <span class="math">φβ ∘ φα⁻¹</span>. An atlas is smooth when its transition maps are <span class="math">C∞</span>; compatible atlases determine a smooth structure. The fourth scene uses the first-quadrant overlap of the upper and right charts. The transition map and its inverse are smooth on <span class="math">(0,1)</span>. Boundary points are excluded.</p>
+        <h3 data-zh="为什么两套坐标算出同一路程？">Why do both charts give the same distance?</h3>
+        <p data-zh='圆形轨道取 &lt;span class="math"&gt;x=cos θ，y=sin θ&lt;/span&gt;，半径为 &lt;span class="math"&gt;R=1 m&lt;/span&gt;。上图使用无量纲坐标 &lt;span class="math"&gt;u=x&lt;/span&gt;，右图使用 &lt;span class="math"&gt;v=y&lt;/span&gt;。两套度规分量分别为 &lt;span class="math"&gt;gᵤᵤ=R²/(1−u²)&lt;/span&gt;、&lt;span class="math"&gt;gᵥᵥ=R²/(1−v²)&lt;/span&gt;，而弧长元都是 &lt;span class="math"&gt;dℓ=R|dθ|&lt;/span&gt;。'>Write the track as <span class="math">x=cos θ, y=sin θ</span>, with radius <span class="math">R=1 m</span>. The dimensionless coordinates are <span class="math">u=x</span> in the upper chart and <span class="math">v=y</span> in the right chart. Their metric components are <span class="math">gᵤᵤ=R²/(1−u²)</span> and <span class="math">gᵥᵥ=R²/(1−v²)</span>. Both describe the same line element <span class="math">dℓ=R|dθ|</span>.</p>
+        <p data-zh='界面显示的有限路程由积分精确计算：&lt;span class="math"&gt;ℓ=R|arcsin u₂−arcsin u₁|=R|arcsin v₂−arcsin v₁|=RΔθ&lt;/span&gt;，其中这一段必须完整位于各自图域内。不是把有限坐标差直接当成微分。坐标接近图域边界时，度规分量可能发散；这里出问题的是坐标，圆形轨道本身仍然规则。'>Finite distances shown here come from the exact integral <span class="math">ℓ=R|arcsin u₂−arcsin u₁|=R|arcsin v₂−arcsin v₁|=RΔθ</span>, provided the entire segment lies inside each chart. A finite coordinate difference is not substituted for a differential. Near a chart boundary a metric component may diverge, even though the circular track remains regular.</p>
+        <p data-zh='圆周在这里用于解释坐标和长度；它在图中的外在弯曲不代表非零内禀曲率，一维黎曼曲率恒为零。第一幕的球面则有非零内禀高斯曲率 &lt;span class="math"&gt;K=1/R²&lt;/span&gt;。缩小邻域改善局部平直近似，但不改变 &lt;span class="math"&gt;K&lt;/span&gt;。'>The circle illustrates coordinates and length. Its bending in the drawing is extrinsic: every one-dimensional Riemannian manifold has zero intrinsic Riemann curvature. The sphere in the first scene has nonzero Gaussian curvature <span class="math">K=1/R²</span>. Shrinking a neighborhood improves the local flat approximation without changing <span class="math">K</span>.</p>
+        <h3 data-zh="从流形走向广义相对论">From manifolds to general relativity</h3>
+        <p data-zh="维数是局部需要的独立坐标个数：圆周是一维，球面是二维。画在三维空间中只是帮助理解；流形的定义不要求一个外部空间。广义相对论进一步在四维光滑流形上赋予 Lorentz 度规，用来描述时空间隔与因果结构。流形本身并不预先规定长度、角度或曲率。">Dimension counts the independent coordinates needed locally: one for a circle, two for a sphere. Drawing a manifold in three-dimensional space is a visual aid; its definition requires no surrounding space. General relativity equips a four-dimensional smooth manifold with a Lorentzian metric to describe spacetime intervals and causal structure. A manifold alone specifies no lengths, angles or curvature.</p>
+        <p data-zh="“局部欧氏”描述的是拓扑与坐标结构，并不是说时空的度规是欧氏度规。在一点可选择局部惯性坐标，使度规等于 Minkowski 度规、联络为零；曲率一般仍非零，有限区域内的潮汐效应也不能由换坐标消除。">“Locally Euclidean” refers to topology and coordinates, not a Euclidean spacetime metric. At a point, local inertial coordinates can make the metric Minkowskian and the connection vanish. Curvature can remain nonzero, and a coordinate change cannot remove tidal effects throughout a finite region.</p>
       </div>
     </details>
-    <details class="reading-notes sources">
-      <summary>阅读依据与原笔记说明</summary>
-      <div class="reading-body">
-        <p>改编自 Lingyu Xia，<a href="{{ '/files/GR_note.pdf' | relative_url }}#page=4" target="_blank" rel="noopener"><i>General Relativity Note</i>，§1.1，正文第 2–5 页</a>（2023 年 5 月 30 日）。封面照片取自同一份笔记。讲解延续“邻域 → 坐标图 → 图册 → 光滑换图”的顺序；交互数值由单位圆、单位球面的解析式实时计算。</p>
-        <p>原笔记第 5 页圆周例子中，下半圆与右半圆的投影公式需分别改为 <span class="math">φ下(x,y)=x</span>、<span class="math">φ右(x,y)=y</span>，以保证在相应开半圆上一一对应。此处据此绘制，原 PDF 保留原样。</p>
-        <p>延伸阅读：David Tong · General Relativity，<a href="https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S2.html" target="_blank" rel="noopener">§2.1 Manifolds</a>；<a href="https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S3.html" target="_blank" rel="noopener">§3 Riemannian Geometry</a>。钟尺、度规和局部惯性系的说明是本交互页加入的物理解释。</p>
-      </div>
-    </details>
-    <footer class="colophon"><span>Lingyu Xia · General Relativity Note</span><a href="{{ '/note/' | relative_url }}">回到全部笔记</a></footer>
+    <details class="reading-notes sources"><summary data-zh="进一步阅读">Further reading</summary><div class="reading-body">
+<p data-zh="演示中的数值由单位圆与单位球面的解析式实时计算。">The measurements in these scenes are calculated from analytic expressions for the unit circle and unit sphere.</p>
+<p>David Tong · General Relativity: <a href="https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S2.html" target="_blank" rel="noopener">§2.1 Manifolds</a>; <a href="https://www.damtp.cam.ac.uk/user/tong/gr/grhtml/S3.html" target="_blank" rel="noopener">§3 Riemannian Geometry</a>.</p>
+</div></details>
+    <footer class="colophon"><span data-zh="Lingyu Xia · 广义相对论交互专题">Lingyu Xia · Interactive General Relativity</span><a href="{{ '/gr/' | relative_url }}" data-zh="返回专题目录">Back to the series</a></footer>
   </main>
 </body>
 </html>

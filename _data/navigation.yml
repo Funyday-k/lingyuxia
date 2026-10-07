@@ -9,6 +9,9 @@ main:
   - title: "Daily Paper"
     url: /daily-paper/
 
+  - title: "GR"
+    url: /gr/
+
   - title: "Note"
     url: /note/
 
