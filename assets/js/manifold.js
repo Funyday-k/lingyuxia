@@ -391,7 +391,7 @@ function setScene(index, focus = false) {
   $('step-count').textContent = `${index + 1} / 4`;
   $('insight').textContent = insights[index];
   history.replaceState(null, '', `#${anchors[index]}`);
-  if (focus) $(`tab-${index}`).focus({ preventScroll: true });
+  if (focus) $(`tab-${index}`).focus();
   updateText(); requestRender();
 }
 
