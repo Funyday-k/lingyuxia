@@ -12,6 +12,9 @@ main:
   - title: "GR"
     url: /gr/
 
+  - title: "StatPhys"
+    url: /statistical-physics/
+
   - title: "Note"
     url: /note/
 

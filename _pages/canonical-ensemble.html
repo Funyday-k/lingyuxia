@@ -1,0 +1,487 @@
+---
+layout: null
+title: "Canonical ensemble | Statistical Physics"
+permalink: /statistical-physics/canonical-ensemble/
+---
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用可调参数的二能级系统，理解正则系综、玻尔兹曼分布、配分函数和能量涨落。">
+  <meta name="theme-color" content="#fffaf4">
+  <title>Canonical ensemble | Statistical Physics</title>
+  <style>
+    :root{--bg:#fffaf4;--paper:#fff;--ink:#403127;--muted:#806f60;--accent:#bd5b24;--accent-soft:#fff1de;--secondary:#285b46;--line:#eadccd;--grid:#f0e8de;--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
+    button,input{font:inherit;color:inherit}button,a,input{-webkit-tap-highlight-color:transparent}
+    button{cursor:pointer}button:disabled{cursor:default;opacity:.5}
+    button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #ca7a43;outline-offset:4px}
+    button{border:0}a{color:var(--accent);text-underline-offset:3px}
+    h1,h2,h3,p{margin:0}h2{font-size:19px;line-height:1.4;letter-spacing:-.25px}h3{font-size:16px;line-height:1.5}
+    .shell{width:min(1280px,calc(100% - 64px));margin:auto}
+    .topbar{border-bottom:1px solid var(--line)}.topbar .shell{height:54px;display:flex;align-items:center;justify-content:space-between}
+    .wordmark{font-size:16px;font-weight:750;letter-spacing:.5px}.top-title{font-size:13px;color:var(--muted);letter-spacing:.15px}
+    .hero{padding:27px 4px 20px;display:flex;align-items:center;justify-content:space-between;gap:28px}
+    h1{font-size:clamp(32px,4vw,48px);font-weight:760;line-height:1.3;letter-spacing:-1.6px}
+    .hero p{font-size:16px;color:var(--muted);margin-top:9px;line-height:1.7}
+    .hero-equations{display:flex;align-items:center;gap:42px;white-space:nowrap;padding-right:8px;color:#403127}
+    math{font-family:"STIX Two Math","Cambria Math","Times New Roman",serif;font-size:1.17em}math[display="block"]{margin:0}.hero-equations math{font-size:36px}
+    .tabs{display:flex;gap:26px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto;scrollbar-width:none}
+    .tab{position:relative;padding:11px 10px 12px;background:transparent;color:var(--muted);font-size:15px;white-space:nowrap}
+    .tab[aria-selected="true"]{color:var(--ink);font-weight:700}.tab[aria-selected="true"]:after{content:"";position:absolute;height:2px;background:var(--accent);bottom:0;left:0;right:0}
+    [hidden]{display:none!important}
+    .lab-layout{display:grid;grid-template-columns:258px minmax(0,1fr);border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);overflow:hidden}
+    .control-rail{padding:22px 20px;border-right:1px solid var(--line);background:linear-gradient(180deg,#fffdf9,#fff8ee)}
+    .control-rail h2{margin-bottom:22px}.parameter{margin-bottom:25px}.parameter-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:8px}
+    .parameter-head label{font-weight:650;font-size:14px}.number-input{width:67px;height:29px;border:1px solid #dfcdbb;border-radius:5px;background:white;text-align:center;font-variant-numeric:tabular-nums;padding:2px 3px;appearance:textfield;-moz-appearance:textfield}
+    .number-input::-webkit-inner-spin-button,.number-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+    input[type="range"]{appearance:none;-webkit-appearance:none;height:5px;border-radius:9px;display:block;width:100%;margin:13px 0 8px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,20%),#e8ddd0 var(--fill,20%),#e8ddd0 100%);cursor:pointer}
+    input[type="range"]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);border:2px solid white;box-shadow:0 0 0 1px var(--accent)}
+    input[type="range"]::-moz-range-thumb{width:12px;height:12px;background:var(--accent);border:2px solid white;border-radius:50%;box-shadow:0 0 0 1px var(--accent)}
+    .range-endpoints{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}.parameter-note{font-size:12px;color:var(--muted);line-height:1.7;margin-top:5px}
+    .preset-label{font-size:12px;margin:3px 0 7px}.presets{display:flex;gap:8px}.preset{background:var(--accent-soft);color:#9e481b;flex:1;border:1px solid #eed7bb;border-radius:6px;height:31px;font-size:12px}
+    .preset:hover{background:#ffe7c9}.actions{display:grid;grid-template-columns:1fr 72px;gap:8px;margin-top:15px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;border-radius:7px;padding:8px 13px;font-size:13px;font-weight:600;border:1px solid var(--line);background:white;color:var(--ink);text-decoration:none}
+    .btn:hover{background:#fff3e4}.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn.primary:hover{background:#a84a19}
+    .btn svg,.icon{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .actions{grid-template-columns:1fr 78px}.actions .btn{white-space:nowrap;padding:8px 10px;gap:6px;font-size:12px}.batch-btn{width:100%;margin-top:8px;color:var(--accent);font-size:12px;min-height:32px}.unit-note{font-size:11px;line-height:1.8;color:var(--muted);margin-top:18px}
+    .lab-body{min-width:0}.simulation{padding:19px 20px 0}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+    .sampling-status{font-size:11px;display:flex;align-items:center;gap:7px;color:var(--muted);white-space:nowrap}.status-dot{width:7px;height:7px;border-radius:50%;background:#c47535}.paused .status-dot{background:#a29587}
+    .visual-frame{border:1px solid var(--line);border-radius:13px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(220px,1fr);overflow:hidden;min-height:291px}
+    .system-pane{padding:15px 15px 12px;border-right:1px solid var(--line);text-align:center;background:#fffefa;min-width:0}
+    .bath-heading{font-size:15px;font-weight:600;margin-bottom:5px;display:flex;justify-content:center;gap:7px;align-items:center}.bath-heading .live-t{color:var(--accent);font-size:12px;font-weight:500}
+    .reservoir{position:relative;border:1px solid #dfb784;border-radius:23px;background:#fff0da;min-height:193px;display:flex;align-items:center;justify-content:center;gap:21px;padding:15px;overflow:hidden}
+    .bath-dots{position:absolute;inset:0;pointer-events:none}.bath-dot{position:absolute;width:5px;height:5px;background:#d1a873;border-radius:50%;opacity:.38}
+    .system-box{position:relative;z-index:1;background:white;border:1px solid #ddc0a1;border-radius:9px;padding:11px;box-shadow:0 3px 14px #57351310;flex-shrink:0}
+    .particle-grid{display:grid;grid-template-columns:repeat(var(--cols,8),1fr);gap:5px;min-width:153px;min-height:153px;align-content:center}
+    .particle{width:15px;height:15px;border-radius:50%;background:var(--accent);border:1px solid #a84a19;transition:background-color .18s,border-color .18s}
+    .particle.excited{background:var(--secondary);border-color:#1e4838}.particle-grid.dense{gap:4px;min-width:160px;min-height:160px}.particle-grid.dense .particle{width:10px;height:10px}
+    .exchange{z-index:1;position:relative;width:70px;flex-shrink:0;display:grid;gap:6px;text-align:center;color:#95633e;font-size:11px;line-height:1.5}
+    .exchange svg{width:61px;height:35px;margin:auto;fill:none;stroke-width:2;stroke-linecap:round}.exchange small{font-size:10px;color:#997859}
+    .system-caption{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.65}.state-caption{font-size:12px;margin-top:6px;font-variant-numeric:tabular-nums}
+    .legend{display:flex;align-items:center;justify-content:center;gap:19px;margin-top:8px;font-size:11px;color:var(--muted)}.legend-item{display:flex;align-items:center;gap:6px}.key-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);flex-shrink:0}.key-dot.secondary{background:var(--secondary)}
+    .probability-pane{padding:13px 17px 8px;min-width:0}.probability-pane h3{font-size:15px}.level-scheme{height:57px;display:flex;flex-direction:column;justify-content:center;gap:14px;margin:6px auto 3px;max-width:194px}
+    .level-row{display:flex;align-items:center;gap:15px;font-size:12px;line-height:1}.level-line{height:1px;background:#765335;flex:1;position:relative}.level-line:after{content:"";position:absolute;width:9px;height:9px;background:var(--accent);border-radius:50%;left:46%;top:-4px}.level-row.high .level-line:after{background:var(--secondary)}
+    svg.chart{width:100%;height:auto;display:block;overflow:visible}#probability-chart{height:155px}svg text{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;fill:var(--muted);font-size:11px}svg .axis{stroke:#b5a18c;stroke-width:1;fill:none}svg .grid-line{stroke:var(--grid);stroke-width:1}svg .chart-value{fill:var(--ink);font-size:13px;font-weight:550}
+    .observables{display:grid;grid-template-columns:repeat(3,1fr);padding:14px 0;margin-top:12px;border-top:1px solid var(--line)}
+    .observable{text-align:center;padding:0 10px}.observable+.observable{border-left:1px solid var(--line)}.observable-label{font-size:12px;color:var(--muted);line-height:1.5}.observable-value{font-family:Georgia,"Times New Roman",serif;font-size:27px;line-height:1.3;font-variant-numeric:tabular-nums;margin-top:4px;color:#403127}.observable-value small{font-size:15px;margin-left:3px;font-style:italic}.observable-value.compact{font-size:16px}
+    .distribution{padding:16px 20px 19px;border-top:1px solid var(--line)}.distribution-layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(225px,1fr);gap:22px;margin-top:10px}
+    .chart-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.chart-tabs{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}.chart-tab{padding:5px 12px;font-size:11px;background:#fff8ef;color:var(--muted)}.chart-tab[aria-selected="true"]{background:white;color:var(--accent);box-shadow:inset 0 0 0 1px #d9ad79;border-radius:5px;font-weight:650}
+    .chart-legend{display:flex;gap:12px;align-items:center;font-size:10px;color:var(--muted)}.key-line{width:15px;height:2px;background:var(--accent);position:relative}.key-line:after{content:"";width:4px;height:4px;position:absolute;top:-1px;left:6px;border-radius:50%;background:var(--accent)}.key-bar{width:10px;height:8px;background:var(--secondary);opacity:.8}
+    #distribution-chart{height:147px}.plot-wrap{position:relative}.plot-tooltip{position:absolute;z-index:4;pointer-events:none;background:#654326;color:white;padding:6px 9px;border-radius:6px;font-size:11px;line-height:1.6;box-shadow:0 3px 12px #0002;max-width:210px}
+    .chart-caption{font-size:11px;color:var(--muted);margin-top:1px;line-height:1.5}.insight{border-left:1px solid var(--line);padding-left:21px;display:flex;flex-direction:column;justify-content:center}.insight h3{margin-bottom:7px;font-size:16px}.insight p{font-size:13px;color:var(--muted);line-height:1.85}.insight-link{margin-top:15px;background:var(--accent-soft);color:var(--accent);text-align:left;padding:10px 12px;border-radius:7px;font-size:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .sample-summary{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.65;font-variant-numeric:tabular-nums}.sample-summary strong{color:var(--ink);font-weight:600}
+    .teaching-footer{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:15px 3px 26px;font-size:11px;color:var(--muted)}.teaching-footer a{color:var(--muted)}
+    details{margin-top:11px;font-size:12px;color:var(--muted)}summary{cursor:pointer;color:var(--accent);font-weight:550;line-height:1.8}details p{margin-top:8px;line-height:1.85}
+    .panel-heading{margin:22px 2px 15px}.panel-heading h2{font-size:25px}.panel-heading p{color:var(--muted);margin-top:7px;font-size:14px}
+    .concept-surface{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:23px 25px}.concept-surface h2{font-size:23px}.concept-lead{color:var(--muted);margin:6px 0 22px;font-size:14px}
+    .concept-diagrams{display:grid;grid-template-columns:1fr 1.35fr;gap:35px;align-items:center}.concept-bath{min-height:214px;position:relative;border:1px solid #dfb784;border-radius:30px;background:#fff0da;text-align:center;padding:15px 24px}.concept-bath>h3{color:var(--accent);font-size:15px}
+    .concept-system-row{display:flex;gap:30px;align-items:center;justify-content:center;margin:14px 0 8px}.mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;background:white;border:1px solid #e2c9ab;padding:10px;border-radius:5px}.mini-grid .particle{width:16px;height:16px}
+    .concept-exchange{font-size:12px;color:var(--accent);display:flex;align-items:center;flex-direction:column;gap:5px}.concept-exchange svg{height:33px;width:62px;fill:none;stroke-width:2;stroke-linecap:round}
+    .concept-bath>p{font-size:13px}.replicas-area{border-left:1px dashed var(--line);padding-left:30px}.replicas-area>h3{font-size:14px;font-weight:550;margin-bottom:15px}.replicas{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.replica .mini-grid{gap:5px;padding:8px}.replica .particle{width:14px;height:14px}.replica{text-align:center}.replica-label{font-size:11px;color:var(--muted);margin-top:8px}.replica-energy{font-size:13px;color:var(--ink);margin-top:3px}.concept-explanation{font-size:12px;color:var(--muted);line-height:1.8;text-align:center;margin-top:18px}
+    .derivation{display:grid;grid-template-columns:repeat(3,1fr);margin:26px 0 14px}.derive-step{padding:0 26px;min-width:0}.derive-step:first-child{padding-left:5px}.derive-step+.derive-step{border-left:1px solid var(--line)}.derive-title{display:flex;align-items:center;gap:10px;margin-bottom:10px}.step-number{width:30px;height:30px;flex-shrink:0;border-radius:50%;background:#ffe6c3;color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}.derive-title h3{font-size:15px}.derive-step .equation{margin:9px 0 12px;font-size:19px}.derive-step p{color:var(--muted);font-size:12px;line-height:1.8}.normalization{display:flex;justify-content:center;align-items:center;gap:20px;margin:19px 0 22px}.normalization math{font-size:27px}.normalization p{font-size:12px;color:var(--muted)}
+    .concept-takeaway{display:flex;align-items:center;gap:24px;background:var(--accent-soft);border-radius:12px;padding:18px 23px;justify-content:space-between}.concept-takeaway h3{font-size:17px;color:var(--accent);white-space:nowrap}.concept-takeaway p{font-size:12px;color:#8a674a;flex:1}.concept-takeaway .btn{flex-shrink:0}
+    .conditions{margin:14px 5px 0;font-size:11px;color:var(--muted);line-height:1.8}
+    .solution-surface{border:1px solid var(--line);background:white;border-radius:var(--radius);overflow:hidden;display:grid;grid-template-columns:1.3fr 1fr}
+    .solution-steps{padding:8px 24px}.solution-step{padding:17px 0;display:grid;grid-template-columns:34px 1fr;gap:13px}.solution-step+.solution-step{border-top:1px solid var(--line)}.solution-step .step-number{background:var(--accent);color:white;width:31px;height:31px}.solution-step h3{font-size:17px;margin-bottom:5px}.solution-step p{color:var(--muted);font-size:12px;line-height:1.85}.formula-row{display:flex;align-items:center;flex-wrap:wrap;gap:15px;margin:9px 0 4px}.formula-row math{font-size:21px}.numeric-result{font-family:Georgia,"Times New Roman",serif;font-size:19px;color:var(--accent);font-variant-numeric:tabular-nums}.formula-note{font-size:11px;color:var(--muted);line-height:1.8}
+    .degeneracy-rail{padding:23px 23px;background:#fff3e2;border-left:1px solid #ead4b9;min-width:0}.degeneracy-rail h3{color:#9e481b;font-size:18px}.degeneracy-rail p{font-size:12px;line-height:1.9;color:#8a674a;margin-top:8px}.degeneracy-states{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.degeneracy-state{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}.degeneracy-state .particle{width:11px;height:11px}.degeneracy-state small{flex-basis:100%;color:var(--muted);font-size:10px;text-align:center;margin-top:4px}.binomial-equation{margin:16px 0;font-size:17px}.extra-results{border-top:1px solid #e7d0b5;margin-top:19px;padding-top:13px}.extra-results h4{font-size:12px;margin:0 0 8px;font-weight:600}.result-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.result-small{background:#ffffffb8;border:1px solid #ecd9c1;border-radius:7px;padding:10px;text-align:center;font-size:11px;color:var(--muted)}.result-small output{display:block;margin-top:4px;font-family:Georgia,"Times New Roman",serif;font-size:22px;color:var(--ink)}.return-btn{width:100%;margin-top:16px}
+    .practice{padding:19px 2px 5px}.practice h2{font-size:20px}.practice-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:11px}.practice-buttons .btn{color:var(--accent);font-size:12px;min-height:39px;border-color:#c9a477;background:transparent}.challenge-feedback{padding:12px 17px;background:var(--accent-soft);border:1px solid #e7d0b5;border-radius:8px;margin-bottom:14px;color:var(--accent);font-size:13px;line-height:1.9}
+    .derive-step p,.solution-step p,.degeneracy-rail p{font-size:14px}.derive-step .equation{font-size:20px}.concept-explanation{font-size:13px}.formula-note{font-size:12px!important}.degeneracy-rail .extra-results p{font-size:12px}.equation,.binomial-equation{overflow-x:auto;max-width:100%;padding-bottom:2px}
+    noscript{display:block;padding:30px;background:white;border:1px solid var(--line);border-radius:var(--radius);margin:20px 0}
+    @media(min-width:1500px){.shell{width:min(1320px,calc(100% - 100px))}.hero{padding-top:28px;padding-bottom:22px}.reservoir{min-height:211px}.visual-frame{min-height:310px}.particle-grid{gap:6px}.particle{width:16px;height:16px}.control-rail{padding:22px}.simulation{padding:20px 22px 0}.distribution{padding:17px 22px 20px}#distribution-chart{height:158px}}
+    @media(max-width:1100px){.hero-equations{gap:18px}.hero-equations math{font-size:24px}.hero p{font-size:14px}.lab-layout{grid-template-columns:225px 1fr}.control-rail{padding:20px 17px}.visual-frame{grid-template-columns:1.25fr 1fr}.exchange{width:53px}.exchange svg{width:48px}.reservoir{gap:12px;padding:12px}.particle-grid{min-width:137px;min-height:137px;gap:4px}.particle{width:13px;height:13px}.distribution-layout{grid-template-columns:minmax(0,1.3fr) minmax(190px,1fr);gap:16px}.simulation,.distribution{padding-left:16px;padding-right:16px}.probability-pane{padding-left:12px;padding-right:12px}.replicas{gap:8px}.replica .particle{width:11px;height:11px}.replicas-area{padding-left:20px}.concept-diagrams{gap:20px}.concept-takeaway{gap:15px}.concept-takeaway h3{font-size:15px}.degeneracy-rail{padding:20px}.binomial-equation{font-size:14px}.solution-surface{grid-template-columns:1.15fr 1fr}.solution-step{gap:9px}}
+    @media(max-width:880px){.shell{width:calc(100% - 36px)}.hero-equations{gap:20px}.hero-equations math{font-size:22px}.hero p{max-width:360px}.lab-layout{grid-template-columns:1fr}.control-rail{border-right:0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);gap:0 20px;padding:15px 18px}.control-rail h2{grid-column:1/-1;font-size:16px;margin-bottom:12px}.parameter{margin-bottom:12px}.parameter-note{min-height:37px}.quick-controls{grid-column:1/-1;display:flex;gap:15px;align-items:center}.preset-label,.unit-note{display:none}.presets{flex:1}.actions{margin:0;display:flex}.batch-btn{width:auto;margin:0}.concept-diagrams{grid-template-columns:1fr}.concept-bath{max-width:420px;width:100%;margin:auto}.replicas-area{border:0;padding:0}.replicas{max-width:560px;margin:auto}.replica .particle{width:16px;height:16px}.concept-takeaway{flex-wrap:wrap}.concept-takeaway p{flex-basis:60%}.concept-takeaway .btn{margin-left:auto}.solution-surface{grid-template-columns:1fr}.degeneracy-rail{border-left:0;border-top:1px solid #ead4b9}.degeneracy-states{max-width:430px}.binomial-equation{font-size:18px}}
+    @media(max-width:600px){.shell{width:calc(100% - 26px)}.topbar .shell{height:47px}.wordmark{font-size:14px}.top-title{font-size:10px}.hero{padding:22px 1px 16px;display:block}.hero p{font-size:13px;max-width:none;line-height:1.8;margin-top:7px}.hero-equations{justify-content:flex-start;margin-top:17px;gap:33px;padding:0}.hero-equations math{font-size:24px}h1{font-size:35px;letter-spacing:-.8px}.tabs{gap:14px;margin-bottom:14px}.tab{font-size:13px;padding:9px 8px 11px}.control-rail{padding:16px;grid-template-columns:1fr;gap:0}.control-rail h2{margin-bottom:16px}.parameter{margin-bottom:15px}.parameter-note{min-height:0;margin-top:4px}.parameter-head{margin-bottom:5px}.quick-controls{display:grid;grid-template-columns:1fr auto;gap:9px}.presets{grid-column:1}.actions{grid-column:2;grid-row:1}.batch-btn{grid-column:1/-1;width:100%;margin-top:0}.btn{font-size:12px;min-height:33px;padding:6px 10px}.preset{height:33px}.simulation{padding:17px 13px 0}.section-head{align-items:flex-start;gap:8px}.section-head h2{font-size:16px;max-width:220px}.sampling-status{font-size:10px;margin-top:3px}.visual-frame{grid-template-columns:1fr;min-height:0}.system-pane{border-right:0;border-bottom:1px solid var(--line);padding:14px}.reservoir{min-height:210px;gap:30px}.particle-grid{gap:5px;min-width:153px;min-height:153px}.particle{width:15px;height:15px}.exchange{width:60px}.exchange svg{width:58px}.probability-pane{padding:14px;display:grid;grid-template-columns:1fr 1.4fr;align-items:center;gap:6px 12px}.probability-pane h3{grid-column:1/-1;font-size:14px}.level-scheme{width:100%;max-width:none;margin:0;padding-left:5px}#probability-chart{height:152px}.level-row{font-size:11px;gap:8px}.observables{padding:14px 0;margin-top:4px}.observable{padding:0 6px}.observable-label{font-size:10px}.observable-value{font-size:23px}.observable-value small{font-size:12px}.distribution{padding:15px 13px 16px}.distribution h2{font-size:17px}.distribution-layout{grid-template-columns:1fr;gap:16px}.chart-top{gap:7px}.chart-tab{padding:5px 10px}.chart-legend{gap:8px}#distribution-chart{height:170px}.insight{border-left:0;border-top:1px solid var(--line);padding:13px 0 0}.insight h3{font-size:15px}.insight-link{margin-top:11px}.teaching-footer{display:block;padding:14px 1px 22px;line-height:1.8}.teaching-footer>p+p{margin-top:6px}.concept-surface{padding:18px 16px}.concept-surface h2{font-size:20px}.concept-lead{font-size:12px;margin-bottom:17px}.concept-bath{padding:13px;min-height:210px}.concept-system-row{gap:22px}.replicas-area>h3{font-size:12px}.replicas{gap:6px}.replica .mini-grid{padding:6px;gap:4px}.replica .particle{width:10px;height:10px}.replica-label{font-size:10px}.replica-energy{font-size:11px}.derivation{grid-template-columns:1fr;margin:20px 0 10px;gap:18px}.derive-step,.derive-step:first-child{padding:0 7px}.derive-step+.derive-step{border-left:0;border-top:1px solid var(--line);padding-top:18px}.derive-step .equation{font-size:19px}.normalization{gap:15px;flex-wrap:wrap;margin:20px 0}.normalization math{font-size:25px}.normalization p{font-size:11px}.concept-takeaway{display:block;padding:17px}.concept-takeaway h3{font-size:16px;white-space:normal}.concept-takeaway p{margin-top:7px}.concept-takeaway .btn{margin-top:13px}.panel-heading{margin-top:16px}.panel-heading h2{font-size:22px}.panel-heading p{font-size:12px}.solution-steps{padding:0 15px}.solution-step{padding:16px 0;grid-template-columns:29px 1fr;gap:10px}.solution-step .step-number{width:27px;height:27px}.solution-step h3{font-size:16px}.formula-row{gap:10px}.formula-row math{font-size:19px}.numeric-result{font-size:17px}.degeneracy-rail{padding:19px 16px}.degeneracy-rail h3{font-size:17px}.degeneracy-states{gap:8px}.degeneracy-state .particle{width:11px;height:11px}.binomial-equation{font-size:15px}.practice-buttons{grid-template-columns:1fr;gap:9px}.practice h2{font-size:18px}.practice-buttons .btn{min-height:38px;text-align:left}.conditions{font-size:11px}.sample-summary{font-size:10px}}
+    @media(max-width:400px){.quick-controls{grid-template-columns:1fr}.presets,.actions,.batch-btn{grid-column:1}.actions{grid-row:2;display:grid;grid-template-columns:1fr 78px}.reservoir{padding:8px;gap:12px}.system-box{padding:8px}.particle-grid{min-width:136px;min-height:136px;gap:4px}.particle{width:13px;height:13px}.particle-grid.dense{min-width:136px;min-height:136px;gap:3px}.particle-grid.dense .particle{width:8px;height:8px}.exchange{width:44px;font-size:10px}.exchange svg{width:43px}.exchange small{font-size:9px}.observable-value{font-size:21px}.observable-value.compact{font-size:13px}.observable-value.compact small{display:block;font-size:10px}.derive-step .equation{font-size:17px}.formula-row math{font-size:17px}.binomial-equation{font-size:14px}.degeneracy-state .particle{width:10px;height:10px}.degeneracy-states{gap:6px}.challenge-feedback{font-size:12px;padding:10px 12px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+    @media print{.topbar,.tabs,.control-rail,.quick-controls,.sampling-status,.insight-link,.return-btn,.practice,.teaching-footer{display:none!important}.shell{width:100%}.hero{padding-top:0}.lab-layout{grid-template-columns:1fr}body{background:white}.solution-surface,.visual-frame{break-inside:avoid}.panel[hidden]{display:block!important;margin-top:25px}.concept-surface,.lab-layout,.solution-surface{box-shadow:none}h1{font-size:30px}.hero-equations math{font-size:22px}}
+  </style>
+  <link rel="stylesheet" href="{{ '/assets/css/statistical-physics.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23fff1de'/%3E%3Ccircle cx='13' cy='13' r='5' fill='%23bd5b24'/%3E%3Ccircle cx='27' cy='27' r='5' fill='%23bd5b24'/%3E%3Ccircle cx='27' cy='13' r='5' fill='%23d9a263'/%3E%3Ccircle cx='13' cy='27' r='5' fill='%23d9a263'/%3E%3C/svg%3E">
+</head>
+<body class="canonical-lab">
+  <header class="physics-header"><div class="physics-header-inner"><a class="physics-brand" href="{{ '/statistical-physics/' | relative_url }}">Lingyu Xia <span>/</span> Statistical Physics</a><nav aria-label="统计物理专题导航"><a href="{{ '/statistical-physics/' | relative_url }}">专题目录</a><a href="{{ '/statistical-physics/canonical-ensemble/' | relative_url }}" aria-current="page">正则系综</a><a href="{{ '/statistical-physics/ising-model/' | relative_url }}">Ising 模型</a></nav></div></header>
+  <main class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div><h1 id="page-title">看见正则系综</h1><p>把系统放进热库，微观的随机起伏，就有了可计算的规律。</p></div>
+      <div class="hero-equations">
+        <math aria-label="微观状态 i 的概率等于玻尔兹曼权重除以配分函数"><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mo>−</mo><mi>β</mi><msub><mi>E</mi><mi>i</mi></msub></mrow></msup><mi>Z</mi></mfrac></math>
+        <math aria-label="贝塔等于一除以玻尔兹曼常数乘温度"><mi>β</mi><mo>=</mo><mfrac><mn>1</mn><mrow><msub><mi>k</mi><mi>B</mi></msub><mi>T</mi></mrow></mfrac></math>
+      </div>
+    </section>
+    <nav class="tabs" role="tablist" aria-label="学习视图">
+      <button class="tab" id="tab-lab" role="tab" aria-selected="true" aria-controls="panel-lab" tabindex="0" data-tab="lab">互动实验</button>
+      <button class="tab" id="tab-concept" role="tab" aria-selected="false" aria-controls="panel-concept" tabindex="-1" data-tab="concept">概念图解</button>
+      <button class="tab" id="tab-solve" role="tab" aria-selected="false" aria-controls="panel-solve" tabindex="-1" data-tab="solve">一步步求解</button>
+    </nav>
+    <noscript>此页面需要启用 JavaScript 来运行互动实验。正则系综描述固定粒子数、体积和温度下的平衡系统；微观状态的概率为 pᵢ = exp(−Eᵢ/kᴮT)/Z。</noscript>
+    <section id="panel-lab" class="panel" role="tabpanel" aria-labelledby="tab-lab" tabindex="0">
+      <p class="challenge-feedback" id="lab-challenge" hidden role="status"></p>
+      <div class="lab-layout">
+        <aside class="control-rail" aria-label="实验控制">
+          <h2>你的实验参数</h2>
+          <div class="parameter">
+            <div class="parameter-head"><label for="temperature">热库温度 <i>T</i></label><input class="number-input" id="temperature-number" type="number" min="0.1" max="5" step="0.05" value="1.00" aria-label="温度数值，单位 E₀ 除以玻尔兹曼常数"></div>
+            <input id="temperature" type="range" min="0.1" max="5" step="0.05" value="1" aria-describedby="temperature-note"><div class="range-endpoints"><span>更冷</span><span>更热</span></div><p id="temperature-note" class="parameter-note">显示 k<sub>B</sub>T / E₀；温度由热库保持。</p>
+          </div>
+          <div class="parameter">
+            <div class="parameter-head"><label for="gap">能级间隔 <i>Δ</i></label><input class="number-input" id="gap-number" type="number" min="0.2" max="6" step="0.05" value="2.00" aria-label="能级间隔数值，单位 E₀"></div>
+            <input id="gap" type="range" min="0.2" max="6" step="0.05" value="2" aria-describedby="gap-note"><div class="range-endpoints"><span>更小</span><span>更大</span></div><p id="gap-note" class="parameter-note">显示 Δ / E₀；基态 0，激发态 Δ。</p>
+          </div>
+          <div class="parameter">
+            <div class="parameter-head"><label for="count">粒子数 <i>N</i></label><input class="number-input" id="count-number" type="number" min="4" max="144" step="4" value="64" aria-label="粒子数数值"></div>
+            <input id="count" type="range" min="4" max="144" step="4" value="64" aria-describedby="count-note"><div class="range-endpoints"><span>更少</span><span>更多</span></div><p id="count-note" class="parameter-note">独立、局域二能级粒子；每次实验 N 固定。</p>
+          </div>
+          <div class="quick-controls">
+            <div class="preset-group"><div class="preset-label">快速预设</div><div class="presets"><button class="preset" data-preset="cold">低温</button><button class="preset" data-preset="hot">高温</button></div></div>
+            <div class="actions"><button class="btn primary" id="pause"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4v12M13 4v12" stroke-width="3"/></svg><span>暂停采样</span></button><button class="btn" id="reset" title="恢复默认参数并重新采样"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.8 7.2A7 7 0 1 0 17 12M17 3v5h-5"/></svg>重置</button></div>
+            <button class="btn batch-btn" id="sample-batch">再采样 1000 次</button>
+          </div>
+          <p class="unit-note">E₀ 是固定的能量单位。调参数是在比较不同实验；一次实验中 N、V、T 均固定。动画表示独立平衡态采样。</p>
+        </aside>
+        <div class="lab-body">
+          <section class="simulation" aria-labelledby="simulation-title">
+            <div class="section-head"><h2 id="simulation-title">一个系统，无数种微观状态</h2><div class="sampling-status" id="sampling-status"><span class="status-dot"></span><span id="status-text">实时采样</span></div></div>
+            <div class="visual-frame">
+              <div class="system-pane">
+                <div class="bath-heading">热库 <i>T</i><span class="live-t" id="bath-temperature">k<sub>B</sub>T = 1.00 E₀</span></div>
+                <div class="reservoir">
+                  <div class="bath-dots" id="bath-dots" aria-hidden="true"></div>
+                  <div class="system-box"><div class="particle-grid" id="particles" role="img" aria-label="64 个独立二能级粒子的一个随机微观状态"></div></div>
+                  <div class="exchange"><svg viewBox="0 0 64 36" aria-hidden="true"><path stroke="#285b46" d="M5 10h50m-7-5 7 5-7 5"/><path stroke="#bd5b24" d="M57 27H7m7-5-7 5 7 5"/></svg><span>能量交换</span><small>N、V 保持固定</small></div>
+                </div>
+                <div class="state-caption" id="state-caption">系统 N = 64</div>
+                <p class="system-caption">每次采样，都是同一 N、V、T 下的一个可能状态。</p>
+                <div class="legend"><span class="legend-item"><span class="key-dot"></span>基态 E = 0</span><span class="legend-item"><span class="key-dot secondary"></span>激发态 E = Δ</span></div>
+              </div>
+              <div class="probability-pane">
+                <h3>二能级占据概率</h3>
+                <div class="level-scheme" aria-label="基态能量为零，激发态能量为能级间隔"><div class="level-row high"><span>E = Δ</span><span class="level-line"></span></div><div class="level-row"><span>E = 0</span><span class="level-line"></span></div></div>
+                <svg class="chart" id="probability-chart" viewBox="0 0 245 155" role="img" aria-label="单粒子处于基态和激发态的理论概率"></svg>
+              </div>
+            </div>
+            <div class="observables" aria-label="理论热力学量">
+              <div class="observable"><div class="observable-label">平均能量 ⟨E⟩</div><div class="observable-value"><output id="mean-energy">15.3</output><small>E₀</small></div></div>
+              <div class="observable"><div class="observable-label">能量涨落 σ<sub>E</sub></div><div class="observable-value"><output id="energy-fluctuation">5.18</output><small>E₀</small></div></div>
+              <div class="observable"><div class="observable-label">热容 C<sub>V</sub> / Nk<sub>B</sub></div><div class="observable-value"><output id="heat-capacity">0.420</output></div></div>
+            </div>
+          </section>
+          <section class="distribution" aria-labelledby="distribution-title">
+            <h2 id="distribution-title">从随机状态，到确定的分布</h2>
+            <div class="distribution-layout">
+              <div>
+                <div class="chart-top"><div class="chart-tabs" role="tablist" aria-label="图表类型"><button class="chart-tab" role="tab" id="chart-energy-tab" aria-controls="plot-panel" aria-selected="true" tabindex="0" data-chart="energy">能量分布</button><button class="chart-tab" role="tab" id="chart-heat-tab" aria-controls="plot-panel" aria-selected="false" tabindex="-1" data-chart="heat">热容曲线</button></div><div class="chart-legend" id="chart-legend"><span class="legend-item"><span class="key-line"></span>理论分布</span><span class="legend-item"><span class="key-bar"></span>采样结果</span></div></div>
+                <div class="plot-wrap" id="plot-panel" role="tabpanel" aria-labelledby="chart-energy-tab"><svg class="chart" id="distribution-chart" viewBox="0 0 520 160" role="img" aria-label="总能量的理论二项分布与采样直方图"></svg><div class="plot-tooltip" id="plot-tooltip" hidden></div></div>
+                <p class="chart-caption" id="chart-caption">横轴为激发粒子数 K = E / Δ，每个整数对应一个能量。</p>
+                <div class="sample-summary" id="sample-summary" aria-live="off"></div>
+              </div>
+              <div class="insight"><h3 id="insight-title">概率不变，能量在变。</h3><p id="insight-text"></p><button class="insight-link" data-open="solve"><span>看看配分函数如何给出这些答案</span><svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5"/></svg></button></div>
+            </div>
+            <details><summary>这里的动画与统计，分别代表什么？</summary><p>每帧按理论概率独立抽取 N 个粒子的状态，代表同一正则系综中的一个平衡样本。动画的播放速度不代表真实的跃迁速率或热化时间。直方图显示当前参数下实际随机抽样的结果；理论曲线是精确的二项分布。样本有限时，两者会有统计偏差。改变任何参数后统计清零，并重新抽取 200 个样本；“暂停”保持参数和已有统计。</p></details>
+          </section>
+        </div>
+      </div>
+    </section>
+    <!-- The two teaching views share the live experiment parameters. -->
+    <section id="panel-concept" class="panel" role="tabpanel" aria-labelledby="tab-concept" tabindex="0" hidden>
+      <div class="concept-surface">
+        <h2>系综：同一条件下，所有可能的系统</h2>
+        <p class="concept-lead">固定 N、V、T；允许能量交换，不交换粒子。</p>
+        <div class="concept-diagrams">
+          <div class="concept-bath">
+            <h3>热库：温度保持 T</h3>
+            <div class="concept-system-row"><div class="mini-grid" id="concept-system" role="img" aria-label="热库中的小系统，含16个示意粒子"></div><div class="concept-exchange"><span>只交换能量</span><svg viewBox="0 0 64 36" aria-hidden="true"><path stroke="#285b46" d="M5 10h50m-7-5 7 5-7 5"/><path stroke="#bd5b24" d="M57 27H7m7-5-7 5 7 5"/></svg></div></div>
+            <p>系统：N、V 固定</p>
+          </div>
+          <div class="replicas-area"><h3>同一条件下的不同微观状态（以 16 个粒子为示意）</h3><div class="replicas" id="replicas"></div><p class="concept-explanation">系综是这些可能状态及其概率的集合。<br>它们是同一个系统的可能性，无需同时存在。</p></div>
+        </div>
+      </div>
+      <div class="derivation">
+        <div class="derive-step"><div class="derive-title"><span class="step-number">01</span><h3>先看热库</h3></div><div class="equation"><math><msub><mi>Ω</mi><mi>R</mi></msub><mo>(</mo><msub><mi>E</mi><mtext>总</mtext></msub><mo>−</mo><msub><mi>E</mi><mi>i</mi></msub><mo>)</mo></math></div><p>系统与热库组成孤立的整体。系统处于状态 i 时，热库剩余的能量是 E<sub>总</sub> − E<sub>i</sub>。热库的可用微观状态越多，这个系统状态就越可能出现。</p></div>
+        <div class="derive-step"><div class="derive-title"><span class="step-number">02</span><h3>展开热库熵</h3></div><div class="equation"><math><msub><mi>S</mi><mi>R</mi></msub><mo>(</mo><msub><mi>E</mi><mtext>总</mtext></msub><mo>−</mo><msub><mi>E</mi><mi>i</mi></msub><mo>)</mo><mo>≈</mo><msub><mi>S</mi><mi>R</mi></msub><mo>(</mo><msub><mi>E</mi><mtext>总</mtext></msub><mo>)</mo><mo>−</mo><mfrac><msub><mi>E</mi><mi>i</mi></msub><mi>T</mi></mfrac></math></div><p>用 S<sub>R</sub> = k<sub>B</sub> ln Ω<sub>R</sub> 与 ∂S<sub>R</sub>/∂E<sub>R</sub> = 1/T。热库足够大，能量交换引起的温度变化可忽略，保留一阶项即可。</p></div>
+        <div class="derive-step"><div class="derive-title"><span class="step-number">03</span><h3>得到玻尔兹曼权重</h3></div><div class="equation"><math><msub><mi>p</mi><mi>i</mi></msub><mo>∝</mo><msup><mi>e</mi><mrow><mo>−</mo><mfrac><msub><mi>E</mi><mi>i</mi></msub><mrow><msub><mi>k</mi><mi>B</mi></msub><mi>T</mi></mrow></mfrac></mrow></msup></math></div><p>把熵还原成状态数，与 i 无关的因子消掉，留下 e<sup>−Eᵢ/(kᴮT)</sup>。同样的条件下，高能微观状态的权重更小；升温会减弱这种抑制。</p></div>
+      </div>
+      <div class="normalization"><math><mi>Z</mi><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msup><mi>e</mi><mrow><mo>−</mo><mi>β</mi><msub><mi>E</mi><mi>i</mi></msub></mrow></msup></math><p>配分函数把所有微观状态的权重加起来，<br>使 ∑<sub>i</sub> p<sub>i</sub> = 1。</p></div>
+      <div class="concept-takeaway"><h3>温度固定，为什么能量还能变？</h3><p>热库决定的是各状态的概率。每次观测的能量仍会涨落，平均能量才是稳定的统计量。</p><button class="btn primary" data-open="lab">进入互动实验<svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5"/></svg></button></div>
+      <p class="conditions">这里的 i 标记完整的系统微观状态。正则分布用于热平衡，采用系统与热库弱耦合、相互作用能可忽略的近似；它给出平衡概率，不规定达到平衡的动力学过程。</p>
+    </section>
+    <section id="panel-solve" class="panel" role="tabpanel" aria-labelledby="tab-solve" tabindex="0" hidden>
+      <div class="panel-heading"><h2>用配分函数，解决一个具体问题</h2><p><span data-value="N">64</span> 个独立二能级粒子，Δ = <span data-value="delta">2.00</span> E₀，k<sub>B</sub>T = <span data-value="theta">1.00</span> E₀。平均能量和热容是多少？</p></div>
+      <div class="solution-surface">
+        <div class="solution-steps">
+          <div class="solution-step"><span class="step-number">1</span><div><h3>写出能级</h3><p>每个粒子只有两个非简并的内部状态，基态能量 0，激发态能量 Δ。粒子位于固定位置，彼此独立。</p><div class="formula-row"><math><msub><mi>ε</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn><mo>,</mo><mspace width=".5em"/><msub><mi>ε</mi><mn>1</mn></msub><mo>=</mo><mi>Δ</mi></math></div><p class="formula-note">E₀ 表示固定的能量单位；ε₀ 表示基态能量。</p></div></div>
+          <div class="solution-step"><span class="step-number">2</span><div><h3>计算配分函数</h3><p>先把单粒子的两个权重相加，再利用独立性相乘。这里无需气体的 N! 因子。</p><div class="formula-row"><math><mi>z</mi><mo>=</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>β</mi><mi>Δ</mi></mrow></msup><mo>,</mo><mspace width=".5em"/><mi>Z</mi><mo>=</mo><msup><mi>z</mi><mi>N</mi></msup></math></div><div class="numeric-result">z = <span data-value="z">1.135</span>；ln Z = <span data-value="logZ">8.12</span></div></div></div>
+          <div class="solution-step"><span class="step-number">3</span><div><h3>求平均能量</h3><p>激发概率 p 是高能态的权重除以 z。对 ln Z 求导得到的结果，与直接求概率加权平均一致。</p><div class="formula-row"><math><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>β</mi><mi>Δ</mi></mrow></msup></mrow></mfrac></math><math><mrow><mo>⟨</mo><mi>E</mi><mo>⟩</mo></mrow><mo>=</mo><mo>−</mo><mfrac><mrow><mi>∂</mi><mo>ln</mo><mi>Z</mi></mrow><mrow><mi>∂</mi><mi>β</mi></mrow></mfrac><mo>=</mo><mi>N</mi><mi>Δ</mi><mi>p</mi></math></div><div class="numeric-result">p = <span data-value="pPercent">11.9%</span>；⟨E⟩ = <span data-value="U">15.3</span> E₀</div></div></div>
+          <div class="solution-step"><span class="step-number">4</span><div><h3>由涨落得到热容</h3><p>独立粒子的能量方差相加。热容是平均能量对温度的响应，保持 N、V 和 Δ 固定。</p><div class="formula-row"><math><msubsup><mi>σ</mi><mi>E</mi><mn>2</mn></msubsup><mo>=</mo><mi>N</mi><msup><mi>Δ</mi><mn>2</mn></msup><mi>p</mi><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></math><math><msub><mi>C</mi><mi>V</mi></msub><mo>=</mo><mfrac><msubsup><mi>σ</mi><mi>E</mi><mn>2</mn></msubsup><mrow><msub><mi>k</mi><mi>B</mi></msub><msup><mi>T</mi><mn>2</mn></msup></mrow></mfrac></math></div><div class="numeric-result">σ<sub>E</sub> = <span data-value="sigma">5.18</span> E₀；C<sub>V</sub> / Nk<sub>B</sub> = <span data-value="c">0.420</span></div></div></div>
+        </div>
+        <aside class="degeneracy-rail">
+          <h3>一个微观状态 ≠ 一个能量值</h3><p>以 4 个粒子为例，“恰好 1 个激发”共有 4 种微观状态。它们的总能量相同，都是 Δ。</p><div class="degeneracy-states" id="degeneracy-states"></div>
+          <p>一般地，激发粒子数 K 的分布是：</p><div class="binomial-equation"><math><mi>P</mi><mo>(</mo><mi>K</mi><mo>=</mo><mi>k</mi><mo>)</mo><mo>=</mo><mrow><mo>(</mo><mfrac linethickness="0"><mi>N</mi><mi>k</mi></mfrac><mo>)</mo></mrow><msup><mi>p</mi><mi>k</mi></msup><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mrow><mi>N</mi><mo>−</mo><mi>k</mi></mrow></msup></math></div>
+          <p>同一能量对应的微观状态数 <i>g</i><sub>k</sub> = C(N,k) 就是简并度。<strong>P(K=k) = g<sub>k</sub> e<sup>−βkΔ</sup> / Z</strong>；忽略 g<sub>k</sub> 就无法得到实验中的能量分布。</p>
+          <div class="extra-results"><h4>更多结果 · 与实验使用相同参数</h4><div class="result-pair"><div class="result-small">熵 S / k<sub>B</sub><output data-value="entropy">23.4</output></div><div class="result-small">自由能 F / E₀<output data-value="freeEnergy">−8.12</output></div></div><p>F = −k<sub>B</sub>T ln Z<br>S / k<sub>B</sub> = ln Z + β⟨E⟩</p><p>相对能量涨落 σ<sub>E</sub> / ⟨E⟩ = <strong data-value="relative">0.340</strong>。相同 T、Δ 下，它随 N<sup>−1/2</sup> 减小。</p></div>
+          <button class="btn primary return-btn" data-open="lab">回到实验，改变参数<svg class="icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5"/></svg></button>
+        </aside>
+      </div>
+      <div class="practice"><h2>亲手验证三个结论</h2><div class="practice-buttons"><button class="btn" data-challenge="temperature">升温：高能态会增多吗？</button><button class="btn" data-challenge="gap">增大能隙：激发态会减少吗？</button><button class="btn" data-challenge="number">增大 N：相对涨落会怎样？</button></div></div>
+      <p class="conditions">在本模型的正温度下，T → 0 时 p → 0；T → ∞ 时 p → 1/2。两个能级在高温下等概率，但平均能量趋于 NΔ/2，热容趋于 0。热容峰对应能级被热激发的温度尺度，并不是相变。</p>
+    </section>
+    <footer class="teaching-footer"><p>模型：固定位置、互不相互作用的二能级粒子，与足够大的热库弱耦合。体积固定。</p><p>延伸阅读：<a href="https://davidtong.org/pdfs/teaching/statistical-physics/statphys1.pdf" target="_blank" rel="noopener noreferrer">David Tong · Statistical Physics §1.3</a></p></footer>
+    <nav class="chapter-navigation" aria-label="章节导航"><a href="{{ '/statistical-physics/' | relative_url }}">返回统计物理目录</a><a href="{{ '/statistical-physics/ising-model/' | relative_url }}">下一节：Ising 模型<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17m-7-7 7 7-7 7"/></svg></a></nav>
+  </main>
+  <!-- All styles, diagrams, calculations and sampling are local. No external dependencies. -->
+  <script>
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const COLORS = {accent:'#bd5b24',secondary:'#285b46',grid:'#f0e8de',muted:'#806f60'};
+  const state = {theta:1,delta:2,N:64,running:!matchMedia('(prefers-reduced-motion: reduce)').matches,view:'lab',chart:'energy',samples:0,totalK:0,totalK2:0,bins:[],current:[],currentK:0};
+
+  // theta = k_B T / E_unit; delta = Delta / E_unit. N, V, Delta are fixed in each derivative.
+  function thermodynamics(theta,delta,N) {
+    const x=delta/theta, weight=Math.exp(-x), p=weight/(1+weight), q=1-p;
+    const logZ=N*Math.log1p(weight), U=N*delta*p, variance=N*delta*delta*p*q;
+    return {x,p,q,logZ,z:1+weight,U,variance,sigma:Math.sqrt(variance),c:x*x*p*q,
+      entropy:logZ+U/theta,freeEnergy:-theta*logZ,relative:Math.sqrt(variance)/U};
+  }
+  let model=thermodynamics(state.theta,state.delta,state.N);
+  function format(value,digits=3) {
+    if(value===0)return '0';
+    const a=Math.abs(value);
+    if(a<.001||a>=1e5){const [mantissa,exponent]=value.toExponential(2).split('e');const superscript={'-':'⁻','+':'','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};return `${mantissa} × 10${Array.from(exponent,ch=>superscript[ch]).join('')}`;}
+    return Number(value.toPrecision(digits)).toLocaleString('en-US',{maximumSignificantDigits:digits,useGrouping:false});
+  }
+  function percent(p){if(p>0&&p<1e-4)return `${format(100*p,2)}%`;return `${(100*p).toFixed((p>0&&p<.001)||(p>.999&&p<1)?2:1)}%`;}
+  function capacityFormat(c){return c>=.001?c.toFixed(3):format(c);}
+  function svgText(x,y,value,extra=''){return `<text x="${x}" y="${y}" ${extra}>${value}</text>`;}
+
+  // Work in log probability so that the full binomial distribution stays stable at low T.
+  function binomialDistribution(N,p) {
+    const logP=Math.log(p),logQ=Math.log1p(-p),result=[];
+    let logChoose=0;
+    for(let k=0;k<=N;k++){
+      if(k>0)logChoose+=Math.log(N-k+1)-Math.log(k);
+      result.push(Math.exp(logChoose+k*logP+(N-k)*logQ));
+    }
+    return result;
+  }
+  let theoretical=[];
+  function setRangeFill(id){const input=$(id);input.style.setProperty('--fill',`${100*(+input.value-+input.min)/(+input.max-+input.min)}%`);}
+  function syncControls(){
+    const fields=[['temperature',state.theta],['gap',state.delta],['count',state.N]];
+    fields.forEach(([id,value])=>{$(id).value=value;$(`${id}-number`).value=id==='count'?value:value.toFixed(2);setRangeFill(id);});
+  }
+  function renderTheory(){
+    model=thermodynamics(state.theta,state.delta,state.N);
+    theoretical=binomialDistribution(state.N,model.p);
+    $('bath-temperature').innerHTML=`k<sub>B</sub>T = ${state.theta.toFixed(2)} E₀`;
+    $('mean-energy').textContent=format(model.U);
+    $('energy-fluctuation').textContent=format(model.sigma);
+    $('heat-capacity').textContent=capacityFormat(model.c);
+    ['mean-energy','energy-fluctuation','heat-capacity'].forEach(id=>{$(id).parentElement.classList.toggle('compact',$(id).textContent.length>8);});
+    const values={N:state.N,theta:state.theta.toFixed(2),delta:state.delta.toFixed(2),z:model.z.toFixed(3),logZ:format(model.logZ),pPercent:percent(model.p),U:format(model.U),sigma:format(model.sigma),c:capacityFormat(model.c),entropy:format(model.entropy),freeEnergy:format(model.freeEnergy),relative:format(model.relative)};
+    document.querySelectorAll('[data-value]').forEach(el=>{el.textContent=values[el.dataset.value];});
+    drawProbability();drawDistribution();renderInsight();
+  }
+  function makeParticles(){
+    const cols=Math.ceil(Math.sqrt(state.N));
+    $('particles').style.setProperty('--cols',cols);
+    $('particles').classList.toggle('dense',state.N>81);
+    $('particles').replaceChildren(...Array.from({length:state.N},()=>{const el=document.createElement('span');el.className='particle';return el;}));
+  }
+  function renderCurrent(){
+    Array.from($('particles').children).forEach((el,i)=>{const excited=!!state.current[i];el.classList.toggle('excited',excited);el.title=`粒子 ${i+1}：${excited?'激发态，E = Δ':'基态，E = 0'}`;});
+    $('particles').setAttribute('aria-label',`${state.N} 个粒子，${state.currentK} 个处于激发态，${state.N-state.currentK} 个处于基态`);
+    $('state-caption').textContent=`系统 N = ${state.N} · 本次 ${state.currentK} 个激发 · E = ${format(state.currentK*state.delta)} E₀`;
+  }
+  function drawSamples(count){
+    for(let s=0;s<count;s++){
+      const sample=new Array(state.N);let k=0;
+      for(let i=0;i<state.N;i++){sample[i]=Math.random()<model.p;k+=sample[i]?1:0;}
+      state.current=sample;state.currentK=k;state.bins[k]++;state.samples++;state.totalK+=k;state.totalK2+=k*k;
+    }
+    renderCurrent();renderSampleSummary();
+    if(state.chart==='energy')drawDistribution();
+  }
+  function renderSampleSummary(){
+    const empiricalU=state.delta*state.totalK/state.samples;
+    const empiricalP=state.totalK/(state.samples*state.N);
+    const observedVariance=state.samples>1?state.delta**2*(state.totalK2-state.totalK**2/state.samples)/(state.samples-1):0;
+    $('sample-summary').innerHTML=`已采样 <strong>${state.samples.toLocaleString('zh-CN')}</strong> 次 · 采样平均 E = <strong>${format(empiricalU)}</strong> E₀<br>采样激发率 ${percent(empiricalP)} / 理论 ${percent(model.p)} · 采样 σ<sub>E</sub> = ${format(Math.sqrt(Math.max(0,observedVariance)))} E₀`;
+  }
+  function resetStatistics(){
+    state.samples=0;state.totalK=0;state.totalK2=0;state.bins=new Array(state.N+1).fill(0);
+    makeParticles();drawSamples(200);
+  }
+  function updateParameters(next){
+    const oldN=state.N;
+    if(next.theta!==undefined)state.theta=Math.max(.1,Math.min(5,Math.round(next.theta*20)/20));
+    if(next.delta!==undefined)state.delta=Math.max(.2,Math.min(6,Math.round(next.delta*20)/20));
+    if(next.N!==undefined)state.N=Math.max(4,Math.min(144,4*Math.round(next.N/4)));
+    syncControls();model=thermodynamics(state.theta,state.delta,state.N);
+    state.bins=new Array(state.N+1).fill(0);state.samples=0;
+    renderTheory();resetStatistics();
+    if(oldN!==state.N)renderCurrent();
+  }
+  function drawProbability(){
+    const bottom=118,top=14,h=bottom-top;
+    let html='<title>单粒子占据概率</title>';
+    [0,.5,1].forEach(t=>{const y=bottom-h*t;html+=`<line class="grid-line" x1="33" y1="${y}" x2="238" y2="${y}"/>`+svgText(26,y+4,t.toFixed(1),'text-anchor="end"');});
+    html+=`<path class="axis" d="M33 ${top-2}V${bottom}H238"/>`;
+    [[model.q,58,COLORS.accent,'基态'],[model.p,153,COLORS.secondary,'激发态']].forEach(([p,x,color,label])=>{
+      const y=bottom-h*p;
+      html+=`<rect x="${x}" y="${y}" width="56" height="${h*p}" fill="${color}" rx="1"><title>${label}概率 ${percent(p)}</title></rect>`;
+      html+=svgText(x+28,Math.max(11,y-6),percent(p),'text-anchor="middle" class="chart-value"');
+      html+=svgText(x+28,136,label,'text-anchor="middle"');
+      html+=svgText(x+28,151,label==='基态'?'E = 0':'E = Δ','text-anchor="middle" style="font-size:10px"');
+    });
+    $('probability-chart').innerHTML=html;
+    $('probability-chart').setAttribute('aria-label',`理论基态概率 ${percent(model.q)}，激发态概率 ${percent(model.p)}`);
+  }
+  function plotFrame(xMax,yMax,yLabel,xLabel){
+    const plot={l:42,r:507,t:18,b:122,xMax,yMax};
+    let html=`<title>${xLabel}与${yLabel}</title>`;
+    for(let j=0;j<=4;j++){
+      const v=yMax*j/4,y=plot.b-(plot.b-plot.t)*j/4;
+      html+=`<line class="grid-line" x1="${plot.l}" y1="${y}" x2="${plot.r}" y2="${y}"/>`;
+      html+=svgText(plot.l-7,y+3,Number(v.toFixed(3)),'text-anchor="end" style="font-size:10px"');
+    }
+    html+=`<path class="axis" d="M${plot.l} ${plot.t}V${plot.b}H${plot.r}"/>`;
+    html+=svgText(10,13,yLabel,'style="font-size:10px"');
+    html+=svgText((plot.l+plot.r)/2,155,xLabel,'text-anchor="middle" style="font-size:11px"');
+    return {plot,html};
+  }
+  function drawDistribution(){
+    if(state.chart==='heat'){drawHeatCurve();return;}
+    const empirical=state.samples?state.bins.map(n=>n/state.samples):state.bins.map(()=>0);
+    const peak=Math.max(...theoretical,...empirical,.025);
+    const ymax=Math.min(1,Math.ceil(peak*1.12*20)/20);
+    let {plot,html}=plotFrame(state.N,ymax,'概率','总能量 E / Δ = 激发粒子数 K');
+    // Give each integer state a full-width bin, including the endpoint states.
+    const binWidth=(plot.r-plot.l)/(state.N+1);
+    const X=k=>plot.l+binWidth*(k+.5),Y=p=>plot.b-(plot.b-plot.t)*p/ymax;
+    const tickStep=state.N<=16?2:state.N<=40?4:state.N<=80?8:24;
+    for(let k=0;k<=state.N;k+=tickStep)html+=svgText(X(k),137,k,'text-anchor="middle" style="font-size:10px"');
+    if(state.N%tickStep)html+=svgText(X(state.N),137,state.N,'text-anchor="middle" style="font-size:10px"');
+    for(let k=0;k<=state.N;k++){
+      const barHeight=plot.b-Y(empirical[k]);
+      if(barHeight>0)html+=`<rect x="${X(k)-binWidth*.37}" y="${Y(empirical[k])}" width="${binWidth*.74}" height="${barHeight}" fill="${COLORS.secondary}" opacity=".78"/>`;
+    }
+    const points=theoretical.map((p,k)=>`${X(k)},${Y(p)}`).join(' ');
+    html+=`<polyline points="${points}" fill="none" stroke="${COLORS.accent}" stroke-width="1.6" stroke-linejoin="round"/>`;
+    theoretical.forEach((p,k)=>{if(p>ymax*.008)html+=`<circle cx="${X(k)}" cy="${Y(p)}" r="1.8" fill="${COLORS.accent}"/>`;});
+    for(let k=0;k<=state.N;k++)html+=`<rect data-bin="${k}" x="${X(k)-binWidth/2}" y="${plot.t}" width="${binWidth}" height="${plot.b-plot.t}" fill="transparent"><title>K=${k}，E=${format(k*state.delta)} E₀；理论 ${percent(theoretical[k])}；采样 ${percent(empirical[k])}</title></rect>`;
+    $('distribution-chart').innerHTML=html;
+    $('distribution-chart').setAttribute('aria-label',`总能量的精确二项分布与 ${state.samples} 次实际采样比较，平均激发粒子数 ${format(state.N*model.p)}`);
+  }
+  function drawHeatCurve(){
+    const tMax=Math.max(5,state.delta*2);
+    let {plot,html}=plotFrame(tMax,.5,'Cᵥ / Nkᴮ','热库温度 kᴮT / E₀（N、Δ 固定）');
+    const X=t=>plot.l+(plot.r-plot.l)*t/tMax,Y=c=>plot.b-(plot.b-plot.t)*c/.5;
+    for(let j=0;j<=5;j++){const t=tMax*j/5;html+=svgText(X(t),137,Number(t.toFixed(1)),'text-anchor="middle" style="font-size:10px"');}
+    const points=[];
+    for(let j=0;j<=260;j++){const theta=tMax*j/260,c=theta===0?0:thermodynamics(theta,state.delta,state.N).c;points.push(`${X(theta)},${Y(c)}`);}
+    html+=`<polyline points="${points.join(' ')}" fill="none" stroke="${COLORS.accent}" stroke-width="2"/>`;
+    html+=`<line x1="${X(state.theta)}" y1="${plot.t}" x2="${X(state.theta)}" y2="${plot.b}" stroke="${COLORS.secondary}" stroke-dasharray="3 3"/>`;
+    html+=`<circle cx="${X(state.theta)}" cy="${Y(model.c)}" r="4" fill="${COLORS.secondary}" stroke="white" stroke-width="1.5"/>`;
+    const labelX=Math.min(plot.r-100,Math.max(plot.l+4,X(state.theta)+8));
+    html+=svgText(labelX,Math.max(12,Y(model.c)-9),`当前 ${capacityFormat(model.c)}`,'style="fill:#285b46;font-size:10px"');
+    const peakT=state.delta/2.3993572805;
+    html+=svgText(X(peakT)+5,14,`峰值 T ≈ ${format(peakT)} E₀/kᴮ`,'style="font-size:10px"');
+    $('distribution-chart').innerHTML=html;
+    $('distribution-chart').setAttribute('aria-label',`固定能隙 ${state.delta} E₀ 时的热容曲线，低温和高温下热容均趋于零，峰值温度约 ${format(peakT)} E₀ 除以玻尔兹曼常数，当前热容 ${capacityFormat(model.c)} NkB`);
+  }
+  function renderInsight(){
+    if(state.chart==='heat'){
+      $('insight-title').textContent='从能量涨落，读出热响应。';
+      $('insight-text').innerHTML='低温时，粒子几乎都在基态；高温时，两个能级接近等概率。两端的平均能量都不太随温度改变，所以热容很小。<br>C<sub>V</sub> = σ<sub>E</sub>² / (k<sub>B</sub>T²)：换算热容还要除以 T²，不能只比较涨落的大小。中间的热容峰不是相变。';
+      $('chart-caption').textContent='曲线固定当前 N、Δ，考察各温度；橙点标记当前实验。';
+      $('chart-legend').innerHTML='<span class="legend-item"><span class="key-line"></span>理论热容</span><span class="legend-item"><span class="key-dot secondary" style="width:7px;height:7px"></span>当前温度</span>';
+    }else{
+      $('insight-title').textContent=model.x>8?'低温，激发态很少出现。':'概率不变，能量在变。';
+      $('insight-text').innerHTML=`在给定温度下，系统的总能量会在不同样本中涨落；理论分布由正则系综确定。<br>当前相对涨落 σ<sub>E</sub>/⟨E⟩ = <strong>${format(model.relative)}</strong>。保持 T、Δ，增大 N 后，它按 N<sup>−1/2</sup> 缩小。`;
+      $('chart-caption').textContent='横轴为激发粒子数 K = E / Δ，每个整数对应一个能量。';
+      $('chart-legend').innerHTML='<span class="legend-item"><span class="key-line"></span>理论分布</span><span class="legend-item"><span class="key-bar"></span>采样结果</span>';
+    }
+  }
+  function setRunning(running){
+    state.running=running;
+    $('pause').innerHTML=running?'<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4v12M13 4v12" stroke-width="3"/></svg><span>暂停采样</span>':'<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6Z"/></svg><span>继续采样</span>';
+    $('status-text').textContent=running?'实时采样':'采样已暂停';
+    $('sampling-status').classList.toggle('paused',!running);
+  }
+  function selectView(view,focus=false){
+    state.view=view;
+    document.querySelectorAll('.tab').forEach(el=>{const active=el.dataset.tab===view;el.setAttribute('aria-selected',active);el.tabIndex=active?0:-1;});
+    document.querySelectorAll('.panel').forEach(el=>{el.hidden=el.id!==`panel-${view}`;});
+    if(focus)$(`tab-${view}`).focus();
+    $('plot-tooltip').hidden=true;
+    if(view==='lab'){drawDistribution();renderSampleSummary();}
+  }
+  function selectChart(chart,focus=false){
+    state.chart=chart;
+    document.querySelectorAll('.chart-tab').forEach(el=>{const active=el.dataset.chart===chart;el.setAttribute('aria-selected',active);el.tabIndex=active?0:-1;if(active){$('plot-panel').setAttribute('aria-labelledby',el.id);if(focus)el.focus();}});
+    $('plot-tooltip').hidden=true;drawDistribution();renderInsight();
+  }
+  function keyboardTabs(event,buttons,callback){
+    if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+    event.preventDefault();const all=Array.from(buttons),i=all.indexOf(event.target);
+    const next=event.key==='Home'?0:event.key==='End'?all.length-1:(i+(event.key==='ArrowRight'?1:-1)+all.length)%all.length;
+    callback(all[next],true);
+  }
+  function illustrateConcept(){
+    const mini=(excited,pattern=0)=>Array.from({length:16},(_,i)=>`<span class="particle${i>=pattern&&i<pattern+excited?' excited':''}"></span>`).join('');
+    $('concept-system').innerHTML=mini(3,4);
+    $('replicas').innerHTML=[0,1,2,3].map((k,i)=>`<div class="replica"><div class="mini-grid" role="img" aria-label="状态 ${String.fromCharCode(65+i)}，${k} 个粒子激发">${mini(k,i*3)}</div><p class="replica-label">状态 ${String.fromCharCode(65+i)}</p><p class="replica-energy">E = ${k===0?'0':k===1?'Δ':`${k}Δ`}</p></div>`).join('');
+    $('degeneracy-states').innerHTML=Array.from({length:4},(_,j)=>`<div class="degeneracy-state" role="img" aria-label="第 ${j+1} 个粒子激发，其余在基态">${Array.from({length:4},(_,i)=>`<span class="particle${i===j?' excited':''}"></span>`).join('')}<small>粒子 ${j+1} 激发</small></div>`).join('');
+    $('bath-dots').innerHTML=Array.from({length:42},(_,i)=>{const col=i%7,row=Math.floor(i/7);return `<span class="bath-dot" style="left:${5+col*14.5+(row%2?3:0)}%;top:${6+row*17}%"></span>`;}).join('');
+  }
+  function startChallenge(kind){
+    let message='';
+    if(kind==='temperature'){
+      updateParameters({theta:.5,delta:2,N:64});
+      message='实验 1：先观察低温 T = 0.50 E₀/kB 的激发概率，再把温度调到 2.00。保持 N、Δ 固定，你会看到激发概率与平均能量升高。';
+    }else if(kind==='gap'){
+      updateParameters({theta:1,delta:.5,N:64});
+      message='实验 2：保持 T = 1.00 E₀/kB、N = 64，把 Δ 从 0.50 调到 4.00 E₀，比较激发概率。注意：平均能量还含有 Δ 因子，不能只用激发概率判断它的变化。';
+    }else{
+      updateParameters({theta:1,delta:2,N:16});
+      message='实验 3：保持 T、Δ，把 N 从 16 调到 64。相对涨落 σE/⟨E⟩ 会减半，绝对涨落 σE 则会加倍。注意区分绝对宽度与相对宽度。';
+    }
+    selectView('lab',true);$('lab-challenge').textContent=message;$('lab-challenge').hidden=false;
+  }
+  document.querySelectorAll('[data-tab]').forEach(button=>button.addEventListener('click',()=>selectView(button.dataset.tab)));
+  document.querySelector('.tabs').addEventListener('keydown',event=>keyboardTabs(event,document.querySelectorAll('.tab'),(el,focus)=>selectView(el.dataset.tab,focus)));
+  document.querySelectorAll('[data-open]').forEach(button=>button.addEventListener('click',()=>selectView(button.dataset.open,true)));
+  document.querySelectorAll('[data-chart]').forEach(button=>button.addEventListener('click',()=>selectChart(button.dataset.chart)));
+  document.querySelector('.chart-tabs').addEventListener('keydown',event=>keyboardTabs(event,document.querySelectorAll('.chart-tab'),(el,focus)=>selectChart(el.dataset.chart,focus)));
+  [['temperature','theta'],['gap','delta'],['count','N']].forEach(([id,key])=>{
+    $(id).addEventListener('input',()=>updateParameters({[key]:+$(id).value}));
+    const input=$(`${id}-number`);let pending;
+    const commit=()=>{clearTimeout(pending);const value=Number(input.value);if(input.value.trim()!==''&&Number.isFinite(value)){if(value!==state[key])updateParameters({[key]:value});else syncControls();}else syncControls();};
+    input.addEventListener('change',commit);input.addEventListener('blur',commit);
+    input.addEventListener('input',()=>{clearTimeout(pending);pending=setTimeout(commit,350);});
+    input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();commit();}});
+  });
+  document.querySelectorAll('[data-preset]').forEach(button=>button.addEventListener('click',()=>{$('lab-challenge').hidden=true;updateParameters({theta:button.dataset.preset==='cold'?.25:4,delta:2});}));
+  $('pause').addEventListener('click',()=>setRunning(!state.running));
+  $('sample-batch').addEventListener('click',()=>drawSamples(1000));
+  $('reset').addEventListener('click',()=>{$('lab-challenge').hidden=true;updateParameters({theta:1,delta:2,N:64});selectChart('energy');setRunning(!matchMedia('(prefers-reduced-motion: reduce)').matches);});
+  document.querySelectorAll('[data-challenge]').forEach(button=>button.addEventListener('click',()=>startChallenge(button.dataset.challenge)));
+  $('distribution-chart').addEventListener('pointermove',event=>{
+    if(state.chart!=='energy')return;
+    const rect=event.currentTarget.getBoundingClientRect(),x=(event.clientX-rect.left)*520/rect.width;
+    const k=Math.floor((x-42)/(507-42)*(state.N+1));
+    if(k<0||k>state.N){$('plot-tooltip').hidden=true;return;}
+    const tooltip=$('plot-tooltip');tooltip.hidden=false;
+    tooltip.innerHTML=`K = ${k} · E = ${format(k*state.delta)} E₀<br>理论概率 ${percent(theoretical[k])}<br>采样概率 ${percent(state.bins[k]/state.samples)}`;
+    const wrapper=$('plot-panel').getBoundingClientRect();
+    tooltip.style.left=`${Math.max(0,Math.min(wrapper.width-190,event.clientX-wrapper.left+10))}px`;
+    tooltip.style.top=`${Math.max(0,event.clientY-wrapper.top-65)}px`;
+  });
+  $('distribution-chart').addEventListener('pointerleave',()=>{$('plot-tooltip').hidden=true;});
+  illustrateConcept();syncControls();renderTheory();resetStatistics();setRunning(state.running);
+  setInterval(()=>{if(state.running&&state.view==='lab'&&!document.hidden)drawSamples(4);},600);
+  </script>
+</body>
+</html>

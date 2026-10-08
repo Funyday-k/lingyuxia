@@ -1,0 +1,519 @@
+---
+layout: null
+title: "Ising model | Statistical Physics"
+permalink: /statistical-physics/ising-model/
+---
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="通过真实的二维 Ising 自旋模拟，交互式理解温度、磁场、能量与相变。">
+  <meta name="theme-color" content="#fffaf4">
+  <title>Ising model | Statistical Physics</title>
+  <style>
+    :root{color-scheme:light;--paper:#fffaf4;--panel:#ffffff;--ink:#403127;--muted:#806f60;--line:#eadccd;--up:#bd5b24;--down:#285b46;--track:#e8ddd0;--radius:14px}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:24px}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:15px;line-height:1.65}
+    button,input{font:inherit;color:inherit}
+    button,a,input{ -webkit-tap-highlight-color:transparent }
+    button{cursor:pointer}
+    button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible,summary:focus-visible{outline:3px solid var(--down);outline-offset:4px}
+    button:disabled{opacity:.4;cursor:default}
+    button{transition:background .16s,transform .16s}
+    button:hover:not(:disabled){background:#fff0de}
+    button:active:not(:disabled){transform:translateY(1px)}
+    a{color:inherit;text-underline-offset:4px}
+    .shell{max-width:1536px;padding:0 clamp(18px,4.7vw,72px);margin:auto}
+    .topbar{border-bottom:1px solid var(--line)}
+    .topbar .shell{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;gap:16px;align-items:center;text-decoration:none;font-size:27px;font-weight:650;letter-spacing:-.7px}
+    .brand-mark{display:grid;grid-template-columns:repeat(2,19px);gap:3px}
+    .brand-mark span{display:grid;place-items:center;width:19px;height:19px;background:var(--up);color:#fff;border-radius:4px}
+    .brand-mark span:nth-child(2),.brand-mark span:nth-child(3){background:var(--down)}
+    .brand-mark svg{width:13px;height:13px}
+    .intro{display:grid;grid-template-columns:35% 1fr;align-items:center;gap:26px;padding:19px 0 18px}
+    h1{font-size:clamp(31px,3.05vw,46px);letter-spacing:-1.7px;line-height:1.16;margin:0;font-weight:750}
+    .title-line{white-space:nowrap}
+    .english{font:italic clamp(24px,2.25vw,35px)/1.2 Georgia,"Times New Roman",serif;letter-spacing:-.8px;margin-left:15px;font-weight:400}
+    .intro-copy{font-size:clamp(16px,1.5vw,22px);margin:0 0 20px;line-height:1.45;letter-spacing:.1px}
+    .experiments{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+    .preset{background:var(--panel);border:1px solid #dfcdbb;border-radius:9px;padding:9px 17px;font-weight:550;white-space:nowrap}
+    .preset[aria-pressed="true"],.primary,.segmented button[aria-pressed="true"]{background:var(--up);border-color:var(--up);color:#fff}
+    .preset[aria-pressed="true"]:hover,.primary:hover:not(:disabled),.segmented button[aria-pressed="true"]:hover{background:#a84a19}
+    .experiment-hint{font-size:13px;color:var(--muted);margin:7px 0 0}
+    .workbench{display:grid;grid-template-columns:1.16fr .78fr 1fr;gap:12px;align-items:stretch}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;min-width:0}
+    h2{font-size:20px;line-height:1.4;margin:0;font-weight:650;letter-spacing:-.3px}
+    h3{font-size:16px;margin:0 0 8px;font-weight:650}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .panel-head h2{font-size:18px}
+    .legend{display:flex;align-items:center;gap:14px;font-size:13px;white-space:nowrap}
+    .legend-item{display:inline-flex;align-items:center;gap:7px}
+    .legend-spin{width:23px;height:23px;background:var(--up);color:#fff;border-radius:5px;display:inline-grid;place-items:center}
+    .legend-spin.down{background:var(--down)}
+    .legend-spin svg{width:15px;height:15px}
+    .spin-canvas{width:100%;aspect-ratio:1;display:block;border-radius:5px;touch-action:manipulation;cursor:crosshair}
+    .action-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 10px}
+    .action{display:inline-flex;justify-content:center;align-items:center;gap:7px;background:transparent;border:1px solid #dfcdbb;border-radius:8px;padding:7px 12px;white-space:nowrap;font-size:13px;min-height:36px}
+    .primary{background:var(--up);border-color:var(--up)}
+    .icon{width:16px;height:16px;flex:none;vertical-align:middle}
+    .lattice-meta{color:var(--muted);font-size:11.5px;white-space:nowrap;margin-left:auto}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:9px;padding:7px 0;line-height:1.5;text-align:center}
+    .stat+.stat{border-left:1px solid var(--line)}
+    .stat-label{font-size:12px;color:var(--muted);display:block}
+    .stat-value{font-size:24px;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-.6px;display:block}
+    #magnetization{color:var(--up)}
+    #energy{color:var(--down)}
+    .controls{display:flex;flex-direction:column;padding:18px 20px}
+    .controls h2{margin-bottom:14px}
+    .control{margin:0 0 22px;min-width:0}
+    .control-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:15px;font-weight:550}
+    .control-head output{font-size:18px;font-weight:650;font-variant-numeric:tabular-nums}
+    .math{font-family:Georgia,"Times New Roman",serif;font-style:italic}
+    input[type="range"]{width:100%;height:25px;margin:0;appearance:none;background:transparent;cursor:pointer;display:block;--slider-color:var(--up)}
+    input[type="range"]::-webkit-slider-runnable-track{height:9px;background:var(--track);border-radius:9px}
+    input[type="range"]::-moz-range-track{height:9px;background:var(--track);border-radius:9px}
+    input[type="range"]::-webkit-slider-thumb{appearance:none;width:21px;height:21px;margin-top:-6px;border:2px solid var(--panel);border-radius:50%;background:var(--slider-color);box-shadow:0 0 0 1px #c9b7a4}
+    input[type="range"]::-moz-range-thumb{width:18px;height:18px;border:2px solid var(--panel);border-radius:50%;background:var(--slider-color);box-shadow:0 0 0 1px #c9b7a4}
+    #field,#speed{--slider-color:#af8058}
+    .scale{display:flex;justify-content:space-between;margin-top:5px;color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums}
+    .scale span{position:relative;padding-top:7px}
+    .scale span::before{content:"";position:absolute;top:0;left:50%;width:1px;height:4px;background:#b6a38e}
+    .critical-text{font-size:12px;color:var(--muted);margin:6px 0 0;text-align:right;min-height:20px}
+    .temperature-track{position:relative}
+    .critical-mark{position:absolute;left:44.27%;top:23px;height:8px;border-left:1px dashed #9f856d;pointer-events:none}
+    .segmented{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #dfcdbb;border-radius:9px;overflow:hidden}
+    .segmented button{border:0;border-right:1px solid #dfcdbb;background:transparent;padding:8px 3px;font-size:13px;line-height:1.4;min-height:49px}
+    .segmented button:last-child{border-right:0}
+    .segmented span{display:block;font-variant-numeric:tabular-nums}
+    .control-help{font-size:12px;color:var(--muted);line-height:1.6;margin:auto 0 0}
+    .insight{display:flex;flex-direction:column;padding:18px 20px}
+    #state-explanation{margin:12px 0 15px;font-size:15px;line-height:1.8;min-height:112px}
+    .history{flex:1;display:flex;flex-direction:column;padding:14px 12px 9px;border:1px solid var(--line);border-radius:10px;min-height:280px}
+    .history h3{font-size:15px;margin:0 0 3px}
+    .chart-legend{display:flex;align-items:center;gap:14px;font-size:11.5px;min-height:21px;color:var(--muted)}
+    .line-key::before{content:"";display:inline-block;vertical-align:middle;width:17px;height:2px;background:var(--up);margin-right:5px}
+    .line-key.staggered::before{background:var(--down)}
+    .history-canvas{width:100%;display:block;flex:1;min-height:180px;height:230px}
+    .chart-note{color:var(--muted);text-align:center;font-size:11.5px;line-height:1.5;margin:5px 0 1px}
+    #sweep-count{font-variant-numeric:tabular-nums}
+    .learning{margin-top:12px;padding:0 18px 16px}
+    .tabs{display:flex;gap:24px;padding:0 4px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+    .tab{border:0;background:transparent;padding:12px 10px 11px;font-weight:550;font-size:15px;color:var(--muted);position:relative;white-space:nowrap}
+    .tab[aria-selected="true"]{color:var(--ink)}
+    .tab[aria-selected="true"]::after{position:absolute;content:"";bottom:-1px;left:0;right:0;height:2px;background:var(--up)}
+    [hidden]{display:none!important}
+    .lesson{display:grid;grid-template-columns:205px 1.1fr 1fr;align-items:center;gap:24px;min-height:135px;padding:6px 10px}
+    .lesson-title{font-size:16px;font-weight:650;margin:0 0 7px}
+    .lesson p{margin:5px 0;font-size:13px;line-height:1.7}
+    .formula{font:italic clamp(22px,2.35vw,35px)/1.7 Georgia,"Times New Roman",serif;margin:4px 0;letter-spacing:.5px;white-space:nowrap}
+    .formula sub{font-size:.48em}
+    .formula .operator{font-style:normal}
+    .lesson-notes{padding-left:22px;border-left:1px solid var(--line)}
+    .lesson-notes p{color:var(--muted)}
+    .neighbors{width:132px;height:132px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:6px;justify-self:center}
+    .spin-tile{border:0;display:grid;place-items:center;background:var(--up);color:#fff;border-radius:7px;position:relative}
+    .spin-tile svg{width:25px;height:25px}
+    .spin-tile.down{background:var(--down)}
+    .spin-tile.down svg{transform:rotate(180deg)}
+    .spin-tile.center{outline:2px solid var(--ink);outline-offset:2px}
+    .spin-tile:nth-child(1){grid-area:1/2}
+    .spin-tile:nth-child(2){grid-area:2/1}
+    .spin-tile:nth-child(3){grid-area:2/2}
+    .spin-tile:nth-child(4){grid-area:2/3}
+    .spin-tile:nth-child(5){grid-area:3/2}
+    .spin-tile small{position:absolute;bottom:0;right:3px;font-size:9px;font-variant-numeric:tabular-nums}
+    .flip-lesson{grid-template-columns:185px 1.1fr 1fr}
+    .flip-formula{font-size:27px}
+    .probability-line{display:flex;gap:12px;align-items:center;margin:9px 0}
+    .probability-track{height:7px;width:110px;background:var(--track);border-radius:7px;overflow:hidden}
+    .probability-fill{height:100%;background:var(--up);width:100%}
+    #acceptance-value{font-variant-numeric:tabular-nums;font-weight:650;font-size:20px}
+    #trial-result{min-height:22px;color:var(--muted);font-size:12px;margin:7px 0 0}
+    .phase-lesson{grid-template-columns:.85fr 1fr 1.05fr}
+    .phase-diagram{display:flex;align-items:center;justify-content:center;gap:15px}
+    .mini-grid{display:grid;grid-template-columns:repeat(6,1fr);width:95px;gap:3px}
+    .mini-grid span{background:var(--up);aspect-ratio:1;border-radius:2px}
+    .mini-grid span.down{background:var(--down)}
+    .phase-label{font-size:12px;text-align:center;color:var(--muted);margin-top:5px}
+    .phase-lesson .formula{font-size:23px;white-space:normal;line-height:1.65}
+    footer{display:flex;align-items:start;gap:20px;justify-content:space-between;padding:14px 0 25px;color:var(--muted);font-size:11.5px}
+    footer p{margin:0}
+    details{min-width:120px;text-align:right;max-width:560px}
+    summary{cursor:pointer;white-space:nowrap}
+    .method{font-size:12px;text-align:left;line-height:1.7;padding:12px 0 0}
+    .method p{margin-bottom:9px}
+    .method a{color:var(--ink)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(min-width:1600px){.shell{max-width:1550px}.intro{padding-top:28px;padding-bottom:25px}}
+    @media(max-width:1250px){.intro{grid-template-columns:38% 1fr;gap:20px}.english{display:block;margin:6px 0 0;font-size:28px}.intro-copy{font-size:18px}.preset{padding:8px 11px;font-size:13px}.workbench{grid-template-columns:1.15fr .85fr}.insight{grid-column:1/-1;display:grid;grid-template-columns:.8fr 1.2fr;grid-template-rows:auto 1fr;align-items:start;column-gap:28px}.insight h2{grid-column:1}.insight #state-explanation{grid-column:1;grid-row:2;min-height:0;margin-bottom:0}.history{grid-column:2;grid-row:1/3;min-height:230px;height:100%}.history-canvas{height:160px;min-height:160px}.lesson{grid-template-columns:155px 1.15fr 1fr;gap:17px}.formula{font-size:28px}.lattice-meta{font-size:12px}}
+    @media(max-width:760px){.shell{padding:0 20px}.topbar .shell{min-height:58px}.brand{font-size:23px;gap:10px}nav{gap:18px;font-size:13px}.intro{grid-template-columns:1fr;padding:21px 0 17px;gap:14px}h1{font-size:38px;line-height:1.18}.title-line{white-space:normal}.english{display:inline-block;margin-left:14px;font-size:29px;white-space:nowrap}.intro-copy{font-size:16px;margin-bottom:12px}.experiments{gap:7px}.preset{padding:8px 12px;flex:1;font-size:13px}.experiment-hint{margin-top:9px;font-size:12px}.workbench{grid-template-columns:1fr}.panel{padding:16px}.controls{padding:17px 20px}.controls h2{margin-bottom:17px}.control{margin-bottom:19px}.control-help{margin:0}.insight{grid-column:auto;display:flex;align-items:stretch;padding:18px 20px}.insight #state-explanation{font-size:14px;margin:10px 0 15px}.history{min-height:275px;height:auto}.history-canvas{height:190px;min-height:190px}.learning{padding:0 14px 17px}.tabs{gap:6px;justify-content:space-between;padding:0}.tab{padding:12px 3px;font-size:12px}.lesson,.flip-lesson,.phase-lesson{grid-template-columns:1fr;gap:14px;padding:6px 3px}.lesson>.neighbors{width:116px;height:116px}.lesson-notes{border:0;border-top:1px solid var(--line);padding:12px 0 0}.formula{font-size:30px;white-space:normal}.lesson-title{font-size:15px}.lesson p{font-size:13px}.flip-formula{font-size:25px}.phase-diagram{gap:30px}.phase-lesson .formula{font-size:24px}footer{flex-direction:column;gap:10px;padding-bottom:22px;font-size:11px}details{text-align:left;max-width:none;width:100%}.action-row{gap:6px}.action{padding:7px 10px}.lattice-meta{font-size:11px}}
+    @media(max-width:380px){.shell{padding:0 14px}.panel{padding:13px}.title-line{white-space:normal}h1{font-size:34px}.english{font-size:26px;margin-left:8px}.preset{flex-basis:44%;padding:8px 10px}.stat-value{font-size:22px}.lattice-meta{width:100%;margin-left:0}.brand-mark{grid-template-columns:repeat(2,17px)}.brand-mark span{width:17px;height:17px}nav{gap:13px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}button{transition:none}}
+    @media print{body{background:white}.shell{padding:0 15px}.topbar nav,.experiments,.action-row,.control,.control-help{display:none}.intro{grid-template-columns:1fr}.workbench{grid-template-columns:1fr 1fr}.controls{display:none}.insight{grid-column:auto;display:flex}.learning,footer{break-inside:avoid}.panel{border-color:#ccc}.history-canvas{height:200px}}
+  </style>
+  <link rel="stylesheet" href="{{ '/assets/css/statistical-physics.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23fff1de'/%3E%3Ccircle cx='13' cy='13' r='5' fill='%23bd5b24'/%3E%3Ccircle cx='27' cy='27' r='5' fill='%23bd5b24'/%3E%3Ccircle cx='27' cy='13' r='5' fill='%23d9a263'/%3E%3Ccircle cx='13' cy='27' r='5' fill='%23d9a263'/%3E%3C/svg%3E">
+</head>
+<body class="ising-lab">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M12 20V4M6 10l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol>
+    <symbol id="play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></symbol>
+    <symbol id="step" viewBox="0 0 24 24"><path d="M4 5l11 7-11 7z" fill="currentColor"/><path d="M19 5v14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
+    <symbol id="reset" viewBox="0 0 24 24"><path d="M20 10a8 8 0 1 0-1 8M20 4v6h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs></svg>
+  <header class="physics-header"><div class="physics-header-inner"><a class="physics-brand" href="{{ '/statistical-physics/' | relative_url }}">Lingyu Xia <span>/</span> Statistical Physics</a><nav aria-label="统计物理专题导航"><a href="{{ '/statistical-physics/' | relative_url }}">专题目录</a><a href="{{ '/statistical-physics/canonical-ensemble/' | relative_url }}">正则系综</a><a href="{{ '/statistical-physics/ising-model/' | relative_url }}" aria-current="page">Ising 模型</a></nav></div></header>
+  <main class="shell">
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">一枚自旋，<br><span class="title-line">一场相变。<span class="english">Ising Model</span></span></h1>
+      <div>
+        <p class="intro-copy">只有向上与向下两种选择，为什么会长出一整片秩序？</p>
+        <div class="experiments" aria-label="选择实验">
+          <button class="preset" data-preset="cold" aria-pressed="false">降温成团</button>
+          <button class="preset" data-preset="critical" aria-pressed="true">临界附近</button>
+          <button class="preset" data-preset="hot" aria-pressed="false">加热打散</button>
+          <button class="preset" data-preset="antiferro" aria-pressed="false">邻居唱反调</button>
+        </div>
+        <p class="experiment-hint">选一个实验，或自己调参数。</p>
+      </div>
+    </section>
+    <section class="workbench" id="experiment" aria-label="二维 Ising 模型交互实验">
+      <div class="panel lattice-panel">
+        <div class="panel-head"><h2>二维自旋晶格</h2><div class="legend" aria-label="自旋图例">
+          <span class="legend-item"><span class="legend-spin"><svg aria-hidden="true"><use href="#arrow"/></svg></span>+1</span>
+          <span class="legend-item"><span class="legend-spin down"><svg style="transform:rotate(180deg)" aria-hidden="true"><use href="#arrow"/></svg></span>−1</span>
+        </div></div>
+        <canvas id="lattice" class="spin-canvas" role="img" tabindex="0" aria-label="32 行、32 列的自旋晶格。橙色向上，深绿色向下。" aria-describedby="lattice-help">当前浏览器不支持画布。每个格点取 +1 或 −1，并与最近的四位邻居相互作用。</canvas>
+        <div class="action-row">
+          <button class="action primary" id="toggle" aria-label="暂停模拟"><svg class="icon" aria-hidden="true"><use id="toggle-icon" href="#pause"/></svg><span id="toggle-label">暂停</span></button>
+          <button class="action" id="single-step" aria-label="暂停并演化一个 Monte Carlo sweep"><svg class="icon" aria-hidden="true"><use href="#step"/></svg>单步</button>
+          <button class="action" id="randomize"><svg class="icon" aria-hidden="true"><use href="#reset"/></svg>随机重置</button>
+          <span class="lattice-meta">32 × 32 · 周期边界</span>
+        </div>
+        <div class="stats" aria-label="当前构型的观测量">
+          <div class="stat"><span class="stat-label">磁化 <i class="math">m</i></span><output id="magnetization" class="stat-value">+0.00</output></div>
+          <div class="stat"><span id="order-label" class="stat-label">同向邻居</span><output id="order" class="stat-value">50%</output></div>
+          <div class="stat"><span class="stat-label">能量 / 自旋</span><output id="energy" class="stat-value">0.00</output></div>
+        </div>
+      </div>
+      <div class="panel controls">
+        <h2>实验控制</h2>
+        <div class="control">
+          <div class="control-head"><label for="temperature">温度 <i class="math">T</i></label><output id="temperature-value" for="temperature">2.27</output></div>
+          <div class="temperature-track"><input id="temperature" type="range" min="0.1" max="5" step="0.01" value="2.27" aria-describedby="critical-reference"><span class="critical-mark" id="critical-mark" aria-hidden="true"></span></div>
+          <div class="scale" aria-hidden="true"><span>0.1</span><span>1.0</span><span>2.0</span><span>3.0</span><span>4.0</span><span>5.0</span></div>
+          <p class="critical-text" id="critical-reference">无场铁磁参考 <i class="math">T</i><sub>c</sub> ≈ 2.269</p>
+        </div>
+        <div class="control">
+          <div class="control-head"><label for="field">外场 <i class="math">h</i></label><output id="field-value" for="field">0.00</output></div>
+          <input id="field" type="range" min="-2" max="2" step="0.05" value="0" aria-label="外场 h，正值偏好向上，负值偏好向下">
+          <div class="scale" aria-hidden="true"><span>−2.0</span><span>−1.0</span><span>0.0</span><span>1.0</span><span>2.0</span></div>
+        </div>
+        <div class="control">
+          <div class="control-head" id="coupling-label">耦合 <i class="math">J</i></div>
+          <div class="segmented" role="group" aria-labelledby="coupling-label">
+            <button data-coupling="1" aria-pressed="true">同向<span>+1</span></button>
+            <button data-coupling="0" aria-pressed="false">无耦合<span>0</span></button>
+            <button data-coupling="-1" aria-pressed="false">反向<span>−1</span></button>
+          </div>
+        </div>
+        <div class="control">
+          <div class="control-head"><label for="speed">演化速度</label><output id="speed-value" for="speed" style="font-size:13px;font-weight:400">中等</output></div>
+          <input id="speed" type="range" min="1" max="5" step="1" value="3">
+          <div class="scale" aria-hidden="true"><span>很慢</span><span>慢</span><span>中等</span><span>快</span><span>很快</span></div>
+        </div>
+        <p id="lattice-help" class="control-help">点击晶格中的自旋，暂停并查看它的邻居。键盘可用方向键选择，Enter 查看。</p>
+      </div>
+      <div class="panel insight">
+        <h2>此刻发生了什么？</h2>
+        <p id="state-explanation">接近临界温度时，邻居的影响与热涨落互相竞争。有序区域会不断长大、缩小，观察团簇如何变化。</p>
+        <div class="history">
+          <h3>磁化随演化变化</h3>
+          <div class="chart-legend"><span class="line-key">磁化 <i class="math">m</i></span><span class="line-key staggered" id="staggered-key" hidden>交错磁化 <i class="math">m</i><sub>s</sub></span></div>
+          <canvas id="history" class="history-canvas" role="img" aria-label="当前参数下的磁化演化曲线，纵轴从负一到正一，横轴是 Monte Carlo sweeps。"></canvas>
+          <p class="chart-note">已演化 <output id="sweep-count">0</output> sweeps · 当前参数的一段采样<br>这是采样过程，不是真实时间。</p>
+        </div>
+      </div>
+    </section>
+    <section class="panel learning" id="principles" aria-label="理解 Ising 模型的原理">
+      <div class="tabs" role="tablist" aria-label="原理讲解">
+        <button class="tab" id="tab-rules" role="tab" aria-selected="true" aria-controls="lesson-rules" tabindex="0" data-tab="rules">模型的三条规则</button>
+        <button class="tab" id="tab-flip" role="tab" aria-selected="false" aria-controls="lesson-flip" tabindex="-1" data-tab="flip">翻转的代价</button>
+        <button class="tab" id="tab-phase" role="tab" aria-selected="false" aria-controls="lesson-phase" tabindex="-1" data-tab="phase">为什么会相变</button>
+      </div>
+      <div id="lesson-rules" class="lesson" role="tabpanel" aria-labelledby="tab-rules">
+        <div class="neighbors" aria-label="每个格点与上下左右四位邻居相互作用">
+          <span class="spin-tile down"><svg aria-hidden="true"><use href="#arrow"/></svg></span><span class="spin-tile"><svg aria-hidden="true"><use href="#arrow"/></svg></span><span class="spin-tile center"><svg aria-hidden="true"><use href="#arrow"/></svg></span><span class="spin-tile"><svg aria-hidden="true"><use href="#arrow"/></svg></span><span class="spin-tile down"><svg aria-hidden="true"><use href="#arrow"/></svg></span>
+        </div>
+        <div><p class="lesson-title">每一枚自旋，只看最近的四位邻居。</p><div class="formula" aria-label="H 等于负 J 乘以最近邻自旋乘积之和，再减去 h 乘以全部自旋之和">H <span class="operator">= −</span>J ∑<sub>⟨i,j⟩</sub> s<sub>i</sub>s<sub>j</sub> <span class="operator">−</span> h ∑<sub>i</sub> s<sub>i</sub></div><p>Ising（伊辛）模型把磁性简化为两态变量：<i class="math">s</i><sub>i</sub> = +1 或 −1。这里演示经典模型；箭头只代表状态。</p></div>
+        <div class="lesson-notes"><p><strong>① 两种状态。</strong>箭头向上或向下，不连续旋转。</p><p><strong>② 邻居互动。</strong><i class="math">J</i> &gt; 0 时同向能量更低；<i class="math">J</i> &lt; 0 时反向更低。每对邻居只计一次。</p><p><strong>③ 外场偏好。</strong><i class="math">h</i> &gt; 0 偏好向上；<i class="math">h</i> &lt; 0 偏好向下。</p></div>
+      </div>
+      <div id="lesson-flip" class="lesson flip-lesson" role="tabpanel" aria-labelledby="tab-flip" hidden>
+        <div class="neighbors" id="selected-neighbors" aria-label="所选自旋与它的四位实际邻居">
+          <span class="spin-tile" data-neighbor="up"><svg aria-hidden="true"><use href="#arrow"/></svg></span><span class="spin-tile" data-neighbor="left"><svg aria-hidden="true"><use href="#arrow"/></svg></span><span class="spin-tile center" data-neighbor="center"><svg aria-hidden="true"><use href="#arrow"/></svg></span><span class="spin-tile" data-neighbor="right"><svg aria-hidden="true"><use href="#arrow"/></svg></span><span class="spin-tile" data-neighbor="down"><svg aria-hidden="true"><use href="#arrow"/></svg></span>
+        </div>
+        <div><p class="lesson-title" id="selected-title">所选自旋：第 17 行，第 17 列</p><div class="formula flip-formula">ΔH <span class="operator">=</span> 2s<sub>i</sub>(J ∑<sub>邻居</sub> s<sub>j</sub> <span class="operator">+</span> h) <span class="operator">=</span> <output id="delta-energy">0</output></div><p id="flip-explanation">先选择一枚自旋，看看翻转它会改变多少能量。</p><div class="probability-line"><span style="font-size:12px">接受概率</span><div class="probability-track" aria-hidden="true"><div class="probability-fill" id="probability-fill"></div></div><output id="acceptance-value">100%</output></div></div>
+        <div class="lesson-notes"><p><strong>Metropolis 规则：</strong>降低或不改变能量的翻转总被接受；增加能量时，以 <i class="math">e</i><sup>−ΔH/T</sup> 的概率接受。</p><button class="action" id="try-flip">按规则尝试一次</button><p id="trial-result" role="status" aria-live="polite">点击按钮会暂停模拟，抽取随机数并决定是否翻转。</p></div>
+      </div>
+      <div id="lesson-phase" class="lesson phase-lesson" role="tabpanel" aria-labelledby="tab-phase" hidden>
+        <div class="phase-diagram" aria-label="低温时更有序，高温时更杂乱"><div><div class="mini-grid" id="ordered-mini" aria-hidden="true"></div><div class="phase-label">低温 · 成团</div></div><div><div class="mini-grid" id="disordered-mini" aria-hidden="true"></div><div class="phase-label">高温 · 杂乱</div></div></div>
+        <div><p class="lesson-title">能量想要整齐，熵偏爱更多可能。</p><p>对于 <i class="math">J</i> = +1、<i class="math">h</i> = 0 的二维方格模型，低温平衡态倾向于选择一个整体方向；高温时两种方向混杂。温度越高，越容易接受需要付出能量的翻转。</p><div class="formula">T<sub>c</sub> <span class="operator">=</span> 2 / ln(1 <span class="operator">+</span> √2) ≈ 2.269</div></div>
+        <div class="lesson-notes"><p><strong>磁化 <i class="math">m</i> = Σ<i class="math">s</i><sub>i</sub> / N：</strong>+1 表示全向上，−1 表示全向下，0 表示两种状态数量相等。</p><p><strong>零磁化也可能有序：</strong>反铁磁可以形成棋盘格。此时看交错磁化 <i class="math">m</i><sub>s</sub> = Σ(−1)<sup>x+y</sup><i class="math">s</i><sub>i</sub> / N；|<i class="math">m</i><sub>s</sub>| 接近 1 才说明整体交错有序。</p><p>临界温度公式对应无限晶格、零外场与铁磁耦合。有限窗口中的团簇和数值需要时间充分采样，不能把一帧当作平衡态。</p></div>
+      </div>
+    </section>
+    <footer>
+      <div><p>有限晶格用于直观演示；严格的相变出现在热力学极限。调整参数后，曲线从新参数重新记录。</p><p>无量纲单位：<i class="math">k</i><sub>B</sub> = 1，能量以固定参考尺度为单位；这里的温度不是摄氏度。</p></div>
+      <details><summary>方法与参考</summary><div class="method"><p>二维 32 × 32 方格、周期边界、最近邻相互作用。每个 sweep 随机挑选 1024 次格点，依 Metropolis 概率尝试单自旋翻转。四边首尾相接，每个点始终有四位邻居。曲线展示即时构型的观测量，不是平衡平均值。随机重置保留当前参数并清空演化记录。</p><p>局部更新在低温或临界附近可能很慢；低温从随机态出发可能暂时困在多个磁畴中。演化速度只影响采样快慢，不改变接受规则。改变外场后，不应再把零场铁磁临界温度解释为当前系统的相变点。</p><p>原理：<a href="https://www.damtp.cam.ac.uk/user/tong/statphys/statmechhtml/S5.html" target="_blank" rel="noopener noreferrer">David Tong · Statistical Physics, §5</a>；经典自旋：<a href="https://www.damtp.cam.ac.uk/user/tong/sft/sfthtml/S1.html" target="_blank" rel="noopener noreferrer">Statistical Field Theory, §1</a>；算法：<a href="https://doi.org/10.1063/1.1699114" target="_blank" rel="noopener noreferrer">Metropolis et al. (1953)</a>。</p></div></details>
+    </footer>
+    <div class="sr-only" id="announcement" aria-live="polite" role="status"></div>
+    <noscript>请启用 JavaScript 以运行交互实验。Ising 模型使用 +1、−1 两种自旋状态，借助最近邻耦合和外场定义能量，再观察温度如何影响有序程度。</noscript>
+    <nav class="chapter-navigation" aria-label="章节导航"><a href="{{ '/statistical-physics/canonical-ensemble/' | relative_url }}">上一节：正则系综</a><a href="{{ '/statistical-physics/' | relative_url }}">返回统计物理目录<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17m-7-7 7 7-7 7"/></svg></a></nav>
+  </main>
+  <script>
+  'use strict';
+  // The simulation is kept independent of the UI so its energy accounting can be verified.
+  class IsingLattice {
+    constructor(size = 32, random = Math.random) {
+      if (!Number.isInteger(size) || size < 4 || size % 2) throw new Error('Use an even square lattice of size >= 4.');
+      this.size = size; this.count = size * size; this.random = random;
+      this.spins = new Int8Array(this.count); this.neighbors = new Int32Array(this.count * 4);
+      this.parity = new Int8Array(this.count); this.J = 1; this.h = 0; this.T = 2.27; this.sweeps = 0;
+      for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+        const i = y * size + x, b = 4 * i;
+        this.neighbors[b] = ((y + size - 1) % size) * size + x;
+        this.neighbors[b + 1] = y * size + (x + size - 1) % size;
+        this.neighbors[b + 2] = y * size + (x + 1) % size;
+        this.neighbors[b + 3] = ((y + 1) % size) * size + x;
+        this.parity[i] = (x + y) % 2 ? -1 : 1;
+      }
+      this.reset();
+    }
+    reset() { for (let i = 0; i < this.count; i++) this.spins[i] = this.random() < .5 ? 1 : -1; this.sweeps = 0; }
+    neighborSum(i) { const b = i * 4, n = this.neighbors, s = this.spins; return s[n[b]] + s[n[b+1]] + s[n[b+2]] + s[n[b+3]]; }
+    deltaEnergy(i) { return 2 * this.spins[i] * (this.J * this.neighborSum(i) + this.h); }
+    static acceptance(delta, temperature) { return delta <= 0 ? 1 : (temperature <= 0 ? 0 : Math.exp(-delta / temperature)); }
+    attempt(i) {
+      const delta = this.deltaEnergy(i), probability = IsingLattice.acceptance(delta, this.T);
+      const random = this.random(), accepted = random < probability;
+      if (accepted) this.spins[i] *= -1;
+      return {delta, probability, random, accepted};
+    }
+    sweep() { for (let k = 0; k < this.count; k++) this.attempt(Math.floor(this.random() * this.count)); this.sweeps++; }
+    observables() {
+      let magnetization = 0, staggered = 0, pairSum = 0;
+      for (let i = 0; i < this.count; i++) {
+        const s = this.spins[i], b = i * 4;
+        magnetization += s; staggered += this.parity[i] * s;
+        // Right and down count every undirected nearest-neighbor bond exactly once.
+        pairSum += s * (this.spins[this.neighbors[b + 2]] + this.spins[this.neighbors[b + 3]]);
+      }
+      return {m:magnetization / this.count, ms:staggered / this.count, energy:(-this.J * pairSum - this.h * magnetization) / this.count, same:(1 + pairSum / (2 * this.count)) / 2};
+    }
+  }
+  const model = new IsingLattice();
+  const el = id => document.getElementById(id);
+  // Animated readouts remain available to screen readers without flooding live announcements.
+  document.querySelectorAll('output').forEach(output => output.setAttribute('aria-live','off'));
+  const lattice = el('lattice'), chart = el('history');
+  const spinContext = lattice.getContext('2d'), chartContext = chart.getContext('2d');
+  const palette = {up:'#bd5b24',down:'#285b46',ink:'#403127',muted:'#806f60',line:'#eadccd',paper:'#ffffff'};
+  const criticalTemperature = 2 / Math.log(1 + Math.SQRT2);
+  const speedSteps = [1,2,4,8,16], speedNames = ['很慢','慢','中等','快','很快'];
+  let speed = 3, paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let selected = 16 * 32 + 16, inspection = false, activeTab = 'rules';
+  let samples = [], lastFrame = 0, graphStart = 0, previousAnnouncedState = '';
+  let latticeWidth = 1, chartWidth = 1, chartHeight = 230;
+
+  const signed = (value, digits = 2) => {
+    const clean = Math.abs(value) < .5 * Math.pow(10,-digits) ? 0 : value;
+    return (clean >= 0 ? '+' : '−') + Math.abs(clean).toFixed(digits);
+  };
+  const number = value => Math.abs(value) < .005 ? '0.00' : (value < 0 ? '−' : '') + Math.abs(value).toFixed(2);
+  function announce(message) { if (message !== previousAnnouncedState) { el('announcement').textContent = message; previousAnnouncedState = message; } }
+  function setPaused(value) {
+    paused = value; el('toggle-label').textContent = paused ? '继续' : '暂停';
+    el('toggle-icon').setAttribute('href', paused ? '#play' : '#pause');
+    el('toggle').setAttribute('aria-label', paused ? '继续模拟' : '暂停模拟');
+  }
+  function setTab(name, focus = false) {
+    activeTab = name;
+    document.querySelectorAll('[data-tab]').forEach(button => {
+      const current = button.dataset.tab === name;
+      button.setAttribute('aria-selected',String(current)); button.tabIndex = current ? 0 : -1;
+      if (current && focus) button.focus();
+      el('lesson-' + button.dataset.tab).hidden = !current;
+    });
+    inspection = name === 'flip'; renderLattice(); renderSelected();
+  }
+  function resizeCanvas(canvas, context, width, height) {
+    const dpr = Math.max(1,Math.min(devicePixelRatio || 1, 2));
+    canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+    context.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function resize() {
+    const w = lattice.getBoundingClientRect().width;
+    latticeWidth = Math.max(1,w); resizeCanvas(lattice,spinContext,latticeWidth,latticeWidth);
+    const box = chart.getBoundingClientRect(); chartWidth = Math.max(1,box.width); chartHeight = Math.max(170,box.height);
+    resizeCanvas(chart,chartContext,chartWidth,chartHeight); renderLattice(); renderChart();
+  }
+  function renderLattice() {
+    const ctx = spinContext, cell = latticeWidth / model.size, gap = Math.max(.8,cell * .07);
+    ctx.clearRect(0,0,latticeWidth,latticeWidth);
+    for (let i = 0; i < model.count; i++) {
+      const s = model.spins[i], x = (i % model.size) * cell, y = Math.floor(i / model.size) * cell;
+      ctx.fillStyle = s === 1 ? palette.up : palette.down;
+      ctx.beginPath(); ctx.roundRect(x + gap/2,y + gap/2,cell-gap,cell-gap,Math.min(2,cell*.12)); ctx.fill();
+      if (cell >= 7) {
+        const cx = x + cell/2, cy = y + cell/2, half = cell*.26, head = cell*.18;
+        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = Math.max(.8,cell*.08); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        ctx.beginPath(); ctx.moveTo(cx,cy + s*half); ctx.lineTo(cx,cy - s*half);
+        ctx.moveTo(cx-head,cy-s*(half-head)); ctx.lineTo(cx,cy-s*half); ctx.lineTo(cx+head,cy-s*(half-head)); ctx.stroke();
+      }
+    }
+    if (inspection || document.activeElement === lattice) {
+      const indices = [selected,...Array.from(model.neighbors.slice(selected*4,selected*4+4))];
+      indices.forEach((i,k) => {
+        const x = (i % model.size)*cell, y = Math.floor(i/model.size)*cell;
+        ctx.strokeStyle = k === 0 ? palette.ink : palette.paper; ctx.lineWidth = k === 0 ? 2.4 : 1.5;
+        ctx.strokeRect(x+1.3,y+1.3,cell-2.6,cell-2.6);
+      });
+    }
+  }
+  function record(metrics) {
+    samples.push({x:model.sweeps-graphStart,m:metrics.m,ms:metrics.ms});
+    if (samples.length > 300) samples.shift();
+  }
+  function resetHistory() { graphStart = model.sweeps; samples = []; record(model.observables()); }
+  function renderChart() {
+    const ctx = chartContext, w = chartWidth, h = chartHeight;
+    const left = 46, right = 12, top = 12, bottom = 42, plotW = Math.max(1,w-left-right), plotH = Math.max(1,h-top-bottom);
+    const xMin = samples.length ? samples[0].x : 0, xMax = samples.length ? Math.max(xMin+1,samples[samples.length-1].x) : 1;
+    const px = x => left + (x-xMin)/(xMax-xMin)*plotW, py = y => top + (1-y)*plotH/2;
+    ctx.clearRect(0,0,w,h); ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif'; ctx.lineWidth = .7;
+    for (const value of [-1,-.5,0,.5,1]) {
+      const y = py(value); ctx.strokeStyle = palette.line; ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(w-right,y); ctx.stroke();
+      ctx.fillStyle = palette.muted; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(value.toFixed(1).replace('-','−'),left-7,y);
+    }
+    const ticks = Math.max(2,Math.min(w < 300 ? 3 : 4,Math.floor(xMax-xMin)+1));
+    for (let i = 0; i < ticks; i++) {
+      const x = left + plotW*i/(ticks-1); ctx.strokeStyle = palette.line; ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,h-bottom); ctx.stroke();
+      ctx.textAlign = i === 0 ? 'left' : i === ticks-1 ? 'right' : 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = palette.muted;
+      ctx.fillText(Math.round(xMin + (xMax-xMin)*i/(ticks-1)).toString(),x,h-bottom+7);
+    }
+    ctx.save(); ctx.beginPath(); ctx.rect(left,top,plotW,plotH); ctx.clip();
+    for (const key of model.J < 0 ? ['m','ms'] : ['m']) {
+      ctx.strokeStyle = key === 'm' ? palette.up : palette.down; ctx.lineWidth = 1.65; ctx.lineJoin = 'round'; ctx.beginPath();
+      samples.forEach((p,i) => { if(i===0) ctx.moveTo(px(p.x),py(p[key])); else ctx.lineTo(px(p.x),py(p[key])); }); ctx.stroke();
+      if(samples.length===1){ctx.fillStyle=ctx.strokeStyle;ctx.beginPath();ctx.arc(px(samples[0].x),py(samples[0][key]),2,0,Math.PI*2);ctx.fill();}
+    }
+    ctx.restore(); ctx.fillStyle = palette.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.font = '12px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillText('MC sweeps',left+plotW/2,h-2); ctx.font = 'italic 14px Georgia, serif'; ctx.textBaseline = 'middle';ctx.fillText('m',8,top+plotH/2);
+  }
+  function explain(metrics) {
+    if (model.J === 0) return model.h === 0
+      ? '没有耦合，也没有外场：每枚自旋独立选择方向。温度再低也不会靠邻居形成集体秩序，因为这里没有邻居互动。'
+      : '没有邻居耦合，外场单独偏好' + (model.h > 0 ? '向上' : '向下') + '。独立自旋的平衡平均磁化是 tanh(h/T)；充分平衡后，瞬时磁化会在该值附近涨落。';
+    if (model.J < 0) return '邻居偏好相反方向，低温时会形成棋盘格或交错磁畴。磁化 m 可以接近 0；看深绿色的交错磁化 mₛ，|mₛ| 越接近 1，整体交错有序越明显。' + (model.h !== 0 ? '外场则与这种交错偏好竞争。' : '');
+    if (model.h !== 0) return '外场偏好' + (model.h > 0 ? '向上' : '向下') + '，耦合又鼓励邻居一起排列。热涨落仍会制造逆向自旋；外场越强，相对温度越大，偏好越明显。零场临界温度不适用于当前外场。';
+    if (model.T > criticalTemperature + .3) return '热涨落更容易克服同向排列的能量优势。自旋仍会短暂成团，但长程有序在高温平衡态中消失，磁化通常在 0 附近涨落。试试逐渐降温。';
+    if (model.T < criticalTemperature - .3) return Math.abs(metrics.m) > .75
+      ? '大多数自旋选择了同一个方向：这就是铁磁有序。无外场时，上、下两种整体方向能量相同。少数逆向自旋来自热涨落；加热可以让秩序逐渐消退。'
+      : '低温让同向邻居更稳定，磁畴正在长大。但从随机状态出发，多个方向相反的磁畴可能长时间竞争；总磁化小并不意味着局部没有秩序。继续演化，或略微升温。';
+    return '接近零场铁磁临界温度时，邻居的影响与热涨落互相竞争。有序区域会不断长大、缩小，观察团簇如何变化。局部更新在这里较慢，需要耐心采样。';
+  }
+  function renderSelected() {
+    const i = selected, neighborValues = {up:model.spins[model.neighbors[4*i]],left:model.spins[model.neighbors[4*i+1]],center:model.spins[i],right:model.spins[model.neighbors[4*i+2]],down:model.spins[model.neighbors[4*i+3]]};
+    document.querySelectorAll('[data-neighbor]').forEach(tile => {
+      const s = neighborValues[tile.dataset.neighbor]; tile.classList.toggle('down',s === -1); tile.setAttribute('aria-label', (tile.dataset.neighbor === 'center' ? '中央自旋' : '邻居') + (s===1 ? '向上，+1' : '向下，−1'));
+    });
+    const delta = model.deltaEnergy(i), probability = IsingLattice.acceptance(delta,model.T), sum = model.neighborSum(i);
+    el('selected-title').textContent = '所选自旋：第 ' + (Math.floor(i/model.size)+1) + ' 行，第 ' + (i%model.size+1) + ' 列';
+    el('delta-energy').textContent = signed(delta);
+    el('acceptance-value').textContent = probability < .001 ? '< 0.1%' : (probability*100).toFixed(probability < .995 ? 1 : 0)+'%';
+    el('probability-fill').style.width = (probability*100)+'%';
+    el('flip-explanation').textContent = '邻居之和 = ' + sum + '，中央自旋 = ' + (model.spins[i]===1?'+1':'−1') + '。' + (delta > 0 ? '翻转需要增加能量，但热涨落仍可能让它发生。' : delta < 0 ? '翻转会降低能量，所以总被接受。' : '翻转不改变能量，所以总被接受。');
+  }
+  function render(recordSample = false) {
+    const metrics = model.observables();
+    el('magnetization').textContent = signed(metrics.m); el('energy').textContent = number(metrics.energy);
+    el('order-label').innerHTML = model.J < 0 ? '交错磁化 <i class="math">m</i><sub>s</sub>' : '同向邻居';
+    el('order').textContent = model.J < 0 ? signed(metrics.ms) : Math.round(metrics.same*100)+'%';
+    el('order').title = model.J < 0 ? '绝对值接近 1 表示棋盘格有序；普通磁化接近 0 仍可有序。' : '上下左右的邻居对中，同向排列的比例。每对只计一次。';
+    el('staggered-key').hidden = model.J >= 0;
+    el('sweep-count').textContent = String(model.sweeps);
+    el('state-explanation').textContent = explain(metrics);
+    if (recordSample) record(metrics);
+    renderLattice(); renderChart(); renderSelected();
+  }
+  function syncControls() {
+    el('temperature').value = String(model.T); el('temperature-value').textContent = model.T.toFixed(2);
+    el('field').value = String(model.h); el('field-value').textContent = number(model.h);
+    const showCritical = model.J === 1 && model.h === 0;
+    el('critical-mark').hidden = !showCritical;
+    el('critical-reference').innerHTML = showCritical ? '无场铁磁参考 <i class="math">T</i><sub>c</sub> ≈ 2.269' : model.J < 0 ? '反铁磁有序看交错磁化 mₛ' : model.J === 0 ? '独立自旋，无邻居耦合' : '当前非零外场，零场临界值不适用';
+    document.querySelectorAll('[data-coupling]').forEach(button => button.setAttribute('aria-pressed',String(Number(button.dataset.coupling) === model.J)));
+    el('speed').value = String(speed); el('speed-value').textContent = speedNames[speed-1];
+  }
+  function clearPreset() { document.querySelectorAll('[data-preset]').forEach(b => b.setAttribute('aria-pressed','false')); }
+  function changeParameter(name,value) { model[name] = value; clearPreset(); resetHistory(); syncControls(); el('trial-result').textContent='参数已更新，可以按新规则尝试翻转。'; render(); }
+  el('temperature').addEventListener('input',event => changeParameter('T',Number(event.target.value)));
+  el('field').addEventListener('input',event => changeParameter('h',Number(event.target.value)));
+  el('speed').addEventListener('input',event => { speed = Number(event.target.value); syncControls(); });
+  document.querySelectorAll('[data-coupling]').forEach(button => button.addEventListener('click',() => changeParameter('J',Number(button.dataset.coupling))));
+  el('toggle').addEventListener('click',() => { setPaused(!paused); announce(paused ? '模拟已暂停。' : '模拟已继续。'); });
+  el('single-step').addEventListener('click',() => { setPaused(true); model.sweep(); render(true); announce('完成一个 sweep，随机尝试 ' + model.count + ' 次翻转。'); });
+  el('randomize').addEventListener('click',() => { model.reset(); resetHistory(); el('trial-result').textContent='构型已随机重置，可以重新尝试。'; render(); announce('晶格已随机重置，当前参数保持不变。'); });
+  const presets = {cold:{T:1.3,J:1,h:0},critical:{T:2.27,J:1,h:0},hot:{T:4.6,J:1,h:0},antiferro:{T:1.3,J:-1,h:0}};
+  document.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click',() => {
+    Object.assign(model,presets[button.dataset.preset]); model.reset(); resetHistory(); clearPreset(); button.setAttribute('aria-pressed','true');
+    syncControls(); setPaused(false); inspection = activeTab === 'flip'; el('trial-result').textContent='新实验已开始；点击任意自旋可暂停查看。'; render(); announce('已开始实验：' + button.textContent + '。');
+  }));
+  document.querySelectorAll('[data-tab]').forEach(button => {
+    button.addEventListener('click',() => setTab(button.dataset.tab));
+    button.addEventListener('keydown',event => {
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+      event.preventDefault(); const names = ['rules','flip','phase'], current = names.indexOf(activeTab);
+      const index = event.key === 'Home' ? 0 : event.key === 'End' ? 2 : (current + (event.key === 'ArrowRight' ? 1 : 2)) % 3;
+      setTab(names[index],true);
+    });
+  });
+  function inspect(index) { selected = index; setPaused(true); setTab('flip'); el('trial-result').textContent='已暂停。按规则尝试一次，可观察随机接受或拒绝。'; announce(el('selected-title').textContent + '，翻转能量变化 ' + el('delta-energy').textContent + '。'); }
+  lattice.addEventListener('click',event => {
+    const box = lattice.getBoundingClientRect(), x = Math.min(31,Math.max(0,Math.floor((event.clientX-box.left)/box.width*32))), y = Math.min(31,Math.max(0,Math.floor((event.clientY-box.top)/box.height*32)));
+    inspect(y*32+x);
+  });
+  lattice.addEventListener('keydown',event => {
+    if (!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(event.key)) return;
+    event.preventDefault(); let x = selected % 32, y = Math.floor(selected/32);
+    if(event.key === 'ArrowLeft') x = (x+31)%32; if(event.key === 'ArrowRight') x=(x+1)%32;
+    if(event.key === 'ArrowUp') y=(y+31)%32; if(event.key === 'ArrowDown') y=(y+1)%32;
+    inspect(y*32+x);
+  });
+  lattice.addEventListener('focus',renderLattice); lattice.addEventListener('blur',renderLattice);
+  el('try-flip').addEventListener('click',() => {
+    setPaused(true); const result = model.attempt(selected);
+    // A targeted demonstration is not counted as a random-site Monte Carlo sweep.
+    resetHistory(); render();
+    el('trial-result').textContent = '本次 ΔH = ' + signed(result.delta) + '，p = ' + (result.probability < .0001 ? result.probability.toExponential(1) : result.probability.toFixed(3)) + '，随机数 r = ' + result.random.toFixed(3) + '。' + (result.accepted ? '接受：自旋已翻转。' : '拒绝：自旋保持原方向。') + ' 局部演示不计入 sweep，曲线从此重新记录。';
+  });
+  // These miniatures are conceptual illustrations, not simulation observations.
+  for (let i = 0; i < 36; i++) {
+    const ordered = document.createElement('span'); if ([5,35].includes(i)) ordered.className='down'; el('ordered-mini').appendChild(ordered);
+    const disordered = document.createElement('span'); if ([1,3,4,6,8,11,13,14,16,17,18,21,23,25,26,28,30,33].includes(i)) disordered.className='down'; el('disordered-mini').appendChild(disordered);
+  }
+  function animate(timestamp) {
+    if (timestamp-lastFrame >= 40) {
+      lastFrame = timestamp;
+      if (!paused && !document.hidden) { for(let k=0;k<speedSteps[speed-1];k++) model.sweep(); render(true); }
+    }
+    requestAnimationFrame(animate);
+  }
+  document.addEventListener('visibilitychange',() => { lastFrame=0; });
+  new ResizeObserver(resize).observe(lattice); new ResizeObserver(resize).observe(chart);
+  resetHistory(); syncControls(); setPaused(paused); resize(); render(); requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
