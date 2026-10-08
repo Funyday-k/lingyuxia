@@ -9,12 +9,6 @@ main:
   - title: "Daily Paper"
     url: /daily-paper/
 
-  - title: "GR"
-    url: /gr/
-
-  - title: "StatPhys"
-    url: /statistical-physics/
-
   - title: "Note"
     url: /note/
 
