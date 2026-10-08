@@ -30,6 +30,11 @@ html[lang="en"] .actions button { font-size: 16px; }
 .future-explorations li p { font: 19px/1.5 Georgia, var(--serif); color: #607991; }
 .series-page .colophon { padding-block: 19px 25px; font: 14px/1.5 Georgia, var(--serif); }
 .series-page .colophon a { text-decoration: none; }
+.available-explorations { display: grid; grid-template-columns: 60px minmax(0, 1fr) auto; gap: 22px; align-items: baseline; padding: 28px 0; border-bottom: 1px solid var(--line); }
+.available-explorations h2 { font: 30px/1.4 Georgia, var(--serif); }
+.available-explorations p { font: 19px/1.6 Georgia, var(--serif); color: #607991; }
+.available-explorations a { display: inline-flex; align-items: center; gap: 14px; text-decoration: none; padding: 9px 18px; border: 1px solid #afc2d3; border-radius: 3px; font: 18px/1.4 Georgia, var(--serif); }
+.available-explorations a:hover { background: var(--ice); }
 @media (min-width: 1200px) {
   .series-heading { padding-top: 10px; }
   .featured-exploration { margin-top: -50px; padding-bottom: 18px; }
@@ -58,6 +63,10 @@ html[lang="en"] .actions button { font-size: 16px; }
   .future-explorations li p { font-size: 17px; }
 }
 @media (max-width: 480px) {
+  .available-explorations { grid-template-columns: 30px minmax(0, 1fr); gap: 12px; }
+  .available-explorations h2 { font-size: 26px; }
+  .available-explorations p { font-size: 17px; }
+  .available-explorations a { grid-column: 2; justify-self: start; font-size: 16px; }
   .wordmark { font-size: 17px; }
   .wordmark span { margin-inline: 4px; }
   .topbar nav { width: 100%; justify-content: space-between; }
