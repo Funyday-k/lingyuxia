@@ -1,0 +1,102 @@
+---
+layout: null
+permalink: /note/edutainment/
+title: "寓教于乐"
+description: "寓教于乐，众宾欢也。凌羽的物理笔记与研究记录。"
+---
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ page.description | escape }}">
+  <meta name="theme-color" content="#fff7cf">
+  <title>寓教于乐，众宾欢也 · Note | Lingyu Xia</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23ffcd32'/%3E%3Cpath d='M11 22q9 12 18 0M12 14h2m12 0h2' fill='none' stroke='%23473415' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preload" href="{{ '/assets/fonts/note-title.ttf' | relative_url }}" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="{{ '/assets/css/note.css' | relative_url }}">
+  <script defer src="{{ '/assets/js/note.js' | relative_url }}"></script>
+</head>
+<body>
+  <a class="skip-link" href="#notebooks">跳到笔记</a>
+  <header class="topbar page-width">
+    <a class="wordmark" href="{{ '/' | relative_url }}">Lingyu Xia <span>/ Note</span></a>
+    <nav aria-label="主导航">
+      <a href="{{ '/' | relative_url }}">主页</a>
+      <a class="current" href="{{ '/note/' | relative_url }}" aria-label="返回 Note">Note</a>
+    </nav>
+  </header>
+
+  <main class="page-width">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="dragon-frame">
+        <img class="dragon" src="{{ '/images/note/nailong-laugh.gif' | relative_url }}" data-still="{{ '/images/note/nailong-still.png' | relative_url }}" alt="黄色奶龙捧着肚子大笑" width="180" height="180" fetchpriority="high">
+      </div>
+      <h1 id="page-title"><span>寓教于乐，</span><span>众宾欢也</span></h1>
+      <div class="dragon-frame dragon-frame-right" aria-hidden="true">
+        <img class="dragon" src="{{ '/images/note/nailong-laugh.gif' | relative_url }}" data-still="{{ '/images/note/nailong-still.png' | relative_url }}" alt="" width="180" height="180">
+      </div>
+    </section>
+
+    <div class="audio-dock">
+  <aside class="sound-player" id="sound-player" aria-label="奶龙笑声播放器">
+    <button class="play-button" id="sound-toggle" type="button" aria-label="播放奶龙笑声" aria-pressed="false">
+      <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7Z"/></svg>
+      <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM15 5h4v14h-4z"/></svg>
+    </button>
+    <div class="sound-copy"><strong>奶龙笑声</strong><span id="sound-status" role="status" aria-live="polite">点击播放</span></div>
+    <button class="sound-utility" id="sound-mute" type="button" aria-label="静音" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5ZM15 8c3 2 3 6 0 8M18 5c5 4 5 10 0 14"/><path class="mute-slash" d="m3 3 18 18"/></svg>
+    </button>
+    <button class="sound-utility" id="sound-close" type="button" aria-label="关闭笑声播放器并停止播放"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button>
+  </aside>
+  <button class="sound-launcher" id="sound-launcher" type="button" aria-label="打开奶龙笑声播放器" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5ZM15 8c3 2 3 6 0 8M18 5c5 4 5 10 0 14"/></svg><span>笑声</span></button>
+    </div>
+
+    <section class="notebooks" id="notebooks" aria-labelledby="notebooks-title">
+      <h2 class="section-title" id="notebooks-title"><span>我的笔记</span></h2>
+      <div class="notebook-columns">
+        <article class="notebook">
+          <span class="notebook-number" aria-hidden="true">01</span>
+          <h3 lang="en">General Relativity</h3>
+          <p class="chinese-title">广义相对论</p>
+          <p class="notebook-description">时空、几何与引力</p>
+          <a class="read-link" href="{{ '/gr/' | relative_url }}" aria-label="阅读广义相对论笔记">阅读笔记<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
+        </article>
+        <article class="notebook">
+          <span class="notebook-number" aria-hidden="true">02</span>
+          <h3 lang="en">Statistical Physics</h3>
+          <p class="chinese-title">统计物理</p>
+          <p class="notebook-description">微观状态、热涨落与相变</p>
+          <a class="read-link" href="{{ '/statistical-physics/' | relative_url }}" aria-label="阅读统计物理笔记">阅读笔记<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="records" aria-labelledby="records-title">
+      <h2 class="section-title" id="records-title"><span>随手记与研究记录</span></h2>
+      <ul class="record-list">
+        {% for post in site.posts %}
+        <li><a href="{{ post.url | relative_url }}"><span>{{ post.title | escape }}</span><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: '%Y.%m.%d' }}</time></a></li>
+        {% endfor %}
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer page-width">
+    <span>Lingyu Xia</span>
+    <details class="media-sources">
+      <summary>素材来源</summary>
+      <div class="source-content">
+        <p>动图：用户提供的奶龙捧腹大笑 GIF，右侧镜像显示。</p>
+        <p>笑声：<a href="https://github.com/whitefirer/dsh-niulai-pet" target="_blank" rel="noopener">奶龙大笑完整片段</a>，首尾交叉淡化后连续循环。角色及原素材权利归各自权利人。</p>
+        <p>标题：<a href="https://github.com/googlefonts/zcool-kuaile" target="_blank" rel="noopener">站酷快乐体</a> · <a href="{{ '/assets/fonts/note-OFL.txt' | relative_url }}">SIL Open Font License</a>。</p>
+      </div>
+    </details>
+  </footer>
+
+  <audio id="nailong-audio" autoplay loop preload="auto"><source src="{{ '/assets/audio/nailong-laugh-loop.wav' | relative_url }}" type="audio/wav"><source src="{{ '/assets/audio/nailong-laugh.mp3' | relative_url }}" type="audio/mpeg"></audio>
+  <noscript><div class="noscript-audio page-width"><p>奶龙笑声</p><audio controls autoplay loop preload="auto" src="{{ '/assets/audio/nailong-laugh-loop.wav' | relative_url }}"></audio></div></noscript>
+</body>
+</html>
