@@ -11,8 +11,10 @@ redirect_from:
 <link rel="stylesheet" href="{{ '/assets/css/note-index.css' | relative_url }}">
 <div class="note-index">
   <p class="note-intro">Physics notes, interactive experiments, and ideas worth exploring.</p>
+  <div class="note-filters" role="group" aria-label="按标签筛选" hidden></div>
+  <p class="note-filter-status" role="status" aria-live="polite" hidden></p>
   <section aria-labelledby="note-explore">
-    <div class="note-section-heading"><h2 id="note-explore">Explore</h2><span>{{ site.data.notes.size }} collections &amp; labs</span></div>
+    <div class="note-section-heading"><h2 id="note-explore">Explore</h2><span data-note-count data-unit="collections &amp; labs">{{ site.data.notes.size }} collections &amp; labs</span></div>
     <div class="note-grid">
       {% for note in site.data.notes %}
       <article class="note-card">
@@ -26,7 +28,7 @@ redirect_from:
     </div>
   </section>
   <section aria-labelledby="note-writing">
-    <div class="note-section-heading"><h2 id="note-writing">Notes &amp; writing</h2><span>{{ site.posts.size }} notes</span></div>
+    <div class="note-section-heading"><h2 id="note-writing">Notes &amp; writing</h2><span data-note-count data-unit="notes">{{ site.posts.size }} notes</span></div>
     <div class="note-grid">
       {% for post in site.posts %}
       <article class="note-card">
@@ -41,3 +43,5 @@ redirect_from:
     </div>
   </section>
 </div>
+
+<script defer src="{{ '/assets/js/note-index.js' | relative_url }}"></script>

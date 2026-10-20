@@ -20,3 +20,12 @@
 .note-index a:focus-visible { outline:2px solid var(--note-accent); outline-offset:4px; }
 @media (max-width:600px) { .note-index .note-grid { grid-template-columns:1fr; } .note-index .note-card { padding:21px; } .note-index .note-section-heading { flex-wrap:wrap; gap:4px; } }
 @media (prefers-reduced-motion:reduce) { .note-index .note-card { transition:none; } }
+.note-index [hidden] { display:none !important; }
+.note-index .note-filters { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 12px; }
+.note-index .note-label-button { margin:0; padding:6px 10px; border:1px solid transparent; border-radius:5px; background:#eef4f5; color:#345c65; font:inherit; font-size:12px; line-height:1.5; cursor:pointer; }
+.note-index .note-label-button:hover { border-color:var(--note-accent); }
+.note-index .note-label-button[aria-pressed="true"] { background:var(--note-accent); color:#fff; }
+.note-index .note-label-button:focus-visible { outline:2px solid var(--note-accent); outline-offset:3px; }
+.note-index.note-filter-ready .note-labels li { padding:0; background:none; }
+.note-index .note-labels .note-label-button { font-size:11px; }
+.note-index .note-filter-status { margin:0 0 24px; color:var(--note-muted); font-size:12px; }
