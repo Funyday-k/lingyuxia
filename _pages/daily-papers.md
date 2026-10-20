@@ -109,8 +109,8 @@ paper_filters: true
   margin-top: 0.4em;
   margin-bottom: 0.2em;
   padding: 0.3em 0.6em;
-  background: transparent;
-  border: 1px solid #e6cf70;
+  background: #f8f7ef;
+  border: 1px solid #e8e5d5;
   border-radius: 5px;
 }
 .paper-link-badge {
