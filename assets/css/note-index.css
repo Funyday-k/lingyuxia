@@ -1,0 +1,22 @@
+/* Note directory: scoped to preserve article and site styles. */
+.note-index { --note-border:#dfe5e8; --note-ink:#283b46; --note-muted:#65757e; --note-accent:#236b78; }
+.note-index .note-intro { color:var(--note-muted); font-size:16px; line-height:1.7; margin:0 0 32px; }
+.note-index section + section { margin-top:40px; }
+.note-index .note-section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.note-index .note-section-heading h2 { margin:0; padding:0; border:0; font-size:21px; }
+.note-index .note-section-heading > span { color:var(--note-muted); font-size:12px; }
+.note-index .note-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.note-index .note-card { display:flex; flex-direction:column; min-width:0; padding:24px; border:1px solid var(--note-border); border-radius:12px; background:#fff; transition:border-color .15s,box-shadow .15s; }
+.note-index .note-card:hover { border-color:#9eb9c1; box-shadow:0 5px 18px rgba(40,59,70,.06); }
+.note-index .note-meta { display:flex; flex-wrap:wrap; gap:6px 14px; color:var(--note-muted); font-size:11px; line-height:1.5; }
+.note-index h3 { margin:14px 0 10px; font-size:21px; line-height:1.35; letter-spacing:-.3px; }
+.note-index h3 a { color:var(--note-ink); text-decoration:none; }
+.note-index h3 a:hover { color:var(--note-accent); text-decoration:underline; }
+.note-index .note-description { margin:0 0 20px; color:#52636d; font-size:14px; line-height:1.7; }
+.note-index .note-labels { display:flex; flex-wrap:wrap; gap:6px; list-style:none; padding:0; margin:auto 0 20px; }
+.note-index .note-labels li { margin:0; padding:4px 9px; border-radius:5px; background:#eef4f5; color:#345c65; font-size:11px; line-height:1.5; }
+.note-index .note-open { display:flex; justify-content:space-between; align-items:center; border-top:1px solid #edf0f2; padding-top:14px; color:var(--note-accent); font-size:13px; font-weight:600; text-decoration:none; }
+.note-index .note-open:hover { text-decoration:underline; }
+.note-index a:focus-visible { outline:2px solid var(--note-accent); outline-offset:4px; }
+@media (max-width:600px) { .note-index .note-grid { grid-template-columns:1fr; } .note-index .note-card { padding:21px; } .note-index .note-section-heading { flex-wrap:wrap; gap:4px; } }
+@media (prefers-reduced-motion:reduce) { .note-index .note-card { transition:none; } }
