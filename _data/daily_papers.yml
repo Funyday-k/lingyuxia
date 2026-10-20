@@ -125,3 +125,11 @@
       and light mediator scenarios. We show that Earth, gas giants, and ice giants probe complementary DM masses and mediator
       properties, and forecast the reach of a free-floating Super-Jupiter. These results establish planetary spectroscopy
       as a powerful and versatile probe of the dark sector, complementary to direct detection, cosmology, and collider searches.
+
+- date: '2026-10-20'
+  papers:
+  - link: https://arxiv.org/abs/2607.20620
+    title: 'Dark Matter Weather: Probing Sub-GeV Interactions with Earth-Shielding Modulation'
+    authors: Tetiana Kozynets, Rebecca Leane, Juri Smirnov
+    abstract: 'Earth shielding changes the dark matter flux reaching underground detectors throughout the day. This study explores how the modulation pattern and ionization spectrum can distinguish nuclear scattering during transit from electron scattering in the detector, with applications to argon and xenon experiments and a DarkSide-50 case study.'
+    comment: Good idea!

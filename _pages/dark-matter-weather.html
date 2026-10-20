@@ -1,0 +1,907 @@
+---
+layout: null
+title: "Dark Matter Weather Lab"
+permalink: /note/dark-matter-weather/
+---
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dark Matter Weather Lab</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Three interactive slides, with one instrument visible at a time. */
+:root {
+  --bg: #FFFFFF;
+  --panel: #FFFFFF;
+  --ink: #000000;
+  --muted: #000000;
+  --line: #000000;
+  --grid: #D4D4D4;
+  --wind: #C04A14;
+  --earth: #2D5D7D;
+  --core: #1E4460;
+  --earthsoft: #D4E2ED;
+  --coresoft: #BACEDE;
+  --slow: #2D5D7D;
+  --lngs: #7B4BC0;
+  --surf: #2E7C59;
+  --supl: #B07A0B;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding-block: 16px; display: grid; gap: 12px; }
+
+
+section.station { height: auto; max-height: calc(100vh - 82px); max-height: calc(100dvh - 82px); overflow-y: auto; overscroll-behavior-y: contain; background: var(--panel); border: 1px solid #000; border-radius: 0; padding: 28px 32px; display: grid; gap: 16px; align-content: start; }
+.st-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; justify-content: space-between; }
+.st-head h2 { font-family: var(--display); font-weight: 600; font-size: 1.7rem; line-height: 1.1; margin: 0; text-wrap: balance; }
+.st-head h2:focus { outline: none; }
+.st-head h2 .n { font-family: var(--mono); font-weight: 500; font-size: .95rem; color: var(--wind); margin-right: 10px; vertical-align: .2em; }
+.refs { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.say { margin: 0; max-width: 110ch; color: var(--muted); font-size: 15px; }
+.say strong { color: var(--ink); font-weight: 600; }
+
+.grid2 { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr) 300px; } .grid2.even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.stage { min-width: 0; display: grid; gap: 12px; align-content: start; }
+canvas { display: block; width: 100%; border-radius: 4px; }
+.cap { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+.rail { min-width: 0; display: grid; gap: 14px; align-content: start; }
+.ctl { display: grid; gap: 4px; }
+.ctl label { font-size: 13px; font-weight: 500; display: flex; justify-content: space-between; gap: 8px; }
+.ctl label output { font-family: var(--mono); font-weight: 400; color: var(--wind); font-variant-numeric: tabular-nums; }
+input[type="range"] { width: 100%; accent-color: var(--wind); }
+select { font: inherit; font-size: 14px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--ink); width: 100%; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font-family: var(--mono); font-size: 13px; padding: 7px 12px; border-radius: 4px; border: 1px solid var(--ink); background: var(--ink); color: var(--panel); cursor: pointer; }
+button.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--wind); outline-offset: 2px; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+
+.readout { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.readout div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.readout dt, .readout .k { color: var(--muted); }
+.readout .v { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.big { font-family: var(--display); font-weight: 700; font-size: 2.6rem; line-height: 1; color: var(--wind); font-variant-numeric: tabular-nums; }
+.bigwrap { display: grid; gap: 2px; }
+.bigwrap .k { font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; display: inline-block; border-radius: 2px; }
+
+
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+/* A content-only presentation. Short viewports scroll within the active slide. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+[hidden] { display: none !important; }
+.slides { min-height: 0; }
+button:disabled { opacity: .35; cursor: default; }
+.station.is-entering { animation: slide-in .2s ease-out; }
+@keyframes slide-in { from { opacity: .5; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 899px) {
+  section.station { padding: 16px; }
+}
+@media (min-width: 900px) and (max-height: 850px) {
+  section.station { padding: 16px; gap: 12px; }
+  .st-head h2 { font-size: 1.5rem; }
+  .say { font-size: 14px; line-height: 1.45; max-width: none; }
+  .rail { gap: 10px; }
+  .stage { gap: 8px; }
+  .readout div { padding-block: 5px; font-size: 13px; }
+  .note { font-size: 12px; line-height: 1.4; }
+  .big { font-size: 2.1rem; }
+}
+@media (prefers-reduced-motion: reduce) { .station.is-entering { animation: none; } }
+
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.slide-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.slide-nav button { min-height: 38px; min-width: 128px; }
+#slideStatus { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.cap, .legend { color: #000; font-weight: 600; }
+.refs { color: #000; font-weight: 500; }
+
+.sample-plots { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+@media (min-width: 900px) { .sample-plots { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.paper-figure { min-width: 0; margin: 0; }
+.paper-caption { margin-top: 8px; font: 14px/1.4 "STIXGeneral", "Times New Roman", serif; color: #000; }
+.paper-caption strong { font-weight: normal; font-variant: small-caps; }
+.sampling-note { max-width: 110ch; }
+.math { font-family: "STIXGeneral", "Times New Roman", serif; }
+</style>
+</head>
+<body>
+<nav style="padding:12px 20px;font-size:14px" aria-label="Site navigation"><a href="{{ '/note/' | relative_url }}">← Note</a> · <a href="https://arxiv.org/abs/2607.20620" target="_blank" rel="noopener noreferrer">Read the paper</a></nav>
+
+<div class="wrap">
+  <main class="slides" id="slides" aria-label="Interactive presentation">
+  <!-- 1 -->
+  <section class="station" id="isoangle" role="group" aria-roledescription="slide" aria-label="1 of 3" aria-labelledby="isoangle-title">
+    <div class="st-head">
+      <h2 id="isoangle-title" tabindex="-1"><span class="n">1</span>Where does the wind come from?</h2>
+      <span class="refs">Fig. 1 · Eq. (8)</span>
+    </div>
+    <p class="say">The Solar System moves toward Cygnus, so incoming DM travels from that direction. As Earth rotates, the detector moves along its latitude circle. <strong>Θ is measured at Earth's center, between the detector radius <span class="math"><i>r</i><sub>det</sub></span> and the direction toward Cygnus.</strong> Near 0° DM arrives from overhead; near 180° it crosses nearly the whole planet.</p>
+    <div class="grid2">
+      <div class="stage">
+        <canvas id="globe" aria-label="Globe with the detector, its radius from Earth's center, the direction toward Cygnus and the DM path"></canvas>
+        <canvas id="strip" aria-label="Isoangle versus local sidereal time for the selected lab"></canvas>
+        <div class="cap">Wind direction taken as δ ≈ +42° (toward Cygnus), as in the paper. Orbital velocity fixed, so Θ repeats every sidereal day.</div>
+      </div>
+      <div class="rail">
+        <div class="ctl"><label for="lab1">Laboratory</label>
+          <select id="lab1"><option value="LNGS">LNGS, Italy (42.5° N)</option><option value="SURF">SURF, USA (44.4° N)</option><option value="SUPL" selected>SUPL, Australia (37.1° S)</option></select></div>
+        <div class="ctl"><label for="lst1"><span>Local sidereal time</span> <output id="lst1o">09.0 h</output></label>
+          <input id="lst1" type="range" min="0" max="24" step="0.05" value="9"></div>
+        <div class="btns"><button id="play1" type="button">Play day</button></div>
+        <div class="bigwrap"><span class="k">Isoangle Θ</span><span class="big" id="th1">—</span></div>
+        <div class="readout">
+          <div><span class="k">Path through rock</span><span class="v" id="path1">—</span></div>
+          <div><span class="k">Fraction of Earth diameter</span><span class="v" id="frac1">—</span></div>
+          <div><span class="k">Wind arrives</span><span class="v" id="arr1">—</span></div>
+          <div><span class="k">Θ range today</span><span class="v" id="rng1">—</span></div>
+        </div>
+        <p class="note">Detector depth uses the lab overburden (about 1.0–1.5 km). At Θ ≈ 0° the only shielding is that overburden.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 2 -->
+  <section class="station" id="scatter" role="group" aria-roledescription="slide" aria-label="2 of 3" aria-labelledby="scatter-title" hidden>
+    <div class="st-head">
+      <h2 id="scatter-title" tabindex="-1"><span class="n">2</span>What the Earth does to the flux</h2>
+      <span class="refs">Fig. 3 &amp; Fig. 4 layout · 2D toy model</span>
+    </div>
+    <p class="say">The simulation samples <strong>the full isoangle range, 0°–180°, in 18 bins of 10°</strong>. Density uses every angle bin; the speed plot compares only three representative directions, near 0°, 90° and 180°. Change σ<sub>χn</sub> to compare weak and strong scattering.</p>
+    <div class="grid2">
+      <div class="stage">
+        <canvas id="sim" aria-label="Toy particles crossing Earth, with markers at the three representative directions"></canvas>
+        <div class="legend"><span><i style="background:var(--wind)"></i>incident</span><span><i style="background:var(--slow)"></i>scattered</span></div>
+      </div>
+      <div class="rail">
+        <div class="ctl"><label for="sig3"><span>σ<sub>χn</sub><sup>SI</sup></span> <output id="sig3o"></output></label>
+          <input id="sig3" type="range" min="-36" max="-32" step="0.1" value="-33.5"></div>
+        <div class="readout">
+          <div><span class="k">Mean free path</span><span class="v" id="mfp3">—</span></div>
+          <div><span class="k">Captured so far</span><span class="v" id="cap3">—</span></div>
+          <div><span class="k">Sampling snapshots</span><span class="v" id="snap3">—</span></div>
+          <div><span class="k">Populated angle bins</span><span class="v" id="occupied3">—</span></div>
+        </div>
+        <div class="btns"><button id="play3" type="button">Pause</button><button id="reset3" type="button" class="ghost">Reset</button></div>
+        <p class="note">All particles are sampled; one in four is drawn. Changing the cross section starts fresh sampling.</p>
+      </div>
+    </div>
+    <div class="sample-plots">
+      <figure class="paper-figure">
+        <canvas id="speed3" aria-label="Unit-area speed histograms near isoangles 0, 90 and 180 degrees"></canvas>
+        <figcaption class="paper-caption"><strong>Speed distribution.</strong> Thin step histograms show 0°–10°, 80°–100° and 170°–180°. The thick dashed black curve is the fixed SHM distribution from the paper's Eq. (7). Arrows mark values above the fixed vertical scale.</figcaption>
+      </figure>
+      <figure class="paper-figure">
+        <canvas id="density3" aria-label="Relative particle density histogram across all isoangles at the current cross section"></canvas>
+        <figcaption class="paper-caption"><strong>Relative density.</strong> Equal-area angle bins measure ρ(Θ)/ρ₀ at the current cross section; the dashed line marks the incident density.</figcaption>
+      </figure>
+    </div>
+    <p class="note sampling-note">The incident speed density is the paper's SHM: v₀ = 238 km/s, v<sub>esc</sub> = 544 km/s and its March 9 detector velocity. Directions and transport remain a 2D illustration. Density uses occupancy in a shell at 0.84–0.96 Earth radii, normalized by the unscattered upstream density and sampling areas. Speed bins are 20 km/s wide; each nonempty histogram integrates to one. Empty angle bins have no curve; repeated snapshots are correlated.</p>
+  </section>
+
+  <!-- 3 -->
+  <section class="station" id="knobs" role="group" aria-roledescription="slide" aria-label="3 of 3" aria-labelledby="knobs-title" hidden>
+    <div class="st-head">
+      <h2 id="knobs-title" tabindex="-1"><span class="n">3</span>Two knobs: σ̄<sub>e</sub> sets the rate, σ<sub>χn</sub> sets the shape</h2>
+      <span class="refs">Fig. 6 · Fig. 8 · Eq. (11)</span>
+    </div>
+    <p class="say">Left: signal rate versus Θ on a log scale, so a pure rescaling moves the curve without changing its shape. Right: the resulting daily forecast at one lab, normalized to its mean. <strong>Move σ̄<sub>e</sub> and the left curve only slides; move σ<sub>χn</sub> and it tilts.</strong> Add a flat background and a weak signal's modulation washes out.</p>
+    <div class="grid2">
+      <div class="stage">
+        <div class="grid2 even" style="gap:12px">
+          <canvas id="rTheta" aria-label="Signal rate versus isoangle"></canvas>
+          <canvas id="rT" aria-label="Relative rate versus sidereal time"></canvas>
+        </div>
+        <div class="cap">Illustrative tanh parameterization of R(Θ), the same functional form the paper fits in Fig. 8. Arbitrary units; not the paper's numbers.</div>
+      </div>
+      <div class="rail">
+        <div class="ctl"><label for="se4"><span>σ̄<sub>e</sub></span> <output id="se4o"></output></label>
+          <input id="se4" type="range" min="-40" max="-37" step="0.05" value="-38.5"></div>
+        <div class="ctl"><label for="sn4"><span>σ<sub>χn</sub><sup>SI</sup></span> <output id="sn4o"></output></label>
+          <input id="sn4" type="range" min="-36" max="-32" step="0.05" value="-34"></div>
+        <div class="ctl"><label for="lab4">Laboratory</label>
+          <select id="lab4"><option value="LNGS">LNGS, Italy</option><option value="SURF">SURF, USA</option><option value="SUPL" selected>SUPL, Australia</option></select></div>
+        <label class="check"><input id="bg4" type="checkbox" checked> Add flat background</label>
+        <div class="bigwrap"><span class="k">Daily modulation, peak-to-trough</span><span class="big" id="mod4">—</span></div>
+        <div class="readout">
+          <div><span class="k">Mean signal (arb.)</span><span class="v" id="mean4">—</span></div>
+          <div><span class="k">Signal fraction</span><span class="v" id="frac4">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+  <nav class="slide-nav" aria-label="Slide navigation">
+    <button id="previousSlide" type="button" class="ghost" aria-controls="slides" disabled>← 上一页</button>
+    <span id="slideStatus" aria-live="polite" aria-atomic="true">1 / 3</span>
+    <button id="nextSlide" type="button" aria-controls="slides">下一页 →</button>
+  </nav>
+
+</div>
+
+<script>
+(() => {
+  const DEG = Math.PI / 180, RE = 6371;
+  const LABS = {
+    LNGS: { name: "LNGS", lat: 42.45, depth: 1.4, key: "lngs" },
+    SURF: { name: "SURF", lat: 44.35, depth: 1.48, key: "surf" },
+    SUPL: { name: "SUPL", lat: -37.07, depth: 1.02, key: "supl" },
+  };
+  const WIND = { dec: 42, ra: 315 };
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- colors from tokens ----------
+  let C = {};
+  const keys = ["bg","panel","ink","muted","line","grid","wind","earth","core","earthsoft","coresoft","slow","lngs","surf","supl"];
+  function readColors() { const cs = getComputedStyle(document.documentElement); keys.forEach(k => C[k] = cs.getPropertyValue("--" + k).trim()); }
+  readColors();
+  function hex(h) { h = h.replace("#", ""); return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)]; }
+  function rgba(h, a) { const [r,g,b] = hex(h); return `rgba(${r},${g},${b},${a})`; }
+  function lerpC(a, b, t) { const A = hex(a), B = hex(b); return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")})`; }
+
+  // ---------- geometry (Eq. 8) ----------
+  const dot = (a, b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+  const W = (() => { const d = WIND.dec*DEG, a = WIND.ra*DEG; return [Math.cos(d)*Math.cos(a), Math.cos(d)*Math.sin(a), Math.sin(d)]; })();
+  const dvec = (lat, lstH) => { const p = lat*DEG, l = lstH*15*DEG; return [Math.cos(p)*Math.cos(l), Math.cos(p)*Math.sin(l), Math.sin(p)]; };
+  const theta = (lat, lst) => Math.acos(Math.max(-1, Math.min(1, dot(W, dvec(lat, lst))))) / DEG;
+  const pathKm = (th, depth) => { const r = (RE - depth)/RE, c = Math.cos(th*DEG), s = Math.sin(th*DEG); return RE * (-r*c + Math.sqrt(1 - r*r*s*s)); };
+  const thRange = lat => [Math.abs(lat - WIND.dec), 180 - Math.abs(lat + WIND.dec)];
+  // screen basis: +x toward wind source, +y = Earth's axis projected
+  const U0 = (() => { const z = [0,0,1], k = dot(z, W); const u = [z[0]-k*W[0], z[1]-k*W[1], z[2]-k*W[2]]; const n = Math.hypot(...u); return u.map(v => v/n); })();
+  const N0 = [W[1]*U0[2]-W[2]*U0[1], W[2]*U0[0]-W[0]*U0[2], W[0]*U0[1]-W[1]*U0[0]];
+  const TILT = 22*DEG; // rotate the view about the wind axis so latitude circles read as ellipses
+  const U = U0.map((v, i) => Math.cos(TILT)*v + Math.sin(TILT)*N0[i]);
+  const N = U0.map((v, i) => -Math.sin(TILT)*v + Math.cos(TILT)*N0[i]);
+  const proj = p => [dot(p, W), dot(p, U), dot(p, N)];
+
+  // ---------- canvas helpers ----------
+  function fit(cv, aspect, maxH, minH) {
+    const w = Math.max(1, cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || 0);
+    let h = Math.round(w * aspect); if (maxH) h = Math.min(h, maxH); if (minH) h = Math.max(h, minH);
+    const dpr = window.devicePixelRatio || 1;
+    if (cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)) { cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr); }
+    cv.style.height = h + "px";
+    const ctx = cv.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cv._w = w; cv._h = h; return ctx;
+  }
+  function canvasRoom(cv, reserved, minimum, maximum) {
+    const slide = cv.closest(".station");
+    const style = getComputedStyle(slide);
+    const top = cv.getBoundingClientRect().top - slide.getBoundingClientRect().top - slide.clientTop;
+    const bottom = parseFloat(style.paddingBottom);
+    // Use the viewport limit so canvas sizes do not depend on the auto-sized frame.
+    const limit = (parseFloat(style.maxHeight) || window.innerHeight - 32)
+      - parseFloat(style.borderTopWidth) - parseFloat(style.borderBottomWidth);
+    return Math.max(minimum, Math.min(maximum, limit - top - bottom - reserved));
+  }
+  const MONO = '600 12px "IBM Plex Mono", ui-monospace, Menlo, monospace';
+  function axes(ctx, cv, o) {
+    const m = { l: 56, r: 20, t: 14, b: 42 };
+    const box = { x: m.l, y: m.t, w: cv._w - m.l - m.r, h: cv._h - m.t - m.b };
+    const sx = v => box.x + (v - o.x0)/(o.x1 - o.x0)*box.w;
+    const sy = o.ylog ? v => box.y + box.h - (Math.log10(v) - Math.log10(o.y0))/(Math.log10(o.y1) - Math.log10(o.y0))*box.h
+                      : v => box.y + box.h - (v - o.y0)/(o.y1 - o.y0)*box.h;
+    ctx.fillStyle = C.panel; ctx.fillRect(0, 0, cv._w, cv._h);
+    ctx.font = MONO; ctx.lineWidth = 1;
+    o.yticks.forEach(t => { const y = Math.round(sy(t)) + .5; ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(box.x, y); ctx.lineTo(box.x+box.w, y); ctx.stroke();
+      ctx.fillStyle = C.ink; ctx.textAlign = "right"; ctx.textBaseline = "middle"; ctx.fillText(o.fy ? o.fy(t) : t, box.x - 6, y); });
+    o.xticks.forEach(t => { const x = Math.round(sx(t)) + .5; ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(x, box.y); ctx.lineTo(x, box.y+box.h); ctx.stroke();
+      ctx.fillStyle = C.ink; ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.fillText(o.fx ? o.fx(t) : t, x, box.y + box.h + 6); });
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 2;
+    ctx.strokeRect(box.x, box.y, box.w, box.h);
+    ctx.beginPath();
+    o.yticks.forEach(t => { const y = sy(t); ctx.moveTo(box.x - 5, y); ctx.lineTo(box.x, y); });
+    o.xticks.forEach(t => { const x = sx(t); ctx.moveTo(x, box.y + box.h); ctx.lineTo(x, box.y + box.h + 5); });
+    ctx.stroke();
+    ctx.fillStyle = C.ink; ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.fillText(o.xl, box.x + box.w/2, cv._h - 2);
+    ctx.save(); ctx.translate(12, box.y + box.h/2); ctx.rotate(-Math.PI/2); ctx.textBaseline = "middle"; ctx.fillText(o.yl, 0, 0); ctx.restore();
+    return { sx, sy, box };
+  }
+  function line(ctx, pts, color, w, dash) { ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w || 2; if (dash) ctx.setLineDash(dash); ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.stroke(); ctx.restore(); }
+
+  // ---------- Slide 1: globe ----------
+  const g = { lab: "SUPL", lst: 9, playing: false, streaks: [] };
+  for (let i = 0; i < 70; i++) g.streaks.push({ x: Math.random()*2.6 - 1.3, y: Math.random()*2.4 - 1.2, l: .06 + Math.random()*.08 });
+  const globe = document.getElementById("globe"), strip = document.getElementById("strip");
+  function directionArrow(ctx, from, to, color, width = 2.5) {
+    line(ctx, [from, to], color, width);
+    const a = Math.atan2(to[1] - from[1], to[0] - from[0]), size = 8;
+    ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(to[0], to[1]);
+    ctx.lineTo(to[0] - size * Math.cos(a - .45), to[1] - size * Math.sin(a - .45));
+    ctx.lineTo(to[0] - size * Math.cos(a + .45), to[1] - size * Math.sin(a + .45));
+    ctx.closePath(); ctx.fill();
+  }
+  function drawGlobeAngle(ctx, cx, cy, R, detector, th) {
+    const a = th * DEG, perpendicular = detector.map((v, i) => v - Math.cos(a) * W[i]);
+    const length = Math.hypot(...perpendicular);
+    const q = length > 1e-8 ? perpendicular.map(v => v / length) : U;
+    const qy = dot(q, U), radius = R * .43, points = [];
+    // Project the actual 3D angle plane. Do not substitute the apparent screen angle.
+    for (let i = 0; i <= 80; i++) {
+      const t = a * i / 80;
+      points.push([cx + radius * Math.cos(t), cy - radius * qy * Math.sin(t)]);
+    }
+    ctx.beginPath(); ctx.moveTo(cx, cy); points.forEach(p => ctx.lineTo(...p)); ctx.closePath();
+    ctx.fillStyle = rgba(C.wind, .12); ctx.fill();
+    line(ctx, points, C.ink, 1.8);
+    const labelR = radius + 23, tx = cx + labelR * Math.cos(a / 2);
+    let ty = cy - labelR * qy * Math.sin(a / 2);
+    if (Math.abs(ty - cy) < 25) ty = cy + (qy >= 0 ? -25 : 25);
+    ctx.font = '24px "STIXGeneral", "Times New Roman", serif';
+    ctx.fillStyle = C.ink; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("Θ", tx, ty);
+  }
+  function drawDetectorFormula(ctx, right, baseline) {
+    ctx.save(); ctx.textAlign = "left"; ctx.textBaseline = "alphabetic"; ctx.fillStyle = C.earth;
+    ctx.font = 'italic 22px "STIXGeneral", "Times New Roman", serif'; const rWidth = ctx.measureText("r").width;
+    ctx.font = '13px "STIXGeneral", "Times New Roman", serif'; const subWidth = ctx.measureText("det").width;
+    const left = right - rWidth - subWidth;
+    ctx.font = 'italic 22px "STIXGeneral", "Times New Roman", serif'; ctx.fillText("r", left, baseline);
+    ctx.font = '13px "STIXGeneral", "Times New Roman", serif'; ctx.fillText("det", left + rWidth, baseline + 5);
+    ctx.restore();
+  }
+  function drawGlobe() {
+    const globeHeight = canvasRoom(globe, 130 + 24 + globe.parentElement.querySelector(".cap").offsetHeight, 240, 380);
+    const ctx = fit(globe, 0.62, globeHeight, 240), w = globe._w, h = globe._h;
+    ctx.fillStyle = C.panel; ctx.fillRect(0, 0, w, h);
+    const R = Math.min(h*0.4, w*0.3), cx = w*0.42, cy = h*0.5;
+    const X = x => cx + x*R, Y = y => cy - y*R;
+    // wind streaks (DM moving toward -x)
+    ctx.lineWidth = 1.5; ctx.lineCap = "round";
+    g.streaks.forEach(s => {
+      const inside = s.x*s.x + s.y*s.y < 1;
+      ctx.strokeStyle = rgba(C.wind, inside ? .14 : .45);
+      ctx.beginPath(); ctx.moveTo(X(s.x), Y(s.y)); ctx.lineTo(X(s.x + s.l), Y(s.y)); ctx.stroke();
+    });
+    // Earth cut-away
+    ctx.fillStyle = rgba(C.earth, .22); ctx.beginPath(); ctx.arc(cx, cy, Math.max(1, R), 0, 2*Math.PI); ctx.fill();
+    ctx.fillStyle = rgba(C.core, .25); ctx.beginPath(); ctx.arc(cx, cy, R*0.546, 0, 2*Math.PI); ctx.fill();
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.arc(cx, cy, Math.max(1, R), 0, 2*Math.PI); ctx.stroke();
+    // axis
+    const np = proj([0,0,1]);
+    line(ctx, [[X(-np[0]*1.15), Y(-np[1]*1.15)], [X(np[0]*1.15), Y(np[1]*1.15)]], C.ink, 1.5, [3,4]);
+    ctx.fillStyle = C.ink; ctx.font = MONO; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("N", X(np[0]*1.24), Y(np[1]*1.24)); ctx.fillText("S", X(-np[0]*1.24), Y(-np[1]*1.24));
+    // equator + latitude circle (near half solid, far half dashed)
+    const lab = LABS[g.lab];
+    function circle(lat, col, wid) {
+      for (let pass = 0; pass < 2; pass++) {
+        ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = wid; if (pass === 0) ctx.setLineDash([2,4]);
+        ctx.beginPath(); let pen = false;
+        for (let i = 0; i <= 240; i++) { const p = proj(dvec(lat, 24*i/240)); const near = p[2] >= 0;
+          if ((pass === 1) === near) { pen ? ctx.lineTo(X(p[0]), Y(p[1])) : ctx.moveTo(X(p[0]), Y(p[1])); pen = true; } else pen = false; }
+        ctx.stroke(); ctx.restore();
+      }
+    }
+    circle(0, C.ink, 1.5);
+    circle(lab.lat, C[lab.key], 2);
+    // detector + DM path
+    const detector = dvec(lab.lat, g.lst), p = proj(detector), th = theta(lab.lat, g.lst);
+    const xd = X(p[0]), yd = Y(p[1]), xexit = X(Math.abs(p[0]));
+    // Both defining rays share Earth's center as their origin.
+    directionArrow(ctx, [cx, cy], [X(1.18), cy], C.wind, 2.5);
+    directionArrow(ctx, [cx, cy], [xd, yd], C.earth, 2.5);
+    ctx.fillStyle = C.ink; ctx.beginPath(); ctx.arc(cx, cy, 3.5, 0, 2 * Math.PI); ctx.fill();
+    ctx.font = '12px "IBM Plex Sans", Arial, sans-serif'; ctx.textAlign = "left"; ctx.textBaseline = "top";
+    ctx.fillText("O", cx + 5, cy + 6);
+    drawDetectorFormula(ctx, Math.min(cx, xd) - 14, (cy + yd) / 2 + 22);
+    ctx.fillStyle = C.wind; ctx.fillText("toward Cygnus", X(1.18) + 6, cy + 5);
+    line(ctx, [[xexit, yd], [w - 8, yd]], rgba(C.wind, .55), 2, [6,5]);
+    line(ctx, [[xexit, yd], [xd, yd]], C.wind, 4);
+    // arrowhead toward detector
+    ctx.fillStyle = C.wind; ctx.beginPath(); ctx.moveTo(xd + 2, yd); ctx.lineTo(xd + 13, yd - 6); ctx.lineTo(xd + 13, yd + 6); ctx.closePath(); ctx.fill();
+    drawGlobeAngle(ctx, cx, cy, R, detector, th);
+    ctx.lineWidth = 2.5; ctx.strokeStyle = C[lab.key]; ctx.fillStyle = p[2] >= 0 ? C[lab.key] : C.panel;
+    ctx.beginPath(); ctx.arc(xd, yd, 7, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = C.ink; ctx.font = '700 13px "IBM Plex Sans", Arial, sans-serif'; ctx.textBaseline = "bottom";
+    const leftRoom = xd > 150; ctx.textAlign = leftRoom ? "right" : "left";
+    ctx.fillText(lab.name + (p[2] < 0 ? " (far side)" : ""), xd + (leftRoom ? -10 : 10), yd - 8);
+    // wind label
+    const narrow = w < 560, ly = narrow ? h - 34 : 10;
+    ctx.fillStyle = C.ink; ctx.font = '700 13px "IBM Plex Sans", Arial, sans-serif'; ctx.textAlign = "right"; ctx.textBaseline = "top";
+    ctx.fillText("DM wind from Cygnus", w - 10, ly);
+    ctx.fillStyle = C.ink; ctx.font = MONO; ctx.fillText("δ ≈ +42°, arrives moving left", w - 10, ly + 17);
+    // readouts
+    document.getElementById("th1").textContent = th.toFixed(0) + "°";
+    const L = pathKm(th, lab.depth);
+    document.getElementById("path1").textContent = (L < 20 ? L.toFixed(1) : Math.round(L).toLocaleString("en-US")) + " km";
+    document.getElementById("frac1").textContent = (L / (2*RE)).toFixed(3);
+    document.getElementById("arr1").textContent = th < 60 ? "from above" : th < 120 ? "at a grazing angle" : "through the Earth";
+    const r = thRange(lab.lat); document.getElementById("rng1").textContent = r[0].toFixed(0) + "° – " + r[1].toFixed(0) + "°";
+    document.getElementById("lst1o").textContent = g.lst.toFixed(1).padStart(4, "0") + " h";
+    globe.setAttribute("aria-label", `Globe with Θ = ${th.toFixed(0)} degrees marked between the detector radius and the direction toward Cygnus at Earth's center`);
+    drawStrip(th);
+  }
+  function drawStrip(th) {
+    const ctx = fit(strip, 0.22, 130, 130); const lab = LABS[g.lab];
+    const a = axes(ctx, strip, { x0: 0, x1: 24, y0: 0, y1: 180, xticks: [0,6,12,18,24], yticks: [0,90,180], fy: t => t + "°", fx: t => t + "h", xl: "local sidereal time", yl: "Θ" });
+    const pts = []; for (let i = 0; i <= 240; i++) { const t = 24*i/240; pts.push([a.sx(t), a.sy(theta(lab.lat, t))]); }
+    line(ctx, pts, C[lab.key], 2);
+    ctx.fillStyle = C.wind; ctx.beginPath(); ctx.arc(a.sx(g.lst), a.sy(th), 5, 0, 2*Math.PI); ctx.fill();
+  }
+  const lst1 = document.getElementById("lst1"), play1 = document.getElementById("play1");
+  document.getElementById("lab1").addEventListener("change", e => { g.lab = e.target.value; drawGlobe(); });
+  lst1.addEventListener("input", e => { g.lst = +e.target.value; drawGlobe(); });
+  play1.addEventListener("click", () => { g.playing = !g.playing; play1.textContent = g.playing ? "Pause" : "Play day"; });
+
+  // ---------- Slide 2: 2D toy transport and full-angle sampling ----------
+  const S = { parts: [], playing: !reduce, logS: -33.5, captured: 0, dt: .012, sampleTick: 0, collecting: true };
+  const ANGLE = { bins: 18, inner: .84, outer: .96, du: .05, every: 4 };
+  // arXiv:2607.20620v1, Eqs. (1), (6), (7), and (9). Internal speed u = v/v0.
+  const SHM = {scale: 238, escape: 544, cutoff: 11, detector: [40.6, 250.2, 13.1]};
+  ANGLE.du = 20 / SHM.scale;
+  SHM.z = SHM.escape / SHM.scale;
+  SHM.boost = SHM.detector.map(v => v / SHM.scale);
+  SHM.e = Math.hypot(...SHM.boost);
+  SHM.maximum = SHM.z + SHM.e;
+  S.vcap = SHM.cutoff / SHM.scale;
+  const UP = { x: 1.42, y: 0, radius: .13 };
+  function erf(z) {
+    // Convergent positive series at the fixed escape ratio z = 544/238.
+    const a = Math.abs(z);
+    let term = a, sum = term;
+    for (let n = 1; n < 80; n++) {
+      term *= 2 * a * a / (2 * n + 1); sum += term;
+      if (term < 1e-16 * sum) break;
+    }
+    const value = 2 / Math.sqrt(Math.PI) * Math.exp(-a * a) * sum;
+    return z < 0 ? -value : value;
+  }
+  SHM.normalization = erf(SHM.z) - 2 / Math.sqrt(Math.PI) * SHM.z * Math.exp(-(SHM.z ** 2));
+  function shmSpeedPDF(u) {
+    if (u <= 0 || u >= SHM.maximum) return 0;
+    const lower = Math.exp(-((u - SHM.e) ** 2));
+    const upper = u < SHM.z - SHM.e ? Math.exp(-((u + SHM.e) ** 2)) : Math.exp(-(SHM.z ** 2));
+    return Math.max(0, u * (lower - upper) / (SHM.normalization * Math.sqrt(Math.PI) * SHM.e));
+  }
+  // Analytic speed density; independent of particle samples and cross section.
+  const INITIAL_BEAM = Array.from({length: 1601}, (_, i) => {
+    const u = SHM.maximum * i / 1600;
+    return {u, density: shmSpeedPDF(u)};
+  });
+  const SPEED_VIEW = {maximum: 800 / SHM.scale, height: 3 * Math.max(...INITIAL_BEAM.map(p => p.density))};
+  // Folding the two half-planes into 0..pi gives equal-area 2D sectors.
+  // These are occupancy/residence observations, not independent crossing events.
+  const sectorArea = Math.PI / ANGLE.bins * (ANGLE.outer ** 2 - ANGLE.inner ** 2);
+  const upstreamArea = Math.PI * UP.radius ** 2;
+  let samples;
+  function clearSamples() {
+    samples = { snapshots: 0, shell: 0, upstream: 0, speedBins: 40,
+      angle: new Float64Array(ANGLE.bins),
+      speed: Array.from({ length: ANGLE.bins }, () => new Float64Array(40)) };
+    S.sampleTick = 0;
+  }
+  function extendSpeedBins(index) {
+    if (index < samples.speedBins) return;
+    const size = Math.ceil((index + 1) / 10) * 10;
+    const extend = old => { const out = new Float64Array(size); out.set(old); return out; };
+    samples.speed = samples.speed.map(extend);
+    samples.speedBins = size;
+  }
+  function sampleAngles() {
+    samples.snapshots++;
+    for (const p of S.parts) {
+      const r2 = p.x * p.x + p.y * p.y;
+      const dx = p.x - UP.x, dy = p.y - UP.y;
+      const incoming = !p.hit && dx * dx + dy * dy < UP.radius ** 2;
+      const inShell = r2 >= ANGLE.inner ** 2 && r2 < ANGLE.outer ** 2;
+      if (!incoming && !inShell) continue;
+      if (incoming) samples.upstream++;
+      if (inShell) {
+        const iv = Math.floor(Math.hypot(p.vx, p.vy) / ANGLE.du);
+        extendSpeedBins(iv); // Preserve the unbounded speed tail.
+        const theta = Math.acos(Math.max(-1, Math.min(1, p.x / Math.sqrt(r2))));
+        const it = Math.min(ANGLE.bins - 1, Math.floor(theta / Math.PI * ANGLE.bins));
+        samples.angle[it]++; samples.speed[it][iv]++; samples.shell++;
+      }
+    }
+  }
+  function densityValues() {
+    return [...samples.angle].map(n => samples.upstream > 0
+      ? n / sectorArea / (samples.upstream / upstreamArea) : NaN);
+  }
+  function normalizedSpeeds(hist, count) {
+    return count > 0 ? [...hist].map(n => n / count / ANGLE.du) : null;
+  }
+  function representativeSpeeds() {
+    // Use existing angle bins. The two bins around 90 degrees form a symmetric band.
+    return [{theta: 0, bins: [0], shade: .3}, {theta: 90, bins: [8, 9], shade: .65},
+      {theta: 180, bins: [17], shade: .97}].map(q => {
+      const hist = new Float64Array(samples.speedBins);
+      let count = 0;
+      q.bins.forEach(i => {
+        count += samples.angle[i];
+        samples.speed[i].forEach((n, j) => { hist[j] += n; });
+      });
+      return {...q, values: normalizedSpeeds(hist, count)};
+    });
+  }
+  let toySeed = 0x57454154;
+  function toyRandom() {
+    toySeed = (toySeed + 0x6D2B79F5) >>> 0;
+    let x = toySeed;
+    x = Math.imul(x ^ x >>> 15, x | 1);
+    x ^= x + Math.imul(x ^ x >>> 7, x | 61);
+    return ((x ^ x >>> 14) >>> 0) / 4294967296;
+  }
+  function gauss() { let u = 0, v = 0; while (!u) u = toyRandom(); while (!v) v = toyRandom(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  function sampleSHMSpeed() {
+    // Draw the Galactic 3D Gaussian, reject above vesc, then apply the detector boost.
+    let velocity;
+    do { velocity = [gauss() / Math.SQRT2, gauss() / Math.SQRT2, gauss() / Math.SQRT2]; }
+    while (Math.hypot(...velocity) >= SHM.z);
+    return Math.hypot(...velocity.map((v, i) => v - SHM.boost[i]));
+  }
+  function sampleIncidentSpeed() {
+    // Boundary injections sample flux u*f(u). Equal-time occupancy then samples
+    // f(u), since a particle's residence time is proportional to 1/u.
+    let u;
+    do { u = sampleSHMSpeed(); } while (toyRandom() * SHM.maximum >= u);
+    return u;
+  }
+  const LANES = 23; let laneIdx = 0, drawTick = 0;
+  function spawn() {
+    const a = Math.PI + gauss() * .04, sp = sampleIncidentSpeed();
+    const lane = laneIdx++ % LANES, y = -1.4 + 2.8 * (lane + .5) / LANES + gauss() * .006;
+    return { x: 1.75 + toyRandom() * .04, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+      hit: false, draw: (drawTick++ % 4) === 0 };
+  }
+  function stepSim(collect = true) {
+    const lam0 = 2 * Math.pow(10, -34 - S.logS);
+    for (let i = 0; i < 26; i++) if (S.parts.length < 6500) S.parts.push(spawn());
+    const keep = [];
+    for (const p of S.parts) {
+      const sp = Math.hypot(p.vx, p.vy), r2 = p.x * p.x + p.y * p.y;
+      if (r2 < 1) {
+        const rho = r2 < .298 ? 2.4 : 1, ds = sp * S.dt;
+        if (toyRandom() < 1 - Math.exp(-ds * rho / lam0)) {
+          const a = toyRandom() * 2 * Math.PI, ns = sp * Math.sqrt(1 - .5 * toyRandom());
+          if (ns < S.vcap) { S.captured++; continue; }
+          p.vx = Math.cos(a) * ns; p.vy = Math.sin(a) * ns; p.hit = true;
+        }
+      }
+      p.x += p.vx * S.dt; p.y += p.vy * S.dt;
+      if (p.x < -1.9 || p.x > 1.9 || p.y < -1.6 || p.y > 1.6) continue;
+      keep.push(p);
+    }
+    S.parts = keep;
+    if (collect && S.collecting && ++S.sampleTick % ANGLE.every === 0) sampleAngles();
+  }
+  function resetSim() {
+    S.parts = []; S.captured = 0; S.collecting = true;
+    toySeed = 0x57454154; laneIdx = 0; drawTick = 0;
+    clearSamples();
+  }
+
+  // ---------- toy rendering ----------
+  const simCv = document.getElementById("sim");
+  const speedCv = document.getElementById("speed3");
+  const densityCv = document.getElementById("density3");
+  // Palette extracted from the colorbar in arXiv:2607.20620v1, p. 3, Fig. 3.
+  const PAPER_PALETTE = ["#fff7f3","#fff6f2","#fff5f1","#fff4f0","#fff3f0","#fff3ef","#fff2ee","#fef1ed","#fef0ec","#feefeb","#feeeeb","#feeeea","#feede9","#feece9","#feebe8","#feebe7","#feeae7","#fee9e6","#fee9e5","#fee8e5","#fee7e4","#fee6e3","#fde6e2","#fde5e2","#fde4e1","#fde4e0","#fde3e0","#fde2df","#fde1de","#fde0dd","#fddfdc","#fddedb","#fdddda","#fdddd9","#fddcd8","#fddbd7","#fddad7","#fdd9d6","#fdd8d5","#fdd7d4","#fdd7d3","#fdd6d2","#fdd5d1","#fdd4d0","#fdd3cf","#fcd2ce","#fcd1cd","#fcd0cc","#fccfcb","#fcceca","#fccdc9","#fcccc8","#fcccc7","#fccbc6","#fccac5","#fcc9c4","#fcc8c3","#fcc7c3","#fcc6c2","#fcc6c1","#fcc5c0","#fcc4c0","#fcc2bf","#fcc1bf","#fcc0bf","#fcbfbe","#fcbebe","#fcbcbd","#fbbbbd","#fbbabd","#fbb9bc","#fbb8bc","#fbb6bc","#fbb5bb","#fbb4bb","#fbb3bb","#fbb2ba","#fbb0ba","#fbafba","#fbaeb9","#fbadb9","#fbacb9","#fbaab8","#fba9b8","#faa8b8","#faa7b7","#faa6b7","#faa5b7","#faa3b6","#faa2b6","#faa1b6","#faa0b5","#fa9eb5","#fa9db4","#fa9bb4","#fa99b3","#fa97b2","#f996b2","#f994b1","#f992b0","#f991b0","#f98faf","#f98dae","#f98bae","#f98aad","#f988ad","#f986ac","#f984ab","#f883ab","#f881aa","#f87fa9","#f87ea9","#f87ca8","#f87aa8","#f878a7","#f877a6","#f875a6","#f873a5","#f871a4","#f770a4","#f76ea3","#f76ca3","#f76ba2","#f769a1","#f767a1","#f666a1","#f564a0","#f462a0","#f361a0","#f35f9f","#f25d9f","#f15c9f","#f05a9e","#ef599e","#ee579e","#ee559d","#ed549d","#ec529d","#eb509c","#ea4f9c","#ea4d9c","#e94b9c","#e84a9b","#e7489b","#e6479b","#e5459a","#e5439a","#e4429a","#e34099","#e23e99","#e13d99","#e13b98","#e03a98","#df3898","#de3697","#dd3597","#dc3397","#db3196","#d93095","#d82e94","#d62d93","#d52b93","#d32992","#d22891","#d02690","#cf258f","#cd238f","#cc218e","#ca208d","#c91e8c","#c71d8c","#c61b8b","#c4198a","#c31889","#c21688","#c01588","#bf1387","#bd1186","#bc1085","#ba0e84","#b90d84","#b70b83","#b60982","#b40881","#b30681","#b10580","#b0037f","#ae017e","#ad017e","#ab017e","#aa017d","#a8017d","#a6017d","#a5017d","#a3017d","#a1017c","#a0017c","#9e017c","#9c017c","#9b017b","#99017b","#98017b","#96017b","#94017b","#93017a","#91017a","#8f017a","#8e017a","#8c0179","#8b0179","#890179","#870179","#860179","#840178","#820178","#810178","#7f0178","#7d0177","#7c0177","#7a0177","#790177","#770176","#760176","#740175","#730175","#710175","#6f0174","#6e0174","#6c0173","#6b0173","#690173","#680172","#660172","#650171","#630171","#620171","#600070","#5f0070","#5d006f","#5b006f","#5a006e","#58006e","#57006e","#55006d","#54006d","#52006c","#51006c","#4f006c","#4e006b","#4c006b","#4b006a","#49006a"];
+  const PAPER_FONT = '16px "STIXGeneral", "Times New Roman", serif';
+  const PAPER_TICK = '14px "STIXGeneral", "Times New Roman", serif';
+  // Omit the near-white end for density curves on a white background.
+  const DENSITY_PALETTE = PAPER_PALETTE.slice(Math.floor((PAPER_PALETTE.length - 1) * .6));
+  const paperColor = (t, palette = PAPER_PALETTE) => palette[Math.round(Math.max(0, Math.min(1, t)) * (palette.length - 1))];
+  function drawSim() {
+    const ctx = fit(simCv, .6, 440, 300), w = simCv._w, h = simCv._h;
+    ctx.fillStyle = C.panel; ctx.fillRect(0, 0, w, h);
+    const R = Math.min(h / 3.3, w / 3.9), cx = w / 2, cy = h / 2;
+    const X = x => cx + x * R, Y = y => cy - y * R;
+    ctx.fillStyle = C.earthsoft; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI); ctx.fill();
+    ctx.fillStyle = C.coresoft; ctx.beginPath(); ctx.arc(cx, cy, R * .546, 0, 2 * Math.PI); ctx.fill();
+    ctx.strokeStyle = C.ink; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI); ctx.stroke();
+    ctx.strokeStyle = rgba(C.wind, .55); ctx.lineWidth = 1.3; ctx.lineCap = "round"; ctx.beginPath();
+    for (const p of S.parts) {
+      if (!p.draw || p.hit) continue;
+      const x = X(p.x), y = Y(p.y); ctx.moveTo(x, y); ctx.lineTo(x - p.vx * R * .05, y + p.vy * R * .05);
+    }
+    ctx.stroke();
+    for (const p of S.parts) {
+      if (!p.draw || !p.hit) continue;
+      const t = Math.min(1, Math.hypot(p.vx, p.vy) / 1.1);
+      ctx.fillStyle = rgba(C.slow, .35 + .5 * (1 - t));
+      ctx.beginPath(); ctx.arc(X(p.x), Y(p.y), 1.8, 0, 2 * Math.PI); ctx.fill();
+    }
+    ctx.font = MONO; ctx.textBaseline = "middle";
+    const markers = [{name: "Upstream", x: UP.x, y: UP.y},
+      {name: "Θ ≈ 0°", x: .9, y: 0}, {name: "Θ ≈ 90°", x: 0, y: .9},
+      {name: "Θ ≈ 180°", x: -.9, y: 0}];
+    const pr = UP.radius * R, place = [[0, -pr - 12, "center"], [0, pr + 12, "center"], [pr + 8, 0, "left"], [-pr - 8, 0, "right"]];
+    markers.forEach((q, i) => {
+      ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.setLineDash(i === 0 ? [3, 3] : []);
+      ctx.beginPath(); ctx.arc(X(q.x), Y(q.y), pr, 0, 2 * Math.PI); ctx.stroke(); ctx.setLineDash([]);
+      const [dx, dy, align] = place[i], tx = X(q.x) + dx, ty = Y(q.y) + dy, tw = ctx.measureText(q.name).width;
+      const bx = align === "center" ? tx - tw / 2 : align === "right" ? tx - tw : tx;
+      ctx.fillStyle = rgba(C.panel, .85); ctx.fillRect(bx - 3, ty - 8, tw + 6, 16);
+      ctx.fillStyle = C.ink; ctx.textAlign = align; ctx.fillText(q.name, tx, ty);
+    });
+    ctx.font = '700 13px "IBM Plex Sans", Arial, sans-serif'; ctx.textAlign = "right"; ctx.textBaseline = "top";
+    ctx.fillText("DM wind ←", w - 10, 8);
+  }
+  function niceMax(value, minimum) {
+    const x = Math.max(value * 1.08, minimum), scale = 10 ** Math.floor(Math.log10(x));
+    return [1, 2, 4, 8, 10].find(n => n * scale >= x) * scale;
+  }
+  function paperAxes(ctx, cv, opts) {
+    const w = cv._w, h = cv._h;
+    const box = { x: Math.round(w * .15), y: 36, w: Math.round(w * .63), h: h - 88 };
+    const sx = x => box.x + (x - opts.x0) / (opts.x1 - opts.x0) * box.w;
+    const sy = y => box.y + box.h - y / opts.y1 * box.h;
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);
+    ctx.font = PAPER_TICK; ctx.fillStyle = "#000"; ctx.lineWidth = .6;
+    for (const x of opts.xticks) {
+      ctx.strokeStyle = "#d0d0d0"; ctx.beginPath(); ctx.moveTo(sx(x), box.y); ctx.lineTo(sx(x), box.y + box.h); ctx.stroke();
+      ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.fillText(opts.fx(x), sx(x), box.y + box.h + 7);
+    }
+    for (let i = 0; i <= 4; i++) {
+      const y = opts.y1 * i / 4;
+      ctx.strokeStyle = "#d0d0d0"; ctx.beginPath(); ctx.moveTo(box.x, sy(y)); ctx.lineTo(box.x + box.w, sy(y)); ctx.stroke();
+      ctx.textAlign = "right"; ctx.textBaseline = "middle"; ctx.fillText(opts.fy(y), box.x - 7, sy(y));
+    }
+    ctx.strokeStyle = "#222"; ctx.lineWidth = 1.1; ctx.strokeRect(box.x, box.y, box.w, box.h);
+    function tick(x, y, dx, dy) { ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); }
+    ctx.beginPath();
+    for (const x of opts.xticks) { tick(sx(x), box.y, 0, 5); tick(sx(x), box.y + box.h, 0, -5); }
+    for (let i = 0; i <= 4; i++) { const y = sy(opts.y1 * i / 4); tick(box.x, y, 5, 0); tick(box.x + box.w, y, -5, 0); }
+    for (let i = 1; i < 24; i++) { const x = box.x + box.w * i / 24; tick(x, box.y, 0, 2.5); tick(x, box.y + box.h, 0, -2.5); }
+    for (let i = 1; i < 16; i++) { const y = box.y + box.h * i / 16; tick(box.x, y, 2.5, 0); tick(box.x + box.w, y, -2.5, 0); }
+    ctx.stroke();
+    ctx.font = PAPER_FONT; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+    ctx.fillText(opts.xl, box.x + box.w / 2, h - 3);
+    ctx.save(); ctx.translate(21, box.y + box.h / 2); ctx.rotate(-Math.PI / 2); ctx.textBaseline = "middle"; ctx.fillText(opts.yl, 0, 0); ctx.restore();
+    ctx.textBaseline = "bottom"; ctx.fillText(opts.title, box.x + box.w / 2, box.y - 9);
+    return { box, sx, sy };
+  }
+  function paperColorbar(ctx, cv, axes, opts) {
+    const x = axes.box.x + axes.box.w + 18, y = axes.box.y, w = 16, h = axes.box.h;
+    const gradient = ctx.createLinearGradient(0, y + h, 0, y);
+    const palette = opts.palette || PAPER_PALETTE;
+    palette.forEach((color, i) => gradient.addColorStop(i / (palette.length - 1), color));
+    ctx.fillStyle = gradient; ctx.fillRect(x, y, w, h); ctx.strokeStyle = "#222"; ctx.lineWidth = 1; ctx.strokeRect(x, y, w, h);
+    ctx.font = PAPER_TICK; ctx.fillStyle = "#000"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    for (const value of opts.ticks) {
+      const yy = y + h * (1 - (value - opts.min) / (opts.max - opts.min));
+      ctx.beginPath(); ctx.moveTo(x + w, yy); ctx.lineTo(x + w + 4, yy); ctx.stroke();
+      ctx.fillText(opts.format(value), x + w + 7, yy);
+    }
+    ctx.font = PAPER_FONT; ctx.save(); ctx.translate(cv._w - 10, y + h / 2); ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(opts.label, 0, 0); ctx.restore();
+  }
+  function stepHistogram(ctx, axes, values, width, color, dash = [], lineWidth = 1.5) {
+    ctx.save(); ctx.beginPath(); ctx.rect(axes.box.x, axes.box.y, axes.box.w, axes.box.h); ctx.clip();
+    ctx.strokeStyle = color; ctx.lineWidth = lineWidth; ctx.setLineDash(dash); ctx.beginPath(); let pen = false;
+    values.forEach((value, i) => {
+      if (!Number.isFinite(value)) { pen = false; return; }
+      const x0 = axes.sx(i * width), x1 = axes.sx((i + 1) * width), y = axes.sy(value);
+      if (!pen) ctx.moveTo(x0, y); else ctx.lineTo(x0, y);
+      ctx.lineTo(x1, y); pen = true;
+    });
+    ctx.stroke(); ctx.restore();
+  }
+  function drawSHMReference(ctx, axes) {
+    ctx.save(); ctx.beginPath(); ctx.rect(axes.box.x, axes.box.y, axes.box.w, axes.box.h); ctx.clip();
+    line(ctx, INITIAL_BEAM.map(p => [axes.sx(p.u), axes.sy(p.density)]), "#000", 3.5, [8, 4]);
+    ctx.restore();
+  }
+  function markSpeedOverflow(ctx, axes, values, color) {
+    const maximum = Math.max(...values);
+    if (maximum <= SPEED_VIEW.height) return;
+    const i = values.indexOf(maximum), x = axes.sx((i + .5) * ANGLE.du), y = axes.box.y;
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, y + 14); ctx.lineTo(x, y + 3); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x, y + 1); ctx.lineTo(x - 3, y + 6); ctx.lineTo(x + 3, y + 6); ctx.closePath(); ctx.fill();
+  }
+  function drawHistograms() {
+    let ctx = fit(speedCv, .87, 500, 350);
+    const distributions = representativeSpeeds();
+    const vmax = SPEED_VIEW.maximum;
+    let axes = paperAxes(ctx, speedCv, { x0: 0, x1: vmax, y1: SPEED_VIEW.height,
+      xticks: [0, 200, 400, 600, 800].map(v => v / SHM.scale), fx: x => String(Math.round(x * SHM.scale)), fy: y => (y / SHM.scale).toFixed(3),
+      xl: "DM speed, v [km/s]", yl: "DM speed distribution, f(v | Θ) [s/km]", title: "σχn = " + supLabel(S.logS) });
+    distributions.forEach(q => { if (q.values) {
+      stepHistogram(ctx, axes, q.values, ANGLE.du, paperColor(q.shade), [], 1);
+      markSpeedOverflow(ctx, axes, q.values, paperColor(q.shade));
+    } });
+    drawSHMReference(ctx, axes);
+    line(ctx, [[axes.sx(S.vcap), axes.box.y], [axes.sx(S.vcap), axes.box.y + axes.box.h]], "#0066ff", 1.6);
+    const legend = { x: axes.box.x + axes.box.w * .4, y: axes.box.y + 7, w: axes.box.w * .57, h: 111 };
+    ctx.fillStyle = "rgba(255,255,255,.93)"; ctx.fillRect(legend.x, legend.y, legend.w, legend.h);
+    ctx.strokeStyle = "#c0c0c0"; ctx.lineWidth = .6; ctx.strokeRect(legend.x, legend.y, legend.w, legend.h);
+    ctx.font = '14px "STIXGeneral", "Times New Roman", serif'; ctx.fillStyle = "#000"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    distributions.forEach((q, i) => {
+      const y = legend.y + 14 + i * 21;
+      line(ctx, [[legend.x + 7, y], [legend.x + 34, y]], paperColor(q.shade), 1);
+      ctx.fillText("Θ ≈ " + q.theta + "°", legend.x + 42, y);
+    });
+    line(ctx, [[legend.x + 7, legend.y + 77], [legend.x + 34, legend.y + 77]], "#000", 3.5, [8, 4]);
+    ctx.fillText("Standard Halo Model", legend.x + 42, legend.y + 77);
+    line(ctx, [[legend.x + 7, legend.y + 98], [legend.x + 34, legend.y + 98]], "#0066ff", 1.6);
+    ctx.fillText("v cut = 11 km/s", legend.x + 42, legend.y + 98);
+    if (!samples.shell) {
+      ctx.font = PAPER_FONT; ctx.fillStyle = "#000"; ctx.textAlign = "center";
+      ctx.fillText("Waiting for particles", axes.box.x + axes.box.w / 2, axes.box.y + axes.box.h * .6);
+    }
+    ctx = fit(densityCv, .87, 500, 350);
+    const density = densityValues();
+    axes = paperAxes(ctx, densityCv, { x0: 0, x1: 180, y1: niceMax(Math.max(1, ...density.filter(Number.isFinite)), 1.5),
+      xticks: [0, 30, 60, 90, 120, 150, 180], fx: x => String(x), fy: y => y.toFixed(1),
+      xl: "isoangle, Θ [°]", yl: "relative DM density, ρ(Θ) / ρ₀", title: "2D toy model" });
+    stepHistogram(ctx, axes, density, 180 / ANGLE.bins, paperColor((S.logS + 36) / 4, DENSITY_PALETTE), [], 2.2);
+    line(ctx, [[axes.sx(0), axes.sy(1)], [axes.sx(180), axes.sy(1)]], "#000", 2, [7, 4]);
+    ctx.font = PAPER_FONT; ctx.fillStyle = "#000"; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+    const arrowX = axes.sx(126), arrowY = axes.sy(1);
+    ctx.fillText("ρ / ρ₀ = 1", arrowX, arrowY - 22);
+    line(ctx, [[arrowX, arrowY - 17], [arrowX, arrowY - 5]], "#000", 1);
+    ctx.beginPath(); ctx.moveTo(arrowX, arrowY - 3); ctx.lineTo(arrowX - 3, arrowY - 8); ctx.lineTo(arrowX + 3, arrowY - 8); ctx.closePath(); ctx.fill();
+    const exponent = x => "10" + String(x).replace(/./g, c => ({"-":"⁻","0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"})[c]);
+    paperColorbar(ctx, densityCv, axes, { min: -36, max: -32, ticks: [-36, -35, -34, -33, -32], format: exponent, label: "σχn SI [cm²]", palette: DENSITY_PALETTE });
+    document.getElementById("cap3").textContent = S.captured.toLocaleString("en-US") + " particles";
+    document.getElementById("snap3").textContent = samples.snapshots.toLocaleString("en-US");
+    document.getElementById("occupied3").textContent = [...samples.angle].filter(n => n > 0).length + " / " + ANGLE.bins;
+  }
+  function supLabel(l) {
+    const SUP = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
+    let e = Math.floor(l + 1e-9), m = Math.pow(10, l - e);
+    if (m >= 9.95) { m = 1; e++; }
+    return (m < 1.05 ? "" : m.toFixed(1) + " × ") + "10" + String(e).split("").map(c => SUP[c]).join("") + " cm²";
+  }
+  function updateSigma(logS = S.logS) {
+    document.getElementById("sig3o").textContent = supLabel(logS);
+    const lamD = Math.pow(10, -34 - logS);
+    document.getElementById("mfp3").textContent = (lamD >= 10 ? lamD.toFixed(0) : lamD >= 1 ? lamD.toFixed(1) : lamD.toFixed(2)) + " × Earth diameter";
+  }
+  const play3 = document.getElementById("play3"), sigmaInput = document.getElementById("sig3");
+  let sigmaTimer;
+  function applySigma() {
+    clearTimeout(sigmaTimer); S.logS = +sigmaInput.value;
+    resetSim(); updateSigma(); drawSim(); drawHistograms();
+  }
+  sigmaInput.addEventListener("input", () => {
+    clearTimeout(sigmaTimer); S.collecting = false; updateSigma(+sigmaInput.value);
+    sigmaTimer = setTimeout(applySigma, 160);
+  });
+  sigmaInput.addEventListener("change", applySigma);
+  play3.addEventListener("click", () => { S.playing = !S.playing; play3.textContent = S.playing ? "Pause" : "Play"; });
+  document.getElementById("reset3").addEventListener("click", () => {
+    applySigma(); S.playing = true; play3.textContent = "Pause";
+  });
+  play3.textContent = S.playing ? "Pause" : "Play";
+
+
+  // ---------- Slide 3: two knobs ----------
+  const K = { se: -38.5, sn: -34, lab: "SUPL", bg: true };
+  const rTh = document.getElementById("rTheta"), rT = document.getElementById("rT");
+  function ratio(th, sn) { const s = Math.pow(10, sn + 34), A = .78*s/(1 + s), D = .3*s/(1 + s); return (1 - D)*(1 + A*Math.tanh((100 - th)/32)); }
+  const S0 = se => Math.pow(10, se + 38.5);
+  const BG = 3;
+  function drawKnobs() {
+    const s0 = S0(K.se), lab = LABS[K.lab], r = thRange(lab.lat);
+    let ctx = fit(rTh, 0.85, 330, 230);
+    let a = axes(ctx, rTh, { x0: 0, x1: 180, y0: .01, y1: 100, ylog: true, xticks: [0,60,120,180], yticks: [.01,.1,1,10,100], fx: t => t + "°", fy: t => t >= 1 ? String(t) : String(t), xl: "isoangle Θ", yl: "signal rate (arb.)" });
+    ctx.fillStyle = rgba(C[lab.key], .12); ctx.fillRect(a.sx(r[0]), a.box.y, a.sx(r[1]) - a.sx(r[0]), a.box.h);
+    ctx.fillStyle = C.ink; ctx.font = MONO; ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.fillText(lab.name + " range", a.sx(r[0]) + 4, a.box.y + 4);
+    const clampY = v => Math.max(.01, Math.min(100, v));
+    line(ctx, [[a.sx(0), a.sy(clampY(s0))], [a.sx(180), a.sy(clampY(s0))]], C.muted, 1.5, [5,4]);
+    const pts = []; for (let i = 0; i <= 180; i += 2) pts.push([a.sx(i), a.sy(clampY(s0*ratio(i, K.sn)))]);
+    line(ctx, pts, C.wind, 2.5);
+    if (K.bg) line(ctx, [[a.sx(0), a.sy(BG)], [a.sx(180), a.sy(BG)]], C.ink, 1, [2,3]);
+    ctx.fillStyle = C.ink; ctx.textAlign = "right"; ctx.textBaseline = "bottom";
+    ctx.textBaseline = "top"; ctx.fillText("no Earth shielding", a.box.x + a.box.w - 4, a.sy(clampY(s0)) + 3); ctx.textBaseline = "bottom";
+    if (K.bg) ctx.fillText("background", a.box.x + a.box.w - 4, a.sy(BG) - 3);
+    // daily forecast
+    const ts = [], vals = [];
+    for (let i = 0; i <= 240; i++) { const t = 24*i/240; ts.push(t); vals.push(s0*ratio(theta(lab.lat, t), K.sn) + (K.bg ? BG : 0)); }
+    const mean = vals.reduce((x, y) => x + y, 0)/vals.length, mx = Math.max(...vals), mn = Math.min(...vals);
+    ctx = fit(rT, 0.85, 330, 230);
+    a = axes(ctx, rT, { x0: 0, x1: 24, y0: 0, y1: 2, xticks: [0,6,12,18,24], yticks: [0,.5,1,1.5,2], fx: t => t + "h", fy: t => t.toFixed(1), xl: "local sidereal time", yl: "R(t) / ⟨R⟩" });
+    line(ctx, [[a.sx(0), a.sy(1)], [a.sx(24), a.sy(1)]], C.muted, 1.2, [5,4]);
+    line(ctx, ts.map((t, i) => [a.sx(t), a.sy(Math.min(2, vals[i]/mean))]), C[lab.key], 2.5);
+    const sigMean = vals.reduce((x, y) => x + y, 0)/vals.length - (K.bg ? BG : 0);
+    document.getElementById("mod4").textContent = (100*(mx - mn)/mean).toFixed(0) + "%";
+    document.getElementById("mean4").textContent = sigMean < 0.01 ? sigMean.toExponential(1) : sigMean.toFixed(2);
+    document.getElementById("frac4").textContent = (100*sigMean/(sigMean + (K.bg ? BG : 0))).toFixed(0) + "%";
+    document.getElementById("se4o").textContent = supLabel(K.se);
+    document.getElementById("sn4o").textContent = supLabel(K.sn);
+  }
+  document.getElementById("se4").addEventListener("input", e => { K.se = +e.target.value; drawKnobs(); });
+  document.getElementById("sn4").addEventListener("input", e => { K.sn = +e.target.value; drawKnobs(); });
+  document.getElementById("lab4").addEventListener("change", e => { K.lab = e.target.value; drawKnobs(); });
+  document.getElementById("bg4").addEventListener("change", e => { K.bg = e.target.checked; drawKnobs(); });
+
+  // ---------- keyboard navigation and animation loop ----------
+  const slides = [...document.querySelectorAll("main.slides > .station")];
+  const previousSlide = document.getElementById("previousSlide"), nextSlide = document.getElementById("nextSlide");
+  let slideIndex = 0;
+  function showSlide(index, { historyMode = "push", focus = false } = {}) {
+    const target = Math.max(0, Math.min(slides.length - 1, index));
+    const changed = target !== slideIndex;
+    slideIndex = target;
+    slides.forEach((slide, i) => {
+      slide.hidden = i !== slideIndex;
+      slide.classList.toggle("is-entering", i === slideIndex && changed);
+      if (i === slideIndex && changed) slide.scrollTop = 0;
+    });
+    document.getElementById("slideStatus").textContent = `${slideIndex + 1} / ${slides.length}`;
+    previousSlide.disabled = slideIndex === 0;
+    nextSlide.disabled = slideIndex === slides.length - 1;
+    const hash = "#" + slides[slideIndex].id;
+    if (historyMode !== "none" && location.hash !== hash) {
+      history[historyMode === "replace" ? "replaceState" : "pushState"](null, "", hash);
+    }
+    drawAll();
+    if (focus && changed) slides[slideIndex].querySelector("h2").focus({ preventScroll: true });
+  }
+  previousSlide.addEventListener("click", () => showSlide(slideIndex - 1, { focus: true }));
+  nextSlide.addEventListener("click", () => showSlide(slideIndex + 1, { focus: true }));
+  document.addEventListener("keydown", e => {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey ||
+        e.target.closest("input, select, textarea, [contenteditable]:not([contenteditable='false'])")) return;
+    let index;
+    if (e.key === "ArrowRight" || e.key === "PageDown") index = slideIndex + 1;
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") index = slideIndex - 1;
+    else if (e.key === "Home") index = 0;
+    else if (e.key === "End") index = slides.length - 1;
+    else return;
+    e.preventDefault(); showSlide(index, { focus: true });
+  });
+  function indexFromHash() { return Math.max(0, slides.findIndex(slide => "#" + slide.id === location.hash)); }
+  window.addEventListener("hashchange", () => {
+    const valid = slides.some(slide => "#" + slide.id === location.hash);
+    showSlide(indexFromHash(), { historyMode: valid ? "none" : "replace", focus: true });
+  });
+  let last = performance.now(), histTick = 0;
+  let lastErr = "";
+  function report(where, e) { const m = where + ": " + (e && (e.stack || e.message) || e); if (m !== lastErr) { lastErr = m; console.warn("[DM Weather] " + m); } }
+  function safe(where, fn) { try { fn(); } catch (e) { report(where, e); } }
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const dt = Math.min(.05, Math.max(0, (now - last)/1000)); last = now;
+    if (!document.hidden && g.playing && slides[slideIndex].id === "isoangle") safe("globe", () => {
+      g.lst = (g.lst + dt*1.5) % 24; lst1.value = String(g.lst);
+      g.streaks.forEach(s => { s.x -= dt*0.9; if (s.x < -1.5) { s.x = 1.6 + Math.random()*.3; s.y = Math.random()*2.4 - 1.2; } });
+      drawGlobe();
+    });
+    if (!document.hidden && S.playing && slides[slideIndex].id === "scatter") safe("simulation", () => {
+      stepSim(); drawSim();
+      if ((histTick += dt) > .5) { histTick = 0; drawHistograms(); }
+    });
+  }
+  function drawAll() {
+    safe("colors", readColors);
+    const id = slides[slideIndex].id;
+    if (id === "isoangle") safe("globe", drawGlobe);
+    if (id === "scatter") { safe("simulation", drawSim); safe("histograms", drawHistograms); }
+    if (id === "knobs") safe("knobs", drawKnobs);
+  }
+  let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(drawAll, 120); });
+  safe("fonts", () => { if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => drawAll(), () => {}); });
+
+  safe("init", () => { updateSigma(); resetSim(); });
+  showSlide(indexFromHash(), { historyMode: "replace" });
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>
