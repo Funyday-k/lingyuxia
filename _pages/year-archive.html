@@ -3,24 +3,25 @@ layout: archive
 permalink: /note/
 title: "Note"
 author_profile: true
+note_filters: true
 redirect_from:
   - /year-archive/
   - /wordpress/blog-posts/
 ---
 
 <link rel="stylesheet" href="{{ '/assets/css/note-index.css' | relative_url }}?v={{ site.time | date: '%s' }}">
-<div class="note-index">
+<div class="note-index note-index-main">
   <p class="note-intro">Physics notes, interactive experiments, and ideas worth exploring.</p>
   <div class="note-search" hidden>
-    <label for="note-search-input">搜索 Note</label>
-    <input id="note-search-input" type="search" placeholder="搜索标题、简介或标签…" autocomplete="off" aria-describedby="note-search-help">
-    <p id="note-search-help">关键词与所选标签同时生效；“显示全部”仅清除标签筛选。</p>
+    <label for="note-search-input">Search notes</label>
+    <input id="note-search-input" type="search" placeholder="Search titles, descriptions, or labels…" autocomplete="off" aria-describedby="note-search-help">
+    <p id="note-search-help">Search within the selected label. “Show all” clears the label filter.</p>
   </div>
-  <div class="note-filters" role="group" aria-label="按标签筛选" hidden></div>
+  <div class="note-filter-mobile"></div>
   <p class="note-filter-status" role="status" aria-live="polite" hidden></p>
-  <p class="note-empty" hidden>没有匹配的内容，请尝试其他关键词或标签。</p>
+  <p class="note-empty" hidden>No matching notes. Try another search or label.</p>
   <section aria-labelledby="note-explore">
-    <div class="note-section-heading"><h2 id="note-explore">Explore</h2><span data-note-count data-unit="collections &amp; labs">{{ site.data.notes.size }} collections &amp; labs</span></div>
+    <div class="note-section-heading"><h2 id="note-explore">Explore</h2><span data-note-count data-unit="collections &amp; labs" data-singular="collection / lab">{{ site.data.notes.size }} collections &amp; labs</span></div>
     <div class="note-grid">
       {% for note in site.data.notes %}
       <article class="note-card">
@@ -34,16 +35,16 @@ redirect_from:
     </div>
   </section>
   <section aria-labelledby="note-writing">
-    <div class="note-section-heading"><h2 id="note-writing">Notes &amp; writing</h2><span data-note-count data-unit="notes">{{ site.posts.size }} notes</span></div>
+    <div class="note-section-heading"><h2 id="note-writing">Notes &amp; writing</h2><span data-note-count data-unit="notes" data-singular="note">{{ site.posts.size }} notes</span></div>
     <div class="note-grid">
       {% for post in site.posts %}
       <article class="note-card">
         <div class="note-meta"><span>{{ post.note_type | default: 'Note' }}</span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y-%m-%d' }}</time></div>
-        <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+        <h3><a href="{{ post.url | relative_url }}">{{ post.note_title | default: post.title }}</a></h3>
         <p class="note-description">{% if post.note_summary %}{{ post.note_summary }}{% else %}{{ post.excerpt | strip_html | truncate: 150 }}{% endif %}</p>
         {% assign labels = post.note_labels | default: post.tags %}
         <ul class="note-labels" aria-label="Labels">{% for label in labels %}<li>{{ label }}</li>{% endfor %}</ul>
-        <a class="note-open" href="{{ post.url | relative_url }}" aria-label="Read {{ post.title | escape }}">Read note <span aria-hidden="true">→</span></a>
+        <a class="note-open" href="{{ post.url | relative_url }}" aria-label="Read {{ post.note_title | default: post.title | escape }}">Read note <span aria-hidden="true">→</span></a>
       </article>
       {% endfor %}
     </div>

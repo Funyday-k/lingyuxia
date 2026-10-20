@@ -2,17 +2,17 @@
   url: /gr/
   description: Explore spacetime, geometry, and gravity through interactive explanations.
   type: Interactive series
-  language: EN / 中文
-  labels: [General Relativity, Geometry]
+  language: English / Chinese
+  labels: [interactive, General Relativity]
 - title: Statistical Physics
   url: /statistical-physics/
   description: Explore thermal fluctuations, microscopic states, and phase transitions through interactive experiments.
   type: Interactive series
-  language: 中文
-  labels: [Statistical Physics, Simulation]
+  language: Chinese
+  labels: [interactive, Statistical Physics]
 - title: Dark Matter Weather Lab
   url: /note/dark-matter-weather/
   description: Explore how Earth shielding and scattering shape the daily dark matter signal.
   type: Interactive lab
-  language: EN
-  labels: [Dark Matter, Direct Detection]
+  language: English
+  labels: [interactive, Astrophysics]

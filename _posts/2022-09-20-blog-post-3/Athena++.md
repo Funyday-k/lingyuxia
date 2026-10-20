@@ -1,7 +1,7 @@
 ---
 note_type: Study note
-note_summary: "Athena++ 数值模拟学习记录：编译、参数配置、喷流模拟与可视化。"
-note_labels: [Computational Physics, Athena++]
+note_summary: "Learning numerical simulation with Athena++: compilation, configuration, astrophysical jets, and visualization."
+note_labels: [note, Astrophysics]
 title: 'Athena++'
 date: 2022-08-14
 permalink: /posts/2022/08/blog-post-1/

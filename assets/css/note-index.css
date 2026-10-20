@@ -35,3 +35,19 @@
 .note-index .note-search input:focus { outline:2px solid var(--note-accent); outline-offset:2px; }
 .note-index .note-search p { margin:8px 0 0; color:var(--note-muted); font-size:12px; }
 .note-index .note-empty { padding:24px; border:1px dashed var(--note-border); border-radius:8px; color:var(--note-muted); font-size:14px; }
+/* Muted category colors are shared by sidebar and card labels. */
+.note-index .note-label-button { --label-bg:#edf0f2; --label-fg:#4b5962; background:var(--label-bg); color:var(--label-fg); }
+.note-index [data-label="interactive"] { --label-bg:#e6efeb; --label-fg:#3e6153; }
+.note-index [data-label="note"] { --label-bg:#e8edf4; --label-fg:#4b607a; }
+.note-index [data-label="thesis"] { --label-bg:#efe9e1; --label-fg:#786044; }
+.note-index [data-label="General Relativity"] { --label-bg:#eee8f1; --label-fg:#6b5278; }
+.note-index [data-label="Astrophysics"] { --label-bg:#f1e6e6; --label-fg:#80565c; }
+.note-index [data-label="Statistical Physics"] { --label-bg:#e4eef0; --label-fg:#436970; }
+.note-index .note-label-button:hover { border-color:var(--label-fg); }
+.note-index .note-label-button[aria-pressed="true"] { background:var(--label-bg); color:var(--label-fg); border-color:var(--label-fg); box-shadow:inset 0 0 0 1px var(--label-fg); }
+.note-filter-panel { clear:both; margin-top:32px; padding-top:20px; border-top:1px solid #dfe5e8; }
+.note-filter-panel h2 { margin:0 0 14px; font-size:16px; }
+.note-filter-panel .note-filters { justify-content:flex-start; }
+.note-filter-panel .note-label-button { text-align:left; }
+@media (min-width:1024px) { .note-filter-panel .note-filters { flex-direction:column; align-items:flex-start; } }
+@media (max-width:1023px) { .note-filter-panel { margin:0 0 20px; padding-top:0; border-top:0; } }
