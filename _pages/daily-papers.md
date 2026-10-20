@@ -27,7 +27,7 @@ paper_filters: true
   border-radius: 6px;
   padding: 1em 1.2em;
   margin-bottom: 1em;
-  background: #fffdf4;
+  background: #ffffff;
   transition: box-shadow 0.2s;
 }
 .paper-card:hover {
