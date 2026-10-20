@@ -41,7 +41,7 @@ author_profile: true
   text-decoration: none;
 }
 .paper-title a:hover {
-  color: #0366d6;
+  color: #436970;
   text-decoration: underline;
 }
 .paper-authors {
@@ -57,7 +57,7 @@ author_profile: true
 }
 .paper-abstract-toggle {
   cursor: pointer;
-  color: #0366d6;
+  color: #436970;
   font-size: 0.9em;
   user-select: none;
   background: none;
@@ -89,7 +89,7 @@ author_profile: true
 }
 .authors-toggle {
   cursor: pointer;
-  color: #0366d6;
+  color: #436970;
   font-size: 0.85em;
   background: none;
   border: none;
@@ -101,32 +101,34 @@ author_profile: true
   text-decoration: underline;
 }
 .paper-comment {
-  color: #e36209;
+  color: #786044;
   font-size: 0.9em;
   margin-top: 0.4em;
   margin-bottom: 0.2em;
   padding: 0.3em 0.6em;
-  background: #fff8e1;
-  border-left: 3px solid #f9a825;
-  border-radius: 3px;
+  background: #efe9e1;
+  border-left: 3px solid #b9a58a;
+  border-radius: 5px;
 }
 .paper-link-badge {
   display: inline-block;
   font-size: 0.78em;
-  padding: 0.15em 0.5em;
-  border-radius: 3px;
-  color: #fff;
+  padding: 0.25em 0.65em;
+  border-radius: 5px;
+  color: var(--badge-fg);
+  border: 1px solid transparent;
   margin-left: 0.5em;
   vertical-align: middle;
   text-decoration: none;
   font-weight: 600;
 }
-.badge-arxiv  { background: #b31b1b; }
-.badge-aps    { background: #1560bd; }
-.badge-nature { background: #1a6e3a; }
-.badge-iop    { background: #7b2d8b; }
-.badge-doi    { background: #555; }
-.paper-link-badge:hover { opacity: 0.85; color: #fff; }
+.badge-arxiv  { background: #f1e6e6; --badge-fg: #80565c; }
+.badge-aps    { background: #e8edf4; --badge-fg: #4b607a; }
+.badge-nature { background: #e6efeb; --badge-fg: #3e6153; }
+.badge-iop    { background: #eee8f1; --badge-fg: #6b5278; }
+.badge-doi    { background: #edf0f2; --badge-fg: #4b5962; }
+.paper-link-badge:hover { border-color: var(--badge-fg); color: var(--badge-fg); }
+.paper-link-badge:focus-visible { outline: 2px solid var(--badge-fg); outline-offset: 3px; }
 .no-papers-msg {
   color: #6c757d;
   font-style: italic;

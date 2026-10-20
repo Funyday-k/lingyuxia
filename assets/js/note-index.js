@@ -1,4 +1,4 @@
-/* Enhance the static directory with combined text search and single-label filtering. */
+/* Enhance the static directory with combined text search and multi-label intersection filtering. */
 (function () {
   'use strict';
   var root = document.querySelector('.note-index-main');
@@ -14,7 +14,7 @@
   var status = root.querySelector('.note-filter-status');
   var search = root.querySelector('#note-search-input');
   var empty = root.querySelector('.note-empty');
-  var selectedLabel = null;
+  var selectedLabels = new Set();
   var cards = Array.from(root.querySelectorAll('.note-card'));
   var labels = ['interactive', 'note', 'thesis', 'General Relativity', 'Astrophysics', 'Statistical Physics'];
   var buttons = [];
@@ -45,7 +45,9 @@
   labels.forEach(function (label) { filters.appendChild(makeButton(label, label)); });
 
   function selectLabel(label) {
-    selectedLabel = label;
+    if (label === null) selectedLabels.clear();
+    else if (selectedLabels.has(label)) selectedLabels.delete(label);
+    else selectedLabels.add(label);
     applyFilters();
   }
 
@@ -53,7 +55,7 @@
     var query = search.value.trim().toLocaleLowerCase();
     var terms = query.split(/\s+/).filter(Boolean);
     entries.forEach(function (entry) {
-      var matchesLabel = selectedLabel === null || entry.labels.indexOf(selectedLabel) !== -1;
+      var matchesLabel = Array.from(selectedLabels).every(function (label) { return entry.labels.indexOf(label) !== -1; });
       var matchesText = terms.every(function (term) { return entry.text.indexOf(term) !== -1; });
       entry.card.hidden = !(matchesLabel && matchesText);
     });
@@ -64,10 +66,10 @@
       count.textContent = visible + ' ' + (visible === 1 ? count.dataset.singular : count.dataset.unit);
     });
     buttons.forEach(function (button) {
-      button.element.setAttribute('aria-pressed', String(button.label === selectedLabel));
+      button.element.setAttribute('aria-pressed', String(button.label === null ? selectedLabels.size === 0 : selectedLabels.has(button.label)));
     });
     var visibleCount = cards.filter(function (card) { return !card.hidden; }).length;
-    status.textContent = (selectedLabel === null ? 'All labels' : selectedLabel) + (query ? ' · Search: ' + search.value.trim() : '') + ' · ' + visibleCount + (visibleCount === 1 ? ' result' : ' results');
+    status.textContent = (selectedLabels.size === 0 ? 'All labels' : Array.from(selectedLabels).join(' + ')) + (query ? ' · Search: ' + search.value.trim() : '') + ' · ' + visibleCount + (visibleCount === 1 ? ' result' : ' results');
     empty.hidden = visibleCount !== 0;
   }
 
