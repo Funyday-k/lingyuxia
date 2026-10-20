@@ -23,15 +23,16 @@ paper_filters: true
   margin-bottom: 1em;
 }
 .paper-card {
-  border: 1px solid #e1e4e8;
-  border-radius: 6px;
-  padding: 1em 1.2em;
-  margin-bottom: 1em;
+  border: 1px solid #dfe5e8;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 18px;
   background: #ffffff;
-  transition: box-shadow 0.2s;
+  transition: border-color .15s, box-shadow .15s;
 }
 .paper-card:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-color: #9eb9c1;
+  box-shadow: 0 5px 18px rgba(40,59,70,.06);
 }
 .paper-title {
   font-size: 1.1em;
@@ -108,8 +109,8 @@ paper_filters: true
   margin-top: 0.4em;
   margin-bottom: 0.2em;
   padding: 0.3em 0.6em;
-  background: #fff5ad;
-  border-left: 3px solid #e6cf70;
+  background: transparent;
+  border: 1px solid #e6cf70;
   border-radius: 5px;
 }
 .paper-link-badge {
@@ -143,6 +144,8 @@ paper_filters: true
 .note-index [data-source="APS"] { --label-bg:#e3edf8; --label-fg:#4b607a; }
 .note-index [data-source="Nature"] { --label-bg:#e6efeb; --label-fg:#3e6153; }
 .note-index [data-source="IOP"] { --label-bg:#eee8f1; --label-fg:#6b5278; }
+@media (max-width:600px) { .paper-card { padding:21px; } }
+@media (prefers-reduced-motion:reduce) { .paper-card { transition:none; } }
 </style>
 
 {% include base_path %}
