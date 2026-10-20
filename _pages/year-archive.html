@@ -11,8 +11,14 @@ redirect_from:
 <link rel="stylesheet" href="{{ '/assets/css/note-index.css' | relative_url }}">
 <div class="note-index">
   <p class="note-intro">Physics notes, interactive experiments, and ideas worth exploring.</p>
+  <div class="note-search" hidden>
+    <label for="note-search-input">搜索 Note</label>
+    <input id="note-search-input" type="search" placeholder="搜索标题、简介或标签…" autocomplete="off" aria-describedby="note-search-help">
+    <p id="note-search-help">关键词与所选标签同时生效；“显示全部”仅清除标签筛选。</p>
+  </div>
   <div class="note-filters" role="group" aria-label="按标签筛选" hidden></div>
   <p class="note-filter-status" role="status" aria-live="polite" hidden></p>
+  <p class="note-empty" hidden>没有匹配的内容，请尝试其他关键词或标签。</p>
   <section aria-labelledby="note-explore">
     <div class="note-section-heading"><h2 id="note-explore">Explore</h2><span data-note-count data-unit="collections &amp; labs">{{ site.data.notes.size }} collections &amp; labs</span></div>
     <div class="note-grid">
