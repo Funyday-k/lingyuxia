@@ -27,5 +27,11 @@
     <div class="note-filters" role="group" aria-label="Filter by label"></div>
   </aside>
   {% endif %}
+  {% if page.paper_filters %}
+  <aside class="note-index note-filter-panel paper-filter-panel" aria-label="Filter papers by source" hidden>
+    <h2>Sources</h2>
+    <div class="note-filters" role="group" aria-label="Filter by source"></div>
+  </aside>
+  {% endif %}
   </div>
 {% endif %}

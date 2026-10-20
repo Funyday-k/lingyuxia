@@ -3,8 +3,10 @@ layout: archive
 title: "Daily Paper"
 permalink: /daily-paper/
 author_profile: true
+paper_filters: true
 ---
 
+<link rel="stylesheet" href="{{ '/assets/css/note-index.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 <style>
 .paper-date-section {
   margin-bottom: 2em;
@@ -25,7 +27,7 @@ author_profile: true
   border-radius: 6px;
   padding: 1em 1.2em;
   margin-bottom: 1em;
-  background: #fafbfc;
+  background: #fffdf4;
   transition: box-shadow 0.2s;
 }
 .paper-card:hover {
@@ -106,8 +108,8 @@ author_profile: true
   margin-top: 0.4em;
   margin-bottom: 0.2em;
   padding: 0.3em 0.6em;
-  background: #efe9e1;
-  border-left: 3px solid #b9a58a;
+  background: #fff4cc;
+  border-left: 3px solid #d6c17c;
   border-radius: 5px;
 }
 .paper-link-badge {
@@ -122,8 +124,8 @@ author_profile: true
   text-decoration: none;
   font-weight: 600;
 }
-.badge-arxiv  { background: #f1e6e6; --badge-fg: #80565c; }
-.badge-aps    { background: #e8edf4; --badge-fg: #4b607a; }
+.badge-arxiv  { background: #f6e3e3; --badge-fg: #80565c; }
+.badge-aps    { background: #e3edf8; --badge-fg: #4b607a; }
 .badge-nature { background: #e6efeb; --badge-fg: #3e6153; }
 .badge-iop    { background: #eee8f1; --badge-fg: #6b5278; }
 .badge-doi    { background: #edf0f2; --badge-fg: #4b5962; }
@@ -133,6 +135,14 @@ author_profile: true
   color: #6c757d;
   font-style: italic;
 }
+.paper-title .paper-link-badge { color:var(--badge-fg); }
+.paper-link-badge { font-family:inherit; cursor:pointer; }
+.paper-link-badge[aria-pressed="true"] { border-color:var(--badge-fg); }
+.paper-directory [hidden] { display:none !important; }
+.note-index [data-source="arXiv"] { --label-bg:#f6e3e3; --label-fg:#80565c; }
+.note-index [data-source="APS"] { --label-bg:#e3edf8; --label-fg:#4b607a; }
+.note-index [data-source="Nature"] { --label-bg:#e6efeb; --label-fg:#3e6153; }
+.note-index [data-source="IOP"] { --label-bg:#eee8f1; --label-fg:#6b5278; }
 </style>
 
 {% include base_path %}
@@ -141,6 +151,16 @@ author_profile: true
   📖 My Daily Paper Picks. Click title to visit paper website, click "Abstract" to expand abstract.
 </p>
 
+<div class="paper-directory">
+<div class="note-index paper-controls">
+  <div class="note-search" hidden>
+    <label for="paper-search-input">Search papers</label>
+    <input id="paper-search-input" type="search" placeholder="Search titles, authors, abstracts, or comments…" autocomplete="off">
+  </div>
+  <div class="paper-filter-mobile"></div>
+  <p class="note-filter-status" role="status" aria-live="polite" hidden></p>
+  <p class="note-empty" hidden>No matching papers. Try another search or source.</p>
+</div>
 {% assign sorted_entries = site.data.daily_papers | sort: "date" | reverse %}
 
 {% for entry in sorted_entries %}
@@ -151,7 +171,7 @@ author_profile: true
   {% endif %}
 
   {% for paper in entry.papers %}
-  <div class="paper-card">
+  <div class="paper-card" data-search="{{ paper.title | escape }} {{ paper.authors | escape }} {{ paper.abstract | escape }} {{ paper.comment | escape }}">
     {% if paper.title %}
       <p class="paper-title">
         <a href="{{ paper.link }}" target="_blank" rel="noopener noreferrer">{{ paper.title }}</a>
@@ -195,6 +215,8 @@ author_profile: true
   <p class="no-papers-msg">暂无论文分享，敬请期待！</p>
 {% endif %}
 
+</div>
+<script defer src="{{ '/assets/js/paper-index.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 <script>
 (function () {
   const THRESHOLD = 10;
