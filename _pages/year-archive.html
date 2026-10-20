@@ -8,7 +8,7 @@ redirect_from:
   - /wordpress/blog-posts/
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/note-index.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/note-index.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 <div class="note-index">
   <p class="note-intro">Physics notes, interactive experiments, and ideas worth exploring.</p>
   <div class="note-search" hidden>
@@ -50,4 +50,4 @@ redirect_from:
   </section>
 </div>
 
-<script defer src="{{ '/assets/js/note-index.js' | relative_url }}"></script>
+<script defer src="{{ '/assets/js/note-index.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
