@@ -151,6 +151,30 @@
       at the level of $χ\sim10^{-12}$. These limits are about $20\%$ better than a naive limit obtained by rescaling the previous
       GigaBREAD limit under the fixed-polarization assumption.
 
+- date: '2026-11-10'
+  papers:
+  - link: https://arxiv.org/pdf/2611.09488v1
+    title: Constraints on Cosmic-Rays and the MeV Emission from Jupiter's Atmosphere
+    authors: Dimitris Tsatsis, Thomas Siegert, Volodymyr Savchenko, Saurabh Mittal, Laura Eisenberger, Mika A. Gelowicz, Rudi
+      Reinhardt, Manja L. Zimmerer, Tristan Bouchet, Tomohiko Oka, Manuel R. H. W. Skalka
+    affiliations: Julius-Maximilians-Universität Würzburg; University of Geneva; Rheinische Friedrich-Wilhelms-Universität
+      Bonn
+    abstract: The Cosmic $γ$-ray Background (CGB) in the MeV regime remains among the least understood components of diffuse
+      cosmic radiation, primarily due to instrumental limitations in detecting faint isotropic emission at MeV energies. We
+      present an indirect method for probing isotropic emission from soft X-rays to $γ$-rays through scattered emission in
+      Jupiter's atmosphere. Using archival observations from SPI, the spectrometer aboard INTEGRAL, spanning 22 years of serendipitous
+      Jupiter observations, we analyse the planet as a moving $γ$-ray point source in the 30 keV to 8 MeV range. Our analysis
+      focuses on Jupiter's $γ$-ray albedo, produced by high-energy photon and cosmic-ray interactions. We performed detailed
+      Monte Carlo simulations to model the response of Jupiter's atmosphere to incident photons, protons, electrons, positrons,
+      and alpha particles. We simulate a 1000 km deep spherical atmosphere with 1 km shell resolution, based on Galileo probe
+      measurements. By comparing empirical and astrophysical models with the SPI data, we find no statistically significant
+      emission from Jupiter. We derive $2σ$ upper limits across the 30 keV to 8 MeV band, which we compare with cutoff power-law,
+      reflected CGB, cosmic-ray-induced, and long-lived mediator dark matter models. We constrain Jupiter's bremsstrahlung
+      luminosity in the MeV range to $10^{18}$ erg/s, close to that inferred from in situ measurements obtained by Juno/JEDI.
+      While the expected emission from the CGB and cosmic rays is a factor of $10^4$ and 100 below our upper limits, respectively,
+      this work establishes planetary atmospheres as promising indirect probes of diffuse $γ$-ray backgrounds for future MeV
+      missions.
+
 - date: '2026-11-11'
   papers:
   - link: https://arxiv.org/pdf/2611.13090v1
