@@ -9,6 +9,10 @@ write access. No credentials belong in this repository.
 
 1. Create a Netlify project for OAuth authentication. The existing public
    website remains hosted on GitHub Pages; no DNS migration is needed.
+   In **Domain management**, add `funyday-k.github.io` and keep it as the
+   primary domain. This matches the editor origin for the OAuth callback.
+   Do not change DNS: pending DNS verification and unavailable Netlify TLS
+   for this domain are expected because GitHub Pages continues to serve it.
 2. Register a GitHub OAuth App with the homepage URL
    `https://funyday-k.github.io/lingyuxia/` and callback
    `https://api.netlify.com/auth/done`.
@@ -26,7 +30,7 @@ write access. No credentials belong in this repository.
    GoatCounter dashboard. Ad blockers may prevent collection. Use a signed-out
    browser to verify the statistics themselves are not publicly readable.
 
-Both identifiers start empty intentionally. No statistics are sent until a
+Both identifiers are now configured. No statistics are sent until a
 valid code is supplied. No OAuth login is offered until a Project ID is set.
 An identifier being present is not proof that its external service works.
 
@@ -98,5 +102,11 @@ until the activation checks above pass.
   and standalone pages. No test content was added to the repository.
 - Analytics checks covered an empty/invalid code, the production hostname,
   management paths and omission of query strings/hash fragments.
-- External account setup, real OAuth, live GitHub writes, deployment and
-  statistics ingestion/private-access checks remain pending.
+- Deployed the management UI and analytics integration to GitHub Pages.
+  GoatCounter received a real verification pageview, with the dashboard set
+  to logged-in users only; an anonymous request returned the login page.
+- Live Safari OAuth initially stalled at Authorized. Adding the existing
+  GitHub Pages host as the Netlify primary domain resolved it without DNS
+  changes. The editor then authenticated and loaded both existing notes.
+  Actual content writes through the live CMS remain untested; draft and
+  attachment saves were tested only in the isolated backend.

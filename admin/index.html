@@ -33,6 +33,7 @@ sitemap: false
       <details id="auth-help"><summary>1. 连接 GitHub 登录 <span id="auth-state">待配置</span></summary>
         <ol>
           <li>在 <a href="https://app.netlify.com/" target="_blank" rel="noopener noreferrer">Netlify</a> 创建一个项目，用于提供登录认证。现有主页继续由 GitHub Pages 托管。</li>
+          <li>在 Netlify 的 Domain management 中添加 <code>funyday-k.github.io</code>，并保持它为 Primary domain，使认证结果能回传到现有后台。这里不修改 DNS；主页继续由 GitHub Pages 托管，Netlify 显示 Pending DNS verification 属于预期状态。</li>
           <li>在 <a href="https://github.com/settings/developers" target="_blank" rel="noopener noreferrer">GitHub OAuth Apps</a> 注册应用，主页填写本网站地址，回调地址填写 <code>https://api.netlify.com/auth/done</code>。</li>
           <li>在 Netlify 项目的 Security → OAuth 中安装 GitHub Provider，将 Client ID 和 Client Secret 填入 Netlify。不要将密钥写入网站文件或聊天。</li>
           <li>将 Netlify 的 Project ID 填入 <code>_data/site_admin.yml</code> 的 <code>netlify_site_id</code>，发布配置后即可登录。</li>
