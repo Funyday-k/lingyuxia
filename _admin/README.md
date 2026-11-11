@@ -1,3 +1,64 @@
+## Native management workspace (2026-11-11)
+
+`/lingyuxia/admin/` now uses its own content-editing interface. Decap is no
+longer embedded in the management page. The old `editor.html` remains a
+fallback for existing Decap drafts; the current UI reads field definitions
+from `config.yml` but does not load the Decap bundle.
+
+- Daily Paper has a searchable title list, date filter and single-paper form.
+  Dates remain a storage detail, not nested editing panels. Day notes are
+  separate from paper comments. Changing a paper date moves only that paper.
+- Notes, publications and galleries support new entries, edits, explicit
+  document deletion and image/PDF uploads. Other pages and existing settings
+  use native fields. Unknown front matter and HTML/Liquid bodies survive edits.
+- All unsaved changes across sections are retained in the current tab and
+  saved together. Reloading/leaving warns about unsaved changes. Input is
+  frozen during remote operations. Sign-out clears the tab's login session.
+- GitHub login reuses the configured Netlify OAuth provider. Its popup is
+  accepted only from the exact provider origin and window. The GitHub token
+  is held in memory/sessionStorage, never in site configuration or URLs.
+  Repository write permission is checked before editing is opened.
+- Save creates/updates a `cms-admin/*` branch and an open pull request. Content,
+  attachments and explicit document removals share one Git commit. Drafts
+  are publicly readable because the repository is public. No GitHub content
+  is written until Save is clicked; Publish has a separate confirmation.
+- A new draft checks the immutable published version before writing. Existing
+  drafts reject a changed head and use non-forced updates. Publishing pins
+  the draft head and lets GitHub reject merge conflicts/rules. This is not
+  automatic semantic merging of concurrent YAML edits. Conflicts keep the
+  local input; ambiguous network results include a GitHub recovery link.
+- Uploaded images preview locally before saving, and from the draft commit
+  on raw.githubusercontent.com after reopening. Files are limited to 10 MB;
+  accepted extensions are PDF, PNG, JPEG, GIF, WebP and AVIF. Deleted documents
+  do not delete shared attachments. Existing filenames remain unchanged;
+  new note filenames follow their selected date.
+- The only embedded surface is the private GoatCounter dashboard. Its access
+  policy and separate session remain unchanged. Markdown previews intentionally
+  support a safe subset; HTML/Liquid are never executed by the editor and
+  formulas/templates should be checked on the published page.
+
+Validation: production Jekyll build passed (the preexisting nested-post image
+UTF-8 warnings remain). Automated tests cover content round trips on 36 real
+files, 12 paper records, OAuth origin/source checks, permissions, optimistic
+conflicts, atomic attachment/deletion commits and ambiguous-write recovery.
+In an isolated browser fixture, search, edit, save, reload/reopen, publish
+confirmation, note creation/deletion and image attachment preview passed;
+all eight existing album images rendered. No fixture or mock is shipped.
+Actual production content writes are not part of this verification.
+
+Run maintained checks with Node 22+:
+
+```sh
+node --test _admin/tests/*.test.mjs
+```
+
+References: [Netlify OAuth setup](https://docs.netlify.com/manage/security/secure-access-to-sites/oauth-provider-tokens/),
+[Decap popup protocol](https://github.com/decaporg/decap-cms/blob/main/packages/decap-cms-lib-auth/src/netlify-auth.js),
+[Git trees](https://docs.github.com/en/rest/git/trees#create-a-tree),
+[pull-request merge](https://docs.github.com/en/rest/pulls/pulls#merge-a-pull-request).
+
+---
+
 # Website administration
 
 The public dashboard is `/lingyuxia/admin/`; the Decap editor is
@@ -111,7 +172,7 @@ until the activation checks above pass.
   Actual content writes through the live CMS remain untested; draft and
   attachment saves were tested only in the isolated backend.
 
-## Integrated workspace (2026-11-11)
+## Earlier embedded workspace (superseded on 2026-11-11)
 
 Use `/lingyuxia/admin/` as the shared workspace. The top navigation follows
 Research, Publications, Daily Paper, Note, CV and Gallery on the public site,

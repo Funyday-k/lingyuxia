@@ -6,60 +6,25 @@ sitemap: false
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow"><title>管理后台 · Lingyu Xia</title>
-<link rel="icon" href="data:,"><link rel="stylesheet" href="{{ '/admin/admin.css' | relative_url }}?v={{ site.time | date: '%s' }}">
-<script defer src="{{ '/admin/dashboard.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>管理后台 · Lingyu Xia</title>
+<link rel="icon" href="data:,"><link rel="stylesheet" href="{{ '/admin/workspace.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<script src="{{ '/admin/vendor/js-yaml-4.1.1.min.js' | relative_url }}"></script>
+<script type="module" src="{{ '/admin/workspace.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </head>
-<body data-build="{{ site.time | date: '%s' }}">
+<body>
 <header class="masthead"><nav aria-label="管理栏目" class="site-nav">
-<a class="brand" href="#about">Lingyu Xia / 夏凌羽 <small>管理</small></a>
+<a class="brand" href="#about">Lingyu Xia <span>内容管理</span></a>
 <a href="#research" data-section="research">Research</a><a href="#publications" data-section="publications">Publications</a><a href="#daily" data-section="daily">Daily Paper</a><a href="#notes" data-section="notes">Note</a><a href="#cv" data-section="cv">CV</a><a href="#gallery" data-section="gallery">Gallery</a><a href="#visitors" data-section="visitors">访问统计</a><a href="#settings" data-section="settings">设置</a>
 </nav></header>
-<div class="workspace" id="workspace">
-<aside class="profile" id="profile"><img src="{{ '/images/profile1.jpg' | relative_url }}" alt="Lingyu Xia"><h2>Lingyu Xia</h2><p>Department of Physics,<br>The Chinese University of Hong Kong</p><p>Hong Kong, China</p><a href="{{ '/' | relative_url }}" target="_blank" rel="noopener">查看公开主页 ↗</a><p class="profile-note">内容与主页栏目一一对应。<br>草稿审核后再发布。</p></aside>
-<main class="main-content">
-<div class="section-heading"><div><h1 id="section-title">About me / 管理概览</h1><p id="section-description">从上方选择栏目，在这里管理主页内容。</p></div><a id="view-public" href="{{ '/' | relative_url }}" target="_blank" rel="noopener">查看对应网页 ↗</a></div>
-<div id="connection-status" class="connection-status" role="status">正在读取连接配置…</div>
-<div id="section-actions" class="section-actions" hidden></div>
-<section id="overview-panel">
-<h2>主页内容</h2>
-<ul class="content-index">
-<li><a href="#research"><strong>Research</strong><span>研究方向与项目介绍</span></a></li>
-<li><a href="#publications"><strong>Publications</strong><span>个人论文条目、页面介绍与现有占位图片</span></a></li>
-<li><a href="#daily"><strong>Daily Paper</strong><span>{{ site.data.daily_papers.size }} 个日期分组 · {% assign paper_count = 0 %}{% for day in site.data.daily_papers %}{% assign paper_count = paper_count | plus: day.papers.size %}{% endfor %}{{ paper_count }} 篇已收录论文</span></a></li>
-<li><a href="#notes"><strong>Note</strong><span>{{ site.posts.size }} 篇笔记 · {{ site.data.notes.size }} 个互动专题</span></a></li>
-<li><a href="#cv"><strong>CV</strong><span>教育经历与个人简历</span></a></li>
-<li><a href="#gallery"><strong>Gallery</strong><span>{{ site.portfolio.size }} 个已有相册 · 编辑照片与文字说明</span></a></li>
-<li><a href="#visitors"><strong>访问统计</strong><span>访问量、热门页面、来源与地区 · 私人面板</span></a></li>
-</ul><p><a href="#about-edit">编辑个人介绍与联系方式 →</a></p>
-    <section class="setup" id="setup">
-      <h2>首次连接</h2>
-      <p>内容保存在你的 GitHub 仓库。只有拥有仓库写入权限的账号才能编辑；此入口页本身不包含私有内容。</p>
-      <details id="auth-help"><summary>1. 连接 GitHub 登录 <span id="auth-state">待配置</span></summary>
-        <ol>
-          <li>在 <a href="https://app.netlify.com/" target="_blank" rel="noopener noreferrer">Netlify</a> 创建一个项目，用于提供登录认证。现有主页继续由 GitHub Pages 托管。</li>
-          <li>在 Netlify 的 Domain management 中添加 <code>funyday-k.github.io</code>，并保持它为 Primary domain，使认证结果能回传到现有后台。这里不修改 DNS；主页继续由 GitHub Pages 托管，Netlify 显示 Pending DNS verification 属于预期状态。</li>
-          <li>在 <a href="https://github.com/settings/developers" target="_blank" rel="noopener noreferrer">GitHub OAuth Apps</a> 注册应用，主页填写本网站地址，回调地址填写 <code>https://api.netlify.com/auth/done</code>。</li>
-          <li>在 Netlify 项目的 Security → OAuth 中安装 GitHub Provider，将 Client ID 和 Client Secret 填入 Netlify。不要将密钥写入网站文件或聊天。</li>
-          <li>将 Netlify 的 Project ID 填入 <code>_data/site_admin.yml</code> 的 <code>netlify_site_id</code>，发布配置后即可登录。</li>
-        </ol>
-        <a href="https://docs.netlify.com/manage/security/secure-access-to-sites/oauth-provider-tokens/" target="_blank" rel="noopener noreferrer">查看官方设置说明 ↗</a>
-      </details>
-      <details><summary>2. 连接私人统计 <span id="analytics-state">待配置</span></summary>
-        <ol>
-          <li>在 <a href="https://www.goatcounter.com/signup" target="_blank" rel="noopener noreferrer">GoatCounter</a> 创建站点，网站地址填写 <code>https://funyday-k.github.io/lingyuxia/</code>。</li>
-          <li>在站点设置中保持统计面板非公开，关闭公开访问及访客计数器。</li>
-          <li>将 <code>你的名称.goatcounter.com</code> 中的“你的名称”填入 <code>_data/site_admin.yml</code> 的 <code>goatcounter_code</code>。登录配置完成后也可在编辑器的“服务连接”中填写。</li>
-        </ol>
-        <p>未填写有效站点名称时不加载统计脚本。本地预览与管理页不计入访问量。</p>
-      </details>
-      <details><summary>日常使用与发布</summary><p>进入编辑器后，选择栏目并新建或编辑内容。保存草稿后，在工作流中检查并发布；GitHub Pages 完成构建后，公开页面才会更新。草稿和附件也会写入公开仓库，请只上传准备公开的材料。建议单个附件不超过 10 MB。</p><p>已有交互笔记的实验代码保留在原页面；常规笔记可直接使用正文编辑器。笔记支持只上传 PDF、不填写正文。</p></details>
-    </section>
-</section>
-<section id="editor-panel" hidden><iframe id="editor-frame" title="主页内容编辑器" referrerpolicy="same-origin"></iframe></section>
-<section id="visitors-panel" hidden><p class="stats-help">统计仅对已登录的你可见。如果下方要求登录或无法显示，请先 <a id="analytics-login" target="_blank" rel="noopener noreferrer">登录 GoatCounter ↗</a>，然后 <button id="refresh-stats" type="button">刷新统计</button>。部分浏览器会限制跨站登录，此时可通过该链接查看。</p><iframe id="stats-frame" title="私人访问统计" referrerpolicy="strict-origin-when-cross-origin"></iframe></section>
-<noscript>管理后台需要启用 JavaScript。</noscript>
-</main></div>
-<footer>© {{ site.time | date: '%Y' }} Lingyu Xia · 管理后台</footer>
+<div class="app-shell">
+<div class="workspace-heading"><div><div class="eyebrow">YOUR PERSONAL WEBSITE</div><h1 id="section-title">内容管理</h1><p id="section-description">正在连接…</p></div><div class="account"><span id="account-name">尚未登录</span><button id="auth-button" type="button">使用 GitHub 登录</button></div></div>
+<div id="message" role="status" aria-live="polite" hidden></div>
+<div class="commandbar" id="commandbar" hidden><div class="draft-context"><span class="status-dot"></span><span id="save-state">已发布内容</span><a id="draft-link" target="_blank" rel="noopener" hidden>查看草稿 ↗</a></div><div class="commands"><button id="drafts-button">草稿箱</button><button id="refresh-button">重新载入</button><button id="save-button" class="primary" disabled>保存草稿</button><button id="publish-button" disabled>发布</button></div></div>
+<main id="content" aria-busy="true"></main>
+<section id="statistics" hidden><div class="stats-note">私人统计 · 若需要，请在下方登录一次。<a id="stats-link" target="_blank" rel="noopener">独立打开 ↗</a><button id="stats-refresh">刷新统计</button></div><iframe id="stats-frame" title="私人访问统计" referrerpolicy="strict-origin-when-cross-origin"></iframe></section>
+<footer><a href="{{ '/' | relative_url }}" target="_blank" rel="noopener">查看公开主页 ↗</a><span>草稿和附件也会存入公开仓库，请只上传准备公开的内容。</span></footer>
+</div>
+<dialog id="dialog"><div id="dialog-content"></div><form method="dialog"><button class="dialog-close">关闭</button></form></dialog>
+<noscript>请启用 JavaScript 以使用管理后台。</noscript>
 </body></html>
