@@ -55,7 +55,7 @@
     }
     links.hidden = !links.children.length;
     if (route && authReady && route !== editorRoute) {
-      editor.src = './editor.html?section=' + encodeURIComponent(key) + '#/collections/' + route;
+      editor.src = './editor.html?v=' + encodeURIComponent(document.body.dataset.build || '') + '&section=' + encodeURIComponent(key) + '#/collections/' + route;
       editorRoute = route; dirty = false;
     }
     if (key === 'visitors' && statsURL && !byId('stats-frame').getAttribute('src')) byId('stats-frame').src = statsURL;

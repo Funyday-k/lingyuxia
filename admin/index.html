@@ -11,7 +11,7 @@ sitemap: false
 <link rel="icon" href="data:,"><link rel="stylesheet" href="{{ '/admin/admin.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 <script defer src="{{ '/admin/dashboard.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 </head>
-<body>
+<body data-build="{{ site.time | date: '%s' }}">
 <header class="masthead"><nav aria-label="管理栏目" class="site-nav">
 <a class="brand" href="#about">Lingyu Xia / 夏凌羽 <small>管理</small></a>
 <a href="#research" data-section="research">Research</a><a href="#publications" data-section="publications">Publications</a><a href="#daily" data-section="daily">Daily Paper</a><a href="#notes" data-section="notes">Note</a><a href="#cv" data-section="cv">CV</a><a href="#gallery" data-section="gallery">Gallery</a><a href="#visitors" data-section="visitors">访问统计</a><a href="#settings" data-section="settings">设置</a>
