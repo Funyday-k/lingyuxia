@@ -1,13 +1,15 @@
 const moduleVersion = new URL(import.meta.url).search;
-const [{ GitHubClient }, { login, logout, getToken }, { createContentModel }] = await Promise.all([
-  import('./github-api.js' + moduleVersion), import('./auth.js' + moduleVersion), import('./content-model.js' + moduleVersion)
+const [{ GitHubClient }, { login, logout, getToken }, { createContentModel }, { renderMarkdownPreview }, { fetchPaperMetadata, identifyPaperLink }] = await Promise.all([
+  import('./github-api.js' + moduleVersion), import('./auth.js' + moduleVersion), import('./content-model.js' + moduleVersion),
+  import('./markdown-preview.js' + moduleVersion), import('./paper-metadata.js' + moduleVersion)
 ]);
 
 const model = createContentModel(window.jsyaml);
 const $ = id => document.getElementById(id);
 const siteBase = new URL('../', location.href);
 const sections = {
-  about: ['管理概览', '一个入口，管理你的主页内容。'],
+  overview: ['管理概览', '一个入口，管理你的主页内容。'],
+  about: ['Home / 首页', '编辑个人介绍、教育经历、联系方式与侧栏资料。'],
   research: ['Research', '编辑研究方向与项目介绍。'],
   publications: ['Publications', '管理个人论文、PDF 附件和页面介绍。'],
   daily: ['Daily Paper', '找到论文，直接编辑。所有修改一起保存为草稿。'],
@@ -95,16 +97,19 @@ function inputField(label, value, onChange, opts = {}) {
   return wrap;
 }
 function previewText(text) {
-  const output = el('div', { className: 'preview' });
-  // Render only a small safe Markdown subset. Raw HTML and Liquid are never executed.
-  for (const line of String(text || '').split('\n')) {
-    const imageMatch = line.match(/^\s*!\[([^\]]*)\]\(([^)]+)\)\s*$/);
-    if (imageMatch && assetURL(imageMatch[2])) { output.append(el('img', { src: assetURL(imageMatch[2]), alt: imageMatch[1], loading: 'lazy' })); continue; }
-    const heading = line.match(/^(#{1,4})\s+(.+)$/);
-    output.append(el(heading ? 'h' + Math.min(heading[1].length + 1, 4) : 'div', { text: heading ? heading[2] : line || '\u00a0' }));
-  }
+  const output = el('div', { className: 'preview markdown-preview' });
+  renderMarkdownPreview(output, text || '', { resolveAsset: assetURL, baseURL: siteBase });
   return output;
 }
+function focusButton() {
+  return el('button', {text:'收起列表', className:'focus-editor-button', onClick:event => {
+    const grid = event.target.closest('.workspace-grid');
+    if (!grid) return;
+    const focused = grid.classList.toggle('focus-editor');
+    event.target.textContent = focused ? '显示列表' : '收起列表';
+  }});
+}
+
 function topActions(label, actions = []) {
   return el('div', { className: 'editor-top' }, el('span', { className: 'eyebrow', text: label }), el('div', { className: 'editor-top-actions' }, el('button', { className: 'mobile-back', text: '← 返回列表', onClick: () => { document.querySelector('.workspace-grid')?.classList.remove('has-selection'); } }), ...actions));
 }
@@ -113,6 +118,63 @@ function checkLeave() { return !isDirty() || window.confirm('有尚未保存的�
 function collection(name) { return config.collections.find(item => item.name === name); }
 function tabs(options, current, onPick) { return el('div', { className: 'tabs' }, ...options.map(([key, label]) => el('button', { text: label, 'aria-pressed': key === current, onClick: () => { mode = key; selected = ''; query = ''; onPick(); } }))); }
 
+function paperImportDialog({ initialLink = '', existing = false, apply }) {
+  const cache = docs;
+  let timer, controller, request = 0, result = null;
+  const input = el('input', {type:'text','aria-label':'粘贴论文链接',placeholder:'粘贴 arXiv 链接或 DOI',value:initialLink});
+  const status = el('p',{className:'import-status',role:'status',text:'粘贴链接后自动读取，也可点击“读取信息”。'});
+  const details = el('div',{className:'import-result'});
+  const overwrite = el('input',{type:'checkbox'});
+  const applyButton = el('button',{className:'primary',text:existing ? '填入编辑器' : '加入论文列表',disabled:'disabled',onClick:()=>{
+    if (!result || cache !== docs) return;
+    apply(result, overwrite.checked);
+    $('dialog').close(); updateStatus();
+    message('论文信息已填入编辑器，请核对后保存草稿。摘要来自公开记录，没有自动生成点评。');
+  }});
+  async function retrieve() {
+    clearTimeout(timer); controller?.abort(); const id = ++request; result = null; applyButton.disabled = true; details.replaceChildren();
+    try { identifyPaperLink(input.value); } catch(error) { status.textContent = error.message; return; }
+    controller = new AbortController(); status.textContent = '正在读取论文信息…';
+    try {
+      const metadata = await fetchPaperMetadata(input.value,{signal:controller.signal});
+      if (id !== request || !$('dialog').open || cache !== docs) return;
+      result = metadata; applyButton.disabled = false;
+      status.textContent = '已读取，请核对后填入。';
+      details.replaceChildren(el('h3',{text:metadata.title || '未返回标题'}),el('p',{className:'count import-authors',text:metadata.authors || '来源未提供作者'}),el('p',{className:'import-abstract',text:metadata.abstract || '来源未提供摘要，可稍后手动填写。'}),el('a',{href:safeURL(metadata.sourceURL || metadata.link),target:'_blank',rel:'noopener',text:'信息来源：'+metadata.source+' ↗'}));
+      if(metadata.date) details.append(el('p',{className:'field-hint',text:'来源记录日期：'+metadata.date}));
+      if (metadata.metadataVersion === 'record') details.append(el('p',{className:'field-hint',text:'按 arXiv 公开记录读取；若链接指定了 v1、v2 等版本，请核对摘要是否与该版本一致。'}));
+    } catch(error) { if(id === request && $('dialog').open) status.textContent = error.name === 'AbortError' ? '读取已取消。' : error.message; }
+  }
+  input.addEventListener('input',()=>{
+    clearTimeout(timer); controller?.abort(); request++; result=null; applyButton.disabled=true; details.replaceChildren();
+    status.textContent = '粘贴 arXiv 或 DOI 链接后自动读取。';
+    try { identifyPaperLink(input.value); timer=setTimeout(retrieve,650); } catch { /* Continue accepting input without fetching unsupported destinations. */ }
+  });
+  showDialog(el('h2',{text:existing ? '从论文链接读取' : '粘贴链接，添加论文'}),el('p',{className:'count',text:'支持 arXiv 摘要页、PDF 链接和 DOI。读取标题、作者、单位与摘要；缺少的信息保持空白。'}),el('div',{className:'import-input-row'},input,el('button',{text:'读取信息',onClick:retrieve})),status,details,
+    ...(existing ? [el('label',{className:'overwrite-option'},overwrite,'替换已有标题、作者、单位和摘要等论文信息（默认只补全空字段）')] : []),applyButton);
+  $('dialog').addEventListener('close',()=>{ clearTimeout(timer); controller?.abort(); request++; },{once:true});
+  if(initialLink.trim()) retrieve(); else input.focus();
+}
+function fillMetadata(target,values,overwrite=false) {
+  for(const [key,value] of Object.entries(values)) if(value != null && String(value).trim() && (overwrite || !String(target[key] || '').trim())) target[key]=value;
+}
+function handlePaperPaste(event, openImport) {
+  const value=event.clipboardData?.getData('text/plain') || '';
+  try { identifyPaperLink(value); } catch { return; }
+  event.preventDefault(); openImport(value);
+}
+function importPublication(doc, initialLink = doc.data.arxiv_url || doc.data.doi_url || doc.data.paperurl || '') {
+  paperImportDialog({initialLink,existing:true,apply:(metadata,overwrite)=>{
+    fillMetadata(doc.data,{title:metadata.title,authors:metadata.authors,excerpt:metadata.abstract,venue:metadata.venue,arxiv_url:metadata.arxiv_url,doi_url:metadata.doi_url,paperurl:metadata.link},overwrite);
+    if(overwrite || !doc.data.date || (doc.originalText === '' && doc.data.date === doc.initialDate)) {
+      const fullDate = /^\d{4}-\d{2}-\d{2}$/.test(metadata.date || '') && !Number.isNaN(Date.parse(metadata.date+'T00:00:00Z')) && new Date(metadata.date+'T00:00:00Z').toISOString().slice(0,10) === metadata.date;
+      if(fullDate) doc.data.date=metadata.date;
+      else if(doc.originalText === '' && doc.data.date === doc.initialDate) doc.data.date='';
+    }
+    updateStatus(); render();
+  }});
+}
+
 async function renderDaily() {
   const doc = await read('_data/daily_papers.yml');
   const list = el('div', { className: 'entries', role: 'list', 'aria-label': '论文列表' });
@@ -120,10 +182,15 @@ async function renderDaily() {
   const search = el('input', { type: 'search', placeholder: '搜索标题、作者或点评', 'aria-label': '搜索论文', value: query, onInput: e => { query = e.target.value; renderList(); } });
   const dates = el('select', { 'aria-label': '按日期筛选', onChange: e => { dateFilter = e.target.value; renderList(); } }, el('option', { value: '', text: '所有日期' }));
   const count = el('span', { className: 'count' });
+  const importNew = el('button',{text:'从链接添加论文',className:'link-import-button',onClick:()=>paperImportDialog({apply:metadata=>{
+    const pos=model.newDaily(doc,dateFilter || localDate());
+    fillMetadata(doc.data[pos.dayIndex].papers[pos.paperIndex],{title:metadata.title,link:metadata.link,authors:metadata.authors,affiliations:metadata.affiliations,abstract:metadata.abstract});
+    selected=`${pos.dayIndex}:${pos.paperIndex}`; query=''; search.value=''; refreshDates();renderList();renderEditor();grid.classList.add('has-selection');
+  }})});
   const pane = el('aside', { className: 'list-pane' }, el('div', { className: 'list-tools' }, search, el('button', { text: '＋ 新增', onClick: () => {
     const day = dateFilter || localDate();
     const pos = model.newDaily(doc, day); selected = `${pos.dayIndex}:${pos.paperIndex}`; updateStatus(); refreshDates(); renderList(); renderEditor(); grid.classList.add('has-selection');
-  } })), el('div', { className: 'filters' }, dates, count), list);
+  } })),importNew, el('div', { className: 'filters' }, dates, count), list);
   const grid = el('div', { className: 'workspace-grid' }, pane, editor);
   function refreshDates() {
     dates.replaceChildren(el('option', { value: '', text: '所有日期' }), ...[...new Set(doc.data.map(day => day.date))].sort().reverse().map(date => el('option', { value: date, text: date })));
@@ -139,10 +206,18 @@ async function renderDaily() {
   function renderEditor() {
     const row = rows().find(item => item.id === selected);
     if (!row) { editor.replaceChildren(el('div', { className: 'empty' }, el('h2', { text: '选择一篇论文' }), el('p', { text: '从左侧直接打开，或新增一篇论文。' }))); return; }
-    const update = (key, value) => { model.updateDaily(doc, row.dayIndex, row.paperIndex, { [key]: value }); updateStatus(); if (key === 'title' || key === 'authors') renderList(); };
-    const previewButton = el('button', { text: '预览', 'aria-pressed': 'false' });
-    const preview = el('div', { hidden: true });
-    previewButton.addEventListener('click', () => { preview.hidden = !preview.hidden; previewButton.setAttribute('aria-pressed', String(!preview.hidden)); preview.replaceChildren(el('div', { className: 'preview' }, el('h2', { text: row.paper.title }), el('p', { text: row.paper.authors || '' }), el('p', { text: row.paper.abstract || '' }), el('h3', { text: '我的点评' }), el('p', { text: row.paper.comment || '' }))); });
+    const update = (key, value) => { model.updateDaily(doc, row.dayIndex, row.paperIndex, { [key]: value }); updateStatus(); if (key === 'title' || key === 'authors') renderList(); refreshPaperPreview(); };
+    const preview = el('section',{className:'paper-live-preview preview-column','aria-label':'论文实时预览'});
+    function refreshPaperPreview() {
+      const body = el('div',{className:'preview'},el('h2',{text:row.paper.title || '论文标题'}),el('p',{className:'count',text:row.paper.authors || ''}),el('h3',{text:'摘要'}),previewText(row.paper.abstract || '尚未填写摘要'),el('h3',{text:'我的点评'}),previewText(row.paper.comment || '尚未填写点评'));
+      preview.replaceChildren(el('div',{className:'pane-heading',text:'实时预览'}),body);
+    }
+    const importCurrent = (initialLink=row.paper.link || '') => paperImportDialog({initialLink,existing:true,apply:(metadata,overwrite)=>{
+      fillMetadata(row.paper,{title:metadata.title,link:metadata.link,authors:metadata.authors,affiliations:metadata.affiliations,abstract:metadata.abstract},overwrite);
+      renderList();renderEditor();
+    }});
+    const linkField=inputField('论文链接',row.paper.link,value=>update('link',value),{type:'url',placeholder:'粘贴 arXiv / DOI 链接以读取信息'});
+    linkField.querySelector('input').addEventListener('paste',event=>handlePaperPaste(event,importCurrent));
     const dateField = inputField('日期', row.date, () => {}, { type: 'date' });
     dateField.querySelector('input').addEventListener('change', event => {
       const value = event.target.value; if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) { event.target.value = row.date; return; }
@@ -155,12 +230,14 @@ async function renderDaily() {
     });
     const dayNote = el('button', { text: '当日说明', onClick: () => showDialog(el('h2', { text: row.date + ' · 当日说明' }), inputField('对这一天所有论文的说明', doc.data[row.dayIndex].comment || '', value => { doc.data[row.dayIndex].comment = value; updateStatus(); }, { multiline: true, rows: 6 })) });
     const remove = el('button', { text: '移除论文', className: 'danger', onClick: () => { if (window.confirm('从这份草稿中移除这篇论文？发布前不会改变公开页面。')) { model.removeDaily(doc, row.dayIndex, row.paperIndex); selected = ''; updateStatus(); renderList(); renderEditor(); grid.classList.remove('has-selection'); } } });
-    editor.replaceChildren(topActions('PAPER DETAILS', [dayNote, previewButton, remove]), preview,
+    const source = el('section',{className:'source-column'},el('div',{className:'pane-heading',text:'编辑内容'}),
       inputField('论文标题', row.paper.title, value => update('title', value), { multiline: true, rows: 2, className: 'title-field', placeholder: '输入论文标题' }),
-      el('div', { className: 'compact-row' }, dateField, inputField('论文链接', row.paper.link, value => update('link', value), { type: 'url', placeholder: 'https://arxiv.org/abs/…' })),
+      el('div', { className: 'compact-row' }, dateField, linkField),
       el('details', { className: 'metadata' }, el('summary', { text: '作者与单位' }), inputField('作者', row.paper.authors, value => update('authors', value), { multiline: true, rows: 2 }), inputField('作者单位', row.paper.affiliations, value => update('affiliations', value), { multiline: true, rows: 2 })),
       inputField('摘要', row.paper.abstract, value => update('abstract', value), { multiline: true, rows: 7, className: 'abstract-field' }),
       inputField('我的点评', row.paper.comment, value => update('comment', value), { multiline: true, rows: 5, className: 'comment-field', placeholder: '记录值得关注的结果、局限和想法…' }));
+    refreshPaperPreview();
+    editor.replaceChildren(topActions('PAPER DETAILS',[focusButton(),dayNote,el('button',{text:'读取链接信息',onClick:()=>importCurrent()}),remove]),el('div',{className:'paper-editor-layout'},source,preview));
   }
   refreshDates(); if (!selected && rows().length) selected = rows()[0].id;
   renderList(); renderEditor(); return grid;
@@ -194,15 +271,14 @@ function imageGrid(body) {
 }
 function genericForm(doc, schema, { gallery = false } = {}) {
   const wrap = el('section', { className: 'editor-pane' });
-  const preview = el('div', { hidden: true });
-  const previewButton = el('button', { text: '正文预览', onClick: () => { preview.hidden = !preview.hidden; preview.replaceChildren(el('p', { className: 'count', text: '简化内容预览；网页模板与公式以发布后的页面为准。' }), previewText(doc.body || doc.data.intro || doc.data.excerpt || '')); } });
-  const actions = [previewButton];
+  const actions = schema.folder ? [focusButton()] : [];
+  if (schema.name === 'publications') actions.push(el('button',{text:'从链接填写',onClick:()=> importPublication(doc)}));
   if (schema.folder) actions.push(el('button', {text:'删除条目', className:'danger', onClick:() => {
     if (!window.confirm('从草稿中删除这个条目？发布后公开页面才会移除，图片附件会保留。')) return;
     if (doc.originalText === '') docs.delete(doc.path); else deleted.add(doc.path);
     selected = ''; updateStatus(); render();
   }}));
-  wrap.append(topActions('EDIT CONTENT', actions), preview);
+  wrap.append(topActions('EDIT CONTENT', actions));
   let pictures;
   if (gallery) { pictures = el('div', {}, imageGrid(doc.body)); wrap.append(pictures); }
   function addField(field, prefix = '') {
@@ -214,21 +290,31 @@ function genericForm(doc, schema, { gallery = false } = {}) {
   function makeField(field, prefix) {
     const key = prefix + field.name;
     const isBody = field.name === 'body';
+    const isMarkdown = field.widget === 'markdown';
+    const livePreview = isMarkdown ? el('div',{className:'preview markdown-preview', 'aria-label':field.label+'预览'}) : null;
+    const refreshPreview = () => { if(livePreview) renderMarkdownPreview(livePreview, getValue(doc,key) || '', {resolveAsset:assetURL,baseURL:siteBase}); };
     const multiline = ['text', 'markdown'].includes(field.widget) || field.name === 'title';
     const value = getValue(doc, key);
     const isList = field.widget === 'list';
-    const input = inputField(field.label, isList ? (Array.isArray(value) ? value.join(', ') : value || '') : value, next => { setValue(doc, key, isList ? next.split(',').map(x => x.trim()).filter(Boolean) : next); }, {
+    const input = inputField(field.label, isList ? (Array.isArray(value) ? value.join(', ') : value || '') : value, next => { setValue(doc, key, isList ? next.split(',').map(x => x.trim()).filter(Boolean) : next); refreshPreview(); }, {
       multiline, rows: isBody ? 18 : field.name === 'title' ? 2 : 4,
       className: isBody ? 'body-field' : field.name === 'title' ? 'title-field' : '',
-      hint: isList ? '多个标签用英文逗号分隔。' : field.hint || (isBody ? '支持 Markdown；保留现有 HTML 和模板内容。' : ''),
+      hint: isList ? '多个标签用英文逗号分隔。' : (isMarkdown ? 'Markdown 源码；右侧预览随输入更新，公式保留原文。' : field.hint || ''),
       type: field.widget === 'datetime' ? 'date' : 'text'
     });
+    if (schema.name === 'publications' && ['paperurl','arxiv_url','doi_url'].includes(field.name)) input.querySelector('input').addEventListener('paste',event=>handlePaperPaste(event,value=>importPublication(doc,value)));
     if (['file', 'image'].includes(field.widget)) {
       input.append(uploadControl(url => { setValue(doc, key, url); input.querySelector('input').value = url; if (image) image.src = assetURL(url); }, field.widget === 'image' ? 'images/uploads' : 'files/uploads'));
       let image;
       if (field.widget === 'image') { image = el('img', { className: 'asset-preview', alt: field.label }); if (value) image.src = assetURL(value); input.append(image); }
     }
-    if (isBody) input.append(uploadControl(url => { const text = `\n\n${/\.pdf$/i.test(url) ? '[PDF]' : '![图片说明]'}(${url})\n`; const area = input.querySelector('textarea'); const start = area.selectionStart; const end = area.selectionEnd; const body = String(doc.body || ''); doc.body = body.slice(0, start) + text + body.slice(end); area.value = doc.body; updateStatus(); if (pictures) pictures.replaceChildren(imageGrid(doc.body)); }, gallery ? 'images/portfolio' : 'files/uploads'));
+    if (isBody) input.append(uploadControl(url => { const text = `\n\n${/\.pdf$/i.test(url) ? '[PDF]' : '![图片说明]'}(${url})\n`; const area = input.querySelector('textarea'); const start = area.selectionStart; const end = area.selectionEnd; const body = String(doc.body || ''); doc.body = body.slice(0, start) + text + body.slice(end); area.value = doc.body; updateStatus(); refreshPreview(); if (pictures) pictures.replaceChildren(imageGrid(doc.body)); }, gallery ? 'images/portfolio' : 'files/uploads'));
+    if (isMarkdown) {
+      refreshPreview();
+      return el('div',{className:'split-editor'},
+        el('section',{className:'source-column'},el('div',{className:'pane-heading',text:'源码'}),input),
+        el('section',{className:'preview-column'},el('div',{className:'pane-heading',text:'实时预览'}),livePreview));
+    }
     return input;
   }
   if (schema.name === 'notes') {
@@ -260,7 +346,7 @@ async function renderCollection(name) {
     const date = localDate();
     const path = `${schema.folder}/${name === 'notes' ? date + '-' : ''}${crypto.randomUUID().slice(0, 8)}.md`;
     const data = { title: '', ...(name === 'gallery' ? { collection: 'portfolio' } : { date }), ...(name === 'notes' ? {note_type:'Study note'} : {}), ...(name === 'publications' ? { collection: 'publications', authors: '', venue: '' } : {}) };
-    const doc = model.parse(path, ''); doc.data = data; doc.kind = 'frontmatter'; docs.set(path, doc); records.unshift(doc); selected = path; updateStatus(); renderList(); renderEditor(); grid.classList.add('has-selection');
+    const doc = model.parse(path, ''); doc.data = data; doc.kind = 'frontmatter'; doc.initialDate = date; docs.set(path, doc); records.unshift(doc); selected = path; updateStatus(); renderList(); renderEditor(); grid.classList.add('has-selection');
   } });
   grid.append(el('aside', { className: 'list-pane' }, el('div', { className: 'list-tools' }, search, add), list), editor);
   if (!selected && records.length) selected = records[0].path;
@@ -288,7 +374,7 @@ async function render() {
   const [title, description] = sections[key]; $('section-title').textContent = title; $('section-description').textContent = description;
   document.querySelectorAll('[data-section]').forEach(link => { if (link.dataset.section === key) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current'); });
   $('statistics').hidden = key !== 'visitors'; $('content').hidden = key === 'visitors';
-  $('commandbar').hidden = !client || key === 'visitors' || key === 'about';
+  $('commandbar').hidden = !client || key === 'visitors' || key === 'overview';
   if (key === 'visitors') { if (!$('stats-frame').src && $('stats-frame').dataset.src) $('stats-frame').src = $('stats-frame').dataset.src; $('content').setAttribute('aria-busy', 'false'); return; }
   if (!client) { $('content').replaceChildren(el('section', { className: 'signin' }, el('h2', { text: '开始管理你的主页' }), el('p', { text: '使用 GitHub 登录后，即可编辑论文、笔记和相册。保存草稿后预览，再发布到主页。' }), el('button', { className: 'primary', text: '使用 GitHub 登录', onClick: signIn }))); $('content').setAttribute('aria-busy', 'false'); return; }
   $('content').setAttribute('aria-busy', 'true');
@@ -300,6 +386,11 @@ async function render() {
       const activeMode = options.some(([value]) => value === mode) ? mode : 'entries';
       output = el('div', {}, tabs(options, activeMode, render));
       output.append(activeMode === 'entries' ? await renderCollection(key) : activeMode === 'topics' ? await renderTopics() : await renderPage(key === 'gallery' ? 'gallery_page' : 'publications_page'));
+    } else if (key === 'about') {
+      const homeMode = mode === 'profile' ? 'profile' : 'body';
+      output = el('div', {}, tabs([['body','首页正文'],['profile','侧栏资料']],homeMode,render));
+      if(homeMode === 'body') output.append(await renderPage('about'));
+      else { const schema = collection('settings').files.find(item=>item.name==='profile'); output.append(el('div',{className:'section-page'},genericForm(await read(schema.file),schema))); }
     } else if (key === 'research' || key === 'cv') output = await renderPage(key);
     else if (key === 'settings') {
       const settingsMode = ['profile', 'services', 'about'].includes(mode) ? mode : 'profile';
@@ -307,7 +398,7 @@ async function render() {
       if (settingsMode === 'about') output.append(await renderPage('about'));
       else { const schema = collection('settings').files.find(item => item.name === settingsMode); output.append(el('div', { className: 'section-page' }, genericForm(await read(schema.file), schema))); }
     } else {
-      output = el('div', { className: 'overview-grid' }, ...Object.entries(sections).filter(([name]) => !['about', 'settings'].includes(name)).map(([name, [label, detail]]) => el('a', { href: '#' + name, className: 'overview-card' }, el('strong', { text: label }), el('span', { text: detail }))));
+      output = el('div', { className: 'overview-grid' }, ...Object.entries(sections).filter(([name]) => !['overview', 'settings'].includes(name)).map(([name, [label, detail]]) => el('a', { href: '#' + name, className: 'overview-card' }, el('strong', { text: label }), el('span', { text: detail }))));
     }
     if (version === routeVersion) $('content').replaceChildren(output);
   } catch (error) { if (version === routeVersion) { message(error.message, true); $('content').replaceChildren(el('div', { className: 'empty', text: '内容未能载入。请检查连接后点击“重新载入”。' })); } }
@@ -390,7 +481,7 @@ $('drafts-button').addEventListener('click', () => run(async () => {
     ...(!list.length ? [el('p', { text: '目前没有已保存的草稿。' })] : []));
 }));
 window.addEventListener('beforeunload', event => { if (isDirty()) { event.preventDefault(); event.returnValue = ''; } });
-window.addEventListener('hashchange', () => { selected = ''; query = ''; dateFilter = ''; mode = ''; render(); });
+window.addEventListener('hashchange', () => { if($('dialog').open) $('dialog').close(); selected = ''; query = ''; dateFilter = ''; mode = ''; render(); });
 $('stats-refresh').addEventListener('click', () => { const frame = $('stats-frame'); if (frame.src) frame.src = frame.src; });
 $('auth-button').disabled = true;
 try {

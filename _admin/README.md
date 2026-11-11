@@ -1,3 +1,45 @@
+## Link import, parallel previews and Home editing (2026-11-11)
+
+- `Home / 首页` opens the actual `_pages/about.md` editor directly, with a
+  separate sidebar-settings tab. The name/logo leads to the management overview.
+  The earlier Settings → personal introduction route remains available.
+- Markdown fields now have source and live preview columns. Daily Paper has
+  an editable paper form beside its live preview. A list-collapse button gives
+  either view more space; narrow screens stack the columns. Marked 18.0.11 is
+  vendored with its MIT license. The renderer creates DOM nodes rather than
+  inserting provider/user HTML; raw HTML and Liquid are displayed literally.
+  Math delimiters and TeX source are preserved, not typeset.
+- Daily Paper supports importing a new record from a pasted arXiv or DOI link.
+  Existing paper links and Publications fields can also open the import dialog
+  on paste. Recognized pastes do not mutate the current field before approval.
+  Typing/pasting in the dialog reads metadata automatically after a short delay.
+- Metadata comes directly from CORS-enabled DataCite and Crossref REST APIs,
+  without another account, secret or proxy. arXiv PDF/abs and legacy/version IDs
+  are supported. An arXiv version URL remains versioned, but the displayed
+  metadata comes from the unversioned public record, with an explicit notice.
+  Arbitrary publisher URLs are not scraped; use their DOI link instead.
+- Imports default to filling empty fields. Replacing populated bibliographic
+  fields requires checking the replacement option. Paper commentary and Daily
+  Paper recommendation dates are never filled from source metadata. Complete
+  publication dates can populate new Publications records; missing/partial dates
+  require the user to supply a date instead of fabricating one.
+- Request cancellation, changed-input response guards and closing a dialog on
+  navigation prevent stale results from being applied. Importing only changes
+  the local edit; saving and publishing remain explicit actions. Missing source
+  fields stay empty. Embedded XML/HTML is reduced to plain text, with common
+  JATS/MathML superscripts/subscripts retained as explicit plain notation.
+
+Verification: 32 automated checks passed, including DOM preview/XSS/math
+regressions with jsdom, and metadata URL/provider/abort/markup tests. Browser
+checks in a disposable repository fixture used live arXiv and DOI APIs, checked
+import and save, preservation of manual title/comment, cancellation without
+mutating the link, publication date, live Markdown update and side-by-side
+Home layout. No real content was changed by these checks.
+
+DOM tests use `jsdom` if installed; otherwise they explicitly skip. Set
+`PREVIEW_JSDOM_PATH` to a local jsdom package path to enable them when running
+`node --test _admin/tests/*.test.mjs`.
+
 ## Native management workspace (2026-11-11)
 
 `/lingyuxia/admin/` now uses its own content-editing interface. Decap is no
