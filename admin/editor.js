@@ -18,6 +18,7 @@
       script.onerror = reject;
       document.head.appendChild(script);
     });
+    window.registerSiteListFormat(window.CMS, window.jsyaml);
     window.CMS.init({ config: { backend: { site_domain: settings.netlify_site_id } } });
     document.getElementById('editor-notice').hidden = true;
   } catch (error) {
@@ -25,3 +26,16 @@
     document.getElementById('retry').hidden = false;
   }
 }());
+
+// Inform the same-origin management shell before it replaces this editor.
+if (window.parent !== window) {
+  let lastDirty = false;
+  new MutationObserver(function () {
+    const text = document.body.innerText;
+    const dirty = text.includes('含未保存的修改') || text.includes('Unsaved Changes');
+    if (dirty !== lastDirty) {
+      lastDirty = dirty;
+      window.parent.postMessage({ type: 'site-editor-dirty', dirty: dirty }, window.location.origin);
+    }
+  }).observe(document.body, { childList: true, subtree: true, characterData: true });
+}

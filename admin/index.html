@@ -6,27 +6,33 @@ sitemap: false
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>内容管理 · Lingyu Xia</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="{{ '/admin/admin.css' | relative_url }}">
-  <script defer src="{{ '/admin/dashboard.js' | relative_url }}"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow"><title>管理后台 · Lingyu Xia</title>
+<link rel="icon" href="data:,"><link rel="stylesheet" href="{{ '/admin/admin.css' | relative_url }}">
+<script defer src="{{ '/admin/dashboard.js' | relative_url }}"></script>
 </head>
 <body>
-  <header><a class="brand" href="{{ '/' | relative_url }}">Lingyu Xia <span>/ 管理</span></a><a href="{{ '/' | relative_url }}">查看主页 ↗</a></header>
-  <main>
-    <div class="eyebrow">PERSONAL WEBSITE</div>
-    <h1>让记录与分享更简单。</h1>
-    <p class="intro">在这里整理笔记、发布论文，更新你的个人主页。</p>
-    <div class="status-bar"><span id="connection-status" role="status">正在检查连接配置…</span><a href="#setup">连接设置 ↓</a></div>
-    <div class="cards">
-      <section class="card"><span class="number">01 / NOTES</span><h2>笔记</h2><p>编写正文、上传 PDF 或图片，整理简介与标签。发布后自动加入 Note 列表。</p><a class="action editor-link" href="{{ '/admin/editor.html' | relative_url }}#/collections/notes">管理笔记 →</a></section>
-      <section class="card"><span class="number">02 / PAPERS</span><h2>个人论文</h2><p>管理作者、摘要、发表信息、论文附件与 arXiv / DOI 链接。</p><a class="action editor-link" href="{{ '/admin/editor.html' | relative_url }}#/collections/publications">管理论文 →</a></section>
-      <section class="card"><span class="number">03 / PROFILE</span><h2>主页内容</h2><p>更新个人介绍、研究方向、简历与侧栏联系方式。</p><a class="action editor-link" href="{{ '/admin/editor.html' | relative_url }}#/collections/pages">编辑页面 →</a></section>
-      <section class="card"><span class="number">04 / VISITORS</span><h2>私人访问统计</h2><p>了解访问量、热门页面、访问来源与大致地区。统计面板需单独登录。</p><a class="action" id="analytics-link" href="#setup">配置访问统计 →</a></section>
-    </div>
+<header class="masthead"><nav aria-label="管理栏目" class="site-nav">
+<a class="brand" href="#about">Lingyu Xia / 夏凌羽 <small>管理</small></a>
+<a href="#research" data-section="research">Research</a><a href="#publications" data-section="publications">Publications</a><a href="#daily" data-section="daily">Daily Paper</a><a href="#notes" data-section="notes">Note</a><a href="#cv" data-section="cv">CV</a><a href="#gallery" data-section="gallery">Gallery</a><a href="#visitors" data-section="visitors">访问统计</a><a href="#settings" data-section="settings">设置</a>
+</nav></header>
+<div class="workspace" id="workspace">
+<aside class="profile" id="profile"><img src="{{ '/images/profile1.jpg' | relative_url }}" alt="Lingyu Xia"><h2>Lingyu Xia</h2><p>Department of Physics,<br>The Chinese University of Hong Kong</p><p>Hong Kong, China</p><a href="{{ '/' | relative_url }}" target="_blank" rel="noopener">查看公开主页 ↗</a><p class="profile-note">内容与主页栏目一一对应。<br>草稿审核后再发布。</p></aside>
+<main class="main-content">
+<div class="section-heading"><div><h1 id="section-title">About me / 管理概览</h1><p id="section-description">从上方选择栏目，在这里管理主页内容。</p></div><a id="view-public" href="{{ '/' | relative_url }}" target="_blank" rel="noopener">查看对应网页 ↗</a></div>
+<div id="connection-status" class="connection-status" role="status">正在读取连接配置…</div>
+<div id="section-actions" class="section-actions" hidden></div>
+<section id="overview-panel">
+<h2>主页内容</h2>
+<ul class="content-index">
+<li><a href="#research"><strong>Research</strong><span>研究方向与项目介绍</span></a></li>
+<li><a href="#publications"><strong>Publications</strong><span>个人论文条目、页面介绍与现有占位图片</span></a></li>
+<li><a href="#daily"><strong>Daily Paper</strong><span>{{ site.data.daily_papers.size }} 个日期分组 · {% assign paper_count = 0 %}{% for day in site.data.daily_papers %}{% assign paper_count = paper_count | plus: day.papers.size %}{% endfor %}{{ paper_count }} 篇已收录论文</span></a></li>
+<li><a href="#notes"><strong>Note</strong><span>{{ site.posts.size }} 篇笔记 · {{ site.data.notes.size }} 个互动专题</span></a></li>
+<li><a href="#cv"><strong>CV</strong><span>教育经历与个人简历</span></a></li>
+<li><a href="#gallery"><strong>Gallery</strong><span>{{ site.portfolio.size }} 个已有相册 · 编辑照片与文字说明</span></a></li>
+<li><a href="#visitors"><strong>访问统计</strong><span>访问量、热门页面、来源与地区 · 私人面板</span></a></li>
+</ul><p><a href="#about-edit">编辑个人介绍与联系方式 →</a></p>
     <section class="setup" id="setup">
       <h2>首次连接</h2>
       <p>内容保存在你的 GitHub 仓库。只有拥有仓库写入权限的账号才能编辑；此入口页本身不包含私有内容。</p>
@@ -50,8 +56,10 @@ sitemap: false
       </details>
       <details><summary>日常使用与发布</summary><p>进入编辑器后，选择栏目并新建或编辑内容。保存草稿后，在工作流中检查并发布；GitHub Pages 完成构建后，公开页面才会更新。草稿和附件也会写入公开仓库，请只上传准备公开的材料。建议单个附件不超过 10 MB。</p><p>已有交互笔记的实验代码保留在原页面；常规笔记可直接使用正文编辑器。笔记支持只上传 PDF、不填写正文。</p></details>
     </section>
-    <noscript><p>请启用 JavaScript 以使用管理后台。首次连接说明仍可阅读。</p></noscript>
-  </main>
-  <footer>Lingyu Xia · 内容管理 <span>GitHub Pages / Decap CMS</span></footer>
-</body>
-</html>
+</section>
+<section id="editor-panel" hidden><iframe id="editor-frame" title="主页内容编辑器" referrerpolicy="same-origin"></iframe></section>
+<section id="visitors-panel" hidden><p class="stats-help">统计仅对已登录的你可见。如果下方要求登录或无法显示，请先 <a id="analytics-login" target="_blank" rel="noopener noreferrer">登录 GoatCounter ↗</a>，然后 <button id="refresh-stats" type="button">刷新统计</button>。部分浏览器会限制跨站登录，此时可通过该链接查看。</p><iframe id="stats-frame" title="私人访问统计" referrerpolicy="strict-origin-when-cross-origin"></iframe></section>
+<noscript>管理后台需要启用 JavaScript。</noscript>
+</main></div>
+<footer>© {{ site.time | date: '%Y' }} Lingyu Xia · 管理后台</footer>
+</body></html>

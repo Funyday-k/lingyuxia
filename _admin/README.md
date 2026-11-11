@@ -110,3 +110,37 @@ until the activation checks above pass.
   changes. The editor then authenticated and loaded both existing notes.
   Actual content writes through the live CMS remain untested; draft and
   attachment saves were tested only in the isolated backend.
+
+## Integrated workspace (2026-11-11)
+
+Use `/lingyuxia/admin/` as the shared workspace. The top navigation follows
+Research, Publications, Daily Paper, Note, CV and Gallery on the public site,
+with private visitor statistics and website settings added alongside them.
+The content editor stays in a same-origin frame. Switching to statistics
+keeps the current editor mounted; changing editor sections warns when the
+editor reports unsaved changes.
+
+- Daily Paper edits the existing `_data/daily_papers.yml` as date groups and
+  nested paper records. A custom `yaml-list` formatter wraps the root list
+  only in the editor and writes a root list back. No data migration is needed.
+  The formatter uses pinned js-yaml 4.1.1 with its bundled MIT license.
+- Note includes the root-array interactive directory `_data/notes.yml`, and
+  nested posts are discoverable. Interactive experiment code is unchanged.
+- Gallery edits existing `_portfolio` albums and uses `/images/portfolio`
+  for media, matching the existing `/lingyuxia/images/portfolio` public URLs.
+- Publications has both paper entries and a page-settings view. Its existing
+  illustration is now `placeholder_image` in front matter; the rendering
+  remains the same. Page descriptions are optional `intro` fields.
+- GoatCounter permits embedding only by `https://funyday-k.github.io` and
+  remains viewable only by logged-in users, with visitor counters disabled.
+  No API token or secret-token dashboard URL is placed in the public site.
+  A separate GoatCounter login may still be necessary. Browsers that block
+  cross-site session cookies may require opening the private dashboard in a
+  separate tab; do not make statistics public to work around that restriction.
+
+Validation: root-list round trips preserve all values in the existing paper
+and note directories. The isolated CMS loaded all eight date groups and
+saved an edited paper comment as a draft. It loaded and saved the existing
+album, and all eight album image URLs loaded in the preview. Cancelling an
+unsaved-change navigation kept the draft in place. These writes used only
+the temporary test backend, never the production repository.
