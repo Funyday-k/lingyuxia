@@ -73,7 +73,7 @@ social:
 
 # Analytics
 analytics:
-  provider               :  "google-universal" # false (default), "google", "google-universal", "custom"
+  provider               : "goatcounter" # Inactive until _data/site_admin.yml has a site code.
   google:
     tracking_id          :
 
@@ -124,6 +124,7 @@ include:
   - _pages
   - files
 exclude:
+  - _admin
   - "*.sublime-project"
   - "*.sublime-workspace"
   - .asset-cache

@@ -1,0 +1,9 @@
+{% assign item = include.item %}
+{% if item.authors %}<p class="content-authors">{{ item.authors | escape }}</p>{% endif %}
+{% if item.pdf or item.arxiv_url or item.doi_url %}
+<p class="content-downloads">
+  {% if item.pdf %}<a class="btn" href="{{ item.pdf | escape }}">Download PDF</a>{% endif %}
+  {% if item.arxiv_url %}<a class="btn" href="{{ item.arxiv_url | escape }}">arXiv</a>{% endif %}
+  {% if item.doi_url %}<a class="btn" href="{{ item.doi_url | escape }}">DOI</a>{% endif %}
+</p>
+{% endif %}

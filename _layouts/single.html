@@ -53,7 +53,10 @@ layout: default
       {% endunless %}
 
       <section class="page__content" itemprop="text">
+        {% include content-downloads.html item=page %}
+        {% if page.collection == 'publications' and page.excerpt %}{{ page.excerpt | markdownify }}{% endif %}
         {{ content }}
+        {% if page.paperurl and page.citation == nil %}<p><a class="btn" href="{{ page.paperurl | escape }}">Read paper</a></p>{% endif %}
         {% if page.link %}<div><a href="{{ page.link }}" class="btn">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
       </section>
 

@@ -1,0 +1,102 @@
+backend:
+  name: github
+  repo: Funyday-k/lingyuxia
+  branch: master
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+  auth_scope: public_repo
+publish_mode: editorial_workflow
+media_folder: files/uploads
+public_folder: /lingyuxia/files/uploads
+site_url: https://funyday-k.github.io/lingyuxia
+display_url: https://funyday-k.github.io/lingyuxia
+locale: zh_Hans
+slug:
+  encoding: unicode
+  clean_accents: false
+collections:
+  - name: notes
+    label: 笔记 Notes
+    label_singular: 笔记
+    folder: _posts
+    create: true
+    slug: '{{fields.date}}-{{slug}}'
+    summary: '{{title}} · {{date}}'
+    fields:
+      - {label: 标题, name: title, widget: string}
+      - {label: 日期, name: date, widget: datetime, format: 'YYYY-MM-DD', time_format: false}
+      - {label: 列表标题（可选）, name: note_title, widget: string, required: false}
+      - {label: 简介, name: note_summary, widget: text, required: false}
+      - {label: 类型, name: note_type, widget: string, default: Study note}
+      - {label: 标签, name: note_labels, widget: list, required: false}
+      - {label: 原有标签, name: tags, widget: list, required: false}
+      - {label: 固定链接（已有链接请保留）, name: permalink, widget: string, required: false}
+      - {label: PDF 附件, name: pdf, widget: file, required: false, media_library: {config: {max_file_size: 10485760}}, hint: '仅上传准备公开的 PDF，建议不超过 10 MB。'}
+      - {label: 正文, name: body, widget: markdown, required: false, hint: '可只上传 PDF；公式建议切换到 Markdown 模式编辑。'}
+  - name: publications
+    label: 个人论文 Papers
+    label_singular: 论文
+    folder: _publications
+    create: true
+    slug: '{{fields.date}}-{{slug}}'
+    summary: '{{title}} · {{venue}}'
+    fields:
+      - {label: 论文标题, name: title, widget: string}
+      - {label: 作者, name: authors, widget: string}
+      - {label: 日期, name: date, widget: datetime, format: 'YYYY-MM-DD', time_format: false}
+      - {label: 期刊或发表状态, name: venue, widget: string, hint: '例如 Physical Review D 或 Preprint'}
+      - {label: 摘要, name: excerpt, widget: text, required: false}
+      - {label: 上传 PDF, name: pdf, widget: file, required: false, media_library: {config: {max_file_size: 10485760}}}
+      - {label: 外部论文链接, name: paperurl, widget: string, required: false, pattern: ['^https://[^\s]+$', '请使用完整的 HTTPS 网址']}
+      - {label: arXiv 链接, name: arxiv_url, widget: string, required: false, pattern: ['^https://arxiv\.org/(abs|pdf)/[^\s]+$', '例如 https://arxiv.org/abs/xxxx.xxxxx']}
+      - {label: DOI 链接, name: doi_url, widget: string, required: false, pattern: ['^https://doi\.org/[^\s]+$', '例如 https://doi.org/10.xxxx/xxxxx']}
+      - {label: 推荐引用格式, name: citation, widget: text, required: false}
+      - {label: 补充介绍, name: body, widget: markdown, required: false}
+  - name: pages
+    label: 主页内容
+    files:
+      - name: about
+        label: 个人介绍与联系方式
+        file: _pages/about.md
+        fields:
+          - {label: 页面标题, name: title, widget: string}
+          - {label: 正文, name: body, widget: markdown}
+      - name: research
+        label: 研究方向
+        file: _pages/research.md
+        fields:
+          - {label: 页面标题, name: title, widget: string}
+          - {label: 正文, name: body, widget: markdown}
+      - name: cv
+        label: 简历
+        file: _pages/cv.md
+        fields:
+          - {label: 页面标题, name: title, widget: string}
+          - {label: 正文, name: body, widget: markdown}
+  - name: settings
+    label: 网站设置
+    format: yaml
+    editor: {preview: false}
+    files:
+      - name: profile
+        label: 网站标题与侧栏信息
+        file: _config.yml
+        fields:
+          - {label: 网站标题, name: title, widget: string}
+          - {label: 网站简介, name: description, widget: text}
+          - label: 侧栏个人信息
+            name: author
+            widget: object
+            fields:
+              - {label: 姓名, name: name, widget: string}
+              - {label: 简介, name: bio, widget: text, required: false}
+              - {label: 地点, name: location, widget: string, required: false}
+              - {label: 邮箱, name: email, widget: string, required: false}
+              - {label: Google Scholar, name: googlescholar, widget: string, required: false}
+              - {label: ORCID, name: orcid, widget: string, required: false}
+      - name: services
+        label: 服务连接
+        file: _data/site_admin.yml
+        fields:
+          - {label: Netlify Project ID, name: netlify_site_id, widget: string, required: false, pattern: ['^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$', '请填写 Project ID，不是网址或密钥'], hint: '修改会影响后续登录。首次连接需在仓库中填写。'}
+          - {label: GoatCounter 站点名称, name: goatcounter_code, widget: string, required: false, pattern: ['^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$', '只填站点名称，不含 https:// 或 .goatcounter.com'], hint: '请先在 GoatCounter 中保持面板非公开。清空此项即可停止统计。'}

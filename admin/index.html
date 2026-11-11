@@ -1,0 +1,56 @@
+---
+layout: null
+permalink: /admin/
+sitemap: false
+---
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>内容管理 · Lingyu Xia</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ '/admin/admin.css' | relative_url }}">
+  <script defer src="{{ '/admin/dashboard.js' | relative_url }}"></script>
+</head>
+<body>
+  <header><a class="brand" href="{{ '/' | relative_url }}">Lingyu Xia <span>/ 管理</span></a><a href="{{ '/' | relative_url }}">查看主页 ↗</a></header>
+  <main>
+    <div class="eyebrow">PERSONAL WEBSITE</div>
+    <h1>让记录与分享更简单。</h1>
+    <p class="intro">在这里整理笔记、发布论文，更新你的个人主页。</p>
+    <div class="status-bar"><span id="connection-status" role="status">正在检查连接配置…</span><a href="#setup">连接设置 ↓</a></div>
+    <div class="cards">
+      <section class="card"><span class="number">01 / NOTES</span><h2>笔记</h2><p>编写正文、上传 PDF 或图片，整理简介与标签。发布后自动加入 Note 列表。</p><a class="action editor-link" href="{{ '/admin/editor.html' | relative_url }}#/collections/notes">管理笔记 →</a></section>
+      <section class="card"><span class="number">02 / PAPERS</span><h2>个人论文</h2><p>管理作者、摘要、发表信息、论文附件与 arXiv / DOI 链接。</p><a class="action editor-link" href="{{ '/admin/editor.html' | relative_url }}#/collections/publications">管理论文 →</a></section>
+      <section class="card"><span class="number">03 / PROFILE</span><h2>主页内容</h2><p>更新个人介绍、研究方向、简历与侧栏联系方式。</p><a class="action editor-link" href="{{ '/admin/editor.html' | relative_url }}#/collections/pages">编辑页面 →</a></section>
+      <section class="card"><span class="number">04 / VISITORS</span><h2>私人访问统计</h2><p>了解访问量、热门页面、访问来源与大致地区。统计面板需单独登录。</p><a class="action" id="analytics-link" href="#setup">配置访问统计 →</a></section>
+    </div>
+    <section class="setup" id="setup">
+      <h2>首次连接</h2>
+      <p>内容保存在你的 GitHub 仓库。只有拥有仓库写入权限的账号才能编辑；此入口页本身不包含私有内容。</p>
+      <details id="auth-help"><summary>1. 连接 GitHub 登录 <span id="auth-state">待配置</span></summary>
+        <ol>
+          <li>在 <a href="https://app.netlify.com/" target="_blank" rel="noopener noreferrer">Netlify</a> 创建一个项目，用于提供登录认证。现有主页继续由 GitHub Pages 托管。</li>
+          <li>在 <a href="https://github.com/settings/developers" target="_blank" rel="noopener noreferrer">GitHub OAuth Apps</a> 注册应用，主页填写本网站地址，回调地址填写 <code>https://api.netlify.com/auth/done</code>。</li>
+          <li>在 Netlify 项目的 Security → OAuth 中安装 GitHub Provider，将 Client ID 和 Client Secret 填入 Netlify。不要将密钥写入网站文件或聊天。</li>
+          <li>将 Netlify 的 Project ID 填入 <code>_data/site_admin.yml</code> 的 <code>netlify_site_id</code>，发布配置后即可登录。</li>
+        </ol>
+        <a href="https://docs.netlify.com/manage/security/secure-access-to-sites/oauth-provider-tokens/" target="_blank" rel="noopener noreferrer">查看官方设置说明 ↗</a>
+      </details>
+      <details><summary>2. 连接私人统计 <span id="analytics-state">待配置</span></summary>
+        <ol>
+          <li>在 <a href="https://www.goatcounter.com/signup" target="_blank" rel="noopener noreferrer">GoatCounter</a> 创建站点，网站地址填写 <code>https://funyday-k.github.io/lingyuxia/</code>。</li>
+          <li>在站点设置中保持统计面板非公开，关闭公开访问及访客计数器。</li>
+          <li>将 <code>你的名称.goatcounter.com</code> 中的“你的名称”填入 <code>_data/site_admin.yml</code> 的 <code>goatcounter_code</code>。登录配置完成后也可在编辑器的“服务连接”中填写。</li>
+        </ol>
+        <p>未填写有效站点名称时不加载统计脚本。本地预览与管理页不计入访问量。</p>
+      </details>
+      <details><summary>日常使用与发布</summary><p>进入编辑器后，选择栏目并新建或编辑内容。保存草稿后，在工作流中检查并发布；GitHub Pages 完成构建后，公开页面才会更新。草稿和附件也会写入公开仓库，请只上传准备公开的材料。建议单个附件不超过 10 MB。</p><p>已有交互笔记的实验代码保留在原页面；常规笔记可直接使用正文编辑器。笔记支持只上传 PDF、不填写正文。</p></details>
+    </section>
+    <noscript><p>请启用 JavaScript 以使用管理后台。首次连接说明仍可阅读。</p></noscript>
+  </main>
+  <footer>Lingyu Xia · 内容管理 <span>GitHub Pages / Decap CMS</span></footer>
+</body>
+</html>

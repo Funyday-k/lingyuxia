@@ -1,0 +1,22 @@
+---
+layout: null
+permalink: /admin/editor.html
+sitemap: false
+---
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>内容编辑器 · Lingyu Xia</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ '/admin/admin.css' | relative_url }}">
+  <link rel="cms-config-url" type="text/yaml" href="{{ '/admin/config.yml' | relative_url }}">
+  <script defer src="{{ '/admin/editor.js' | relative_url }}"></script>
+</head>
+<body>
+  <div class="editor-notice" id="editor-notice"><h1>内容编辑器</h1><p id="editor-status" role="status">正在检查登录配置…</p><a href="{{ '/admin/' | relative_url }}">← 返回管理首页</a><a href="" id="retry" hidden>重新加载</a></div>
+  <noscript>请启用 JavaScript 以使用编辑器。</noscript>
+</body>
+</html>

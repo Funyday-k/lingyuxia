@@ -1,0 +1,4 @@
+{% assign counter_code = site.data.site_admin.goatcounter_code | strip %}
+{% if jekyll.environment == 'production' and counter_code != '' %}
+<script defer src="{{ '/assets/js/visitor-analytics.js' | relative_url }}" data-goatcounter-code="{{ counter_code | escape }}"></script>
+{% endif %}
