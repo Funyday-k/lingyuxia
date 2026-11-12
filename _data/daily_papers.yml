@@ -190,3 +190,25 @@
       at high significance, such as atmospheric He I and the 3.3 $μ$m PAH feature. We calculate the Cramér-Rao bound and compare
       to sensitivity forecasts, finding that our limits could be improved by more than an order of magnitude with solely methodological
       improvements.
+
+- date: '2026-11-12'
+  papers:
+  - link: https://arxiv.org/abs/2611.14350v1
+    title: New Constraints on the Ultrahigh Energy Neutrino Flux from the First Array-Wide Search with the Askaryan Radio
+      Array
+    authors: 'ARA Collaboration: N. Alden, S. Ali, P. Allison, D.Z. Besson, A. Bishop, P. Chen, Y.C. Chen, Y.-C. Chen, S.
+      Chiche, B.A. Clark, A. Connolly, K. Couberly, A. Cummings, P. Dasgupta, K.D. de Vries, C. Deaconu, M.A. DuVernois, J.
+      Flaherty, P. Giri, J. Hanson, K.D. Hoffman, M.-H. Huang, K. Hughes, A. Ishihara, A. Karle, J.L. Kelley, M.-C. Kim, I.
+      Kravchenko, R. Krebs, C.Y. Kuo, U.A. Latif, C.H. Liu, T.C. Liu, W. Luszczak, A. Machtay, M.S. Muzio, J. Nam, R.J. Nichol,
+      A. Novikov, A. Nozdrina, E. Oberla, C.W. Pai, Y. Pan, C. Pfendner, N. Punsuebsay, J. Roth, A. Salcedo-Gomez, D. Seckel,
+      M.F.H. Seikh, Y.-S. Shiao, S.C. Su, S. Toscano, J. Torres, N. van Eijndhoven, A. Vieregg, M. Vilarino Fostier, M.-Z.
+      Wang, S.-H. Wang, P. Windischhofer, S.A. Wissel, S. Yoshida'
+    affiliations: University of Chicago; University of Kansas; The Ohio State University; University of Wisconsin-Madison;
+      National Taiwan University; Université Libre de Bruxelles; University of Maryland; Pennsylvania State University; Vrije
+      Universiteit Brussel; University of Nebraska; Whittier College; National United University; Chiba University; National
+      Pingtung University; University College London; University of Delaware; National Nano Device Laboratories; University
+      of Utah; DESY
+    abstract: 'Summary of the arXiv abstract: The Askaryan Radio Array combined data from its South Pole stations to search
+      for diffuse ultrahigh-energy neutrinos. The analysis retained zero candidate events, with an expected background of
+      0.13 events. It set a 90% confidence upper limit on the all-flavor flux and improved on existing bounds between 50 and
+      1000 EeV. The result also constrains selected models of ultrahigh-energy cosmic-ray sources.'
